@@ -1,40 +1,575 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Contact Notes recorder</title>
-<style>
-:root{font-family:system-ui,sans-serif;color:#1b2738;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;padding:24px}.panel{max-width:460px;margin:auto;padding:24px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 4px 18px #1b273809}h1{font-size:24px;margin:0 0 8px}p{color:#64748b;line-height:1.45}button{font:inherit;border:0;border-radius:9px;padding:12px 16px;background:#e9eef5;color:#20324c;cursor:pointer;margin:5px 5px 5px 0}button.primary{background:#185bd5;color:#fff}button:disabled{opacity:.5;cursor:not-allowed}audio{width:100%;margin:16px 0}.status{min-height:24px;margin-top:12px}.error{color:#b42318}
-</style></head><body><main class="panel"><h1>Record voice note</h1><p>Press Start and allow microphone access. Press Stop when finished, listen to it, then choose Use recording. Maximum 8 MB.</p><button id="start" class="primary">● Start</button><button id="stop" disabled>■ Stop</button><button id="send" disabled>Use recording</button><audio id="preview" controls hidden></audio><div id="status" class="status" role="status" aria-live="polite"></div></main>
-<script>
-const params=new URLSearchParams(location.hash.slice(1));const targetOrigin=params.get('origin');const token=params.get('token');const $=id=>document.getElementById(id);const MAX=8*1024*1024;
-let stream,recorder,chunks=[],blob,previewUrl,timer;
-function status(message,error=false){$('status').textContent=message;$('status').className='status'+(error?' error':'')}
-function tracksOff(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
-function sendError(message){if(window.opener&&targetOrigin&&token)window.opener.postMessage({app:'contact-notes-recorder',token,type:'error',message},targetOrigin)}
-if(!window.opener||!targetOrigin||!/^https:\/\//.test(targetOrigin)||!/^[a-f0-9]{32}$/.test(token)){status('Open this recorder from Contact Notes.',true);$('start').disabled=true}
-$('start').onclick=async()=>{
- try{
-  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw Error('This browser does not support microphone recording.');
-  if(previewUrl)URL.revokeObjectURL(previewUrl);$('preview').hidden=true;$('send').disabled=true;blob=null;chunks=[];
-  stream=await navigator.mediaDevices.getUserMedia({audio:true});
-  const mime=['audio/webm','audio/mp4','audio/ogg'].find(m=>MediaRecorder.isTypeSupported(m));
-  if(!mime)throw Error('No supported audio format found.');
-  recorder=new MediaRecorder(stream,{mimeType:mime});
-  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
-  recorder.onstop=()=>{
-   clearInterval(timer);tracksOff();$('start').disabled=false;$('stop').disabled=true;
-   blob=new Blob(chunks,{type:mime});
-   if(!blob.size||blob.size>MAX){blob=null;status('Recording exceeds 8 MB. Please make a shorter note.',true);return}
-   previewUrl=URL.createObjectURL(blob);$('preview').src=previewUrl;$('preview').hidden=false;$('send').disabled=false;status('Listen to your recording, then choose Use recording.');
-  };
-  recorder.start(1000);$('start').disabled=true;$('stop').disabled=false;status('Recording…');
-  timer=setInterval(()=>{const bytes=chunks.reduce((n,c)=>n+c.size,0);if(bytes>MAX&&recorder.state==='recording')recorder.stop()},500);
- }catch(e){tracksOff();$('start').disabled=false;$('stop').disabled=true;status(e.message||'Microphone access was denied.',true);sendError(e.message||'Microphone access was denied.')}
-};
-$('stop').onclick=()=>{if(recorder?.state==='recording')recorder.stop()};
-$('send').onclick=()=>{
- if(!blob||!window.opener||window.opener.closed){status('Return to Contact Notes and open the recorder again.',true);return}
- window.opener.postMessage({app:'contact-notes-recorder',token,type:'audio',blob},targetOrigin);
- status('Recording sent. You can return to Contact Notes.');
- setTimeout(()=>window.close(),600);
-};
-window.addEventListener('pagehide',tracksOff);
-</script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voice Notes · Moolya</title>
+
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color-scheme: light;
+      --ink: #102b35;
+      --muted: #526c74;
+      --panel: #fff;
+      --field: #f6f8f9;
+      --line: #dce6e8;
+      --teal: #207f89;
+      --soft: #eaf5f5;
+      --error: #b42318;
+      --bg: #215566;
+      --glow: #2da0aa;
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #eaf5f7;
+      --muted: #adc3cb;
+      --panel: #112e3a;
+      --field: #0b2430;
+      --line: #2c4c59;
+      --teal: #6bd4db;
+      --soft: #1c414d;
+      --error: #ffaaa3;
+      --bg: #051823;
+      --glow: #15555e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 10% 15%, var(--glow), transparent 55%),
+        var(--bg);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .shell {
+      max-width: 480px;
+      margin: auto;
+    }
+
+    header, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 12px 36px #001c2c18;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 10px;
+      padding: 2px;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 16px;
+      letter-spacing: -.3px;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    button {
+      font: inherit;
+      font-weight: 650;
+      padding: 12px 16px;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--soft);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 3px;
+    }
+
+    .theme {
+      font-size: 11px;
+      white-space: nowrap;
+      padding: 8px 10px;
+      min-height: 40px;
+      border-radius: 20px;
+    }
+
+    .panel { padding: 28px; }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 26px;
+      letter-spacing: -.7px;
+      line-height: 1.25;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .record-display {
+      margin: 24px 0;
+      padding: 25px 16px;
+      text-align: center;
+      background: var(--field);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .mic {
+      display: grid;
+      place-items: center;
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: var(--soft);
+      color: var(--teal);
+    }
+
+    .mic svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .timer {
+      font-size: 34px;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 1px;
+      line-height: 1.3;
+    }
+
+    .state {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .recording .mic {
+      background: #b4231820;
+      color: var(--error);
+      animation: pulse 1.4s infinite;
+    }
+
+    .recording .state { color: var(--error); }
+
+    @keyframes pulse {
+      50% { box-shadow: 0 0 0 9px #b4231810; }
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .controls button { flex: 1; }
+
+    .start {
+      background: var(--teal);
+      color: var(--panel);
+      border: 0;
+    }
+
+    .send {
+      width: 100%;
+      border: 0;
+      border-radius: 24px;
+      background: #ffda00;
+      color: #102a34;
+      margin-top: 12px;
+      font-weight: 750;
+    }
+
+    .limit {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+    }
+
+    .status {
+      font-size: 12px;
+      line-height: 1.7;
+      min-height: 20px;
+      margin-top: 16px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .status.error { color: var(--error); }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 380px) {
+      body { padding: 12px; }
+      .panel { padding: 22px 18px; }
+      header { padding: 12px; }
+      .brand small { display: none; }
+      h1 { font-size: 24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .recording .mic { animation: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <img class="logo"
+          src="PASTE_YOUR_MOOLYA_LOGO_SRC_HERE"
+          alt="Moolya">
+
+        <div>
+          <strong>Contact Notes</strong>
+          <small>Connections worth remembering</small>
+        </div>
+      </div>
+
+      <button id="theme" class="theme" type="button">Dark mode</button>
+    </header>
+
+    <main class="panel">
+      <div class="eyebrow">Capture the conversation</div>
+      <h1>Record a voice note</h1>
+      <p>Start recording, share your thoughts, then listen before saving.</p>
+
+      <div id="display" class="record-display">
+        <div class="mic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.7"
+            stroke-linecap="round">
+            <rect x="9" y="2" width="6" height="12" rx="3"/>
+            <path d="M5 10v2a7 7 0 0014 0v-2M12 19v3M8 22h8"/>
+          </svg>
+        </div>
+
+        <div id="clock" class="timer">00:00</div>
+        <div id="state" class="state">Ready when you are</div>
+      </div>
+
+      <div class="controls">
+        <button id="start" class="start" type="button">
+          ● Start recording
+        </button>
+        <button id="stop" type="button" disabled>■ Stop</button>
+      </div>
+
+      <audio id="preview" controls hidden></audio>
+
+      <button id="send" class="send" type="button" disabled>
+        Use recording
+      </button>
+
+      <div class="limit">Maximum recording size: 8 MB</div>
+
+      <div id="status" class="status" role="status" aria-live="polite">
+        Allow microphone access when prompted.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const params = new URLSearchParams(location.hash.slice(1));
+
+    const targetOrigin = params.get("origin");
+    const token = params.get("token");
+    const MAX = 8 * 1024 * 1024;
+
+    let stream, recorder;
+    let chunks = [];
+    let blob, previewUrl, timer, startedAt;
+    let busy = false;
+
+    // Light / dark mode
+    let theme = matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark" : "light";
+
+    try {
+      theme = localStorage.getItem("contactNotesTheme") || theme;
+    } catch (e) {}
+
+    function applyTheme() {
+      document.documentElement.dataset.theme = theme;
+      $("theme").textContent = theme === "dark" ? "Light mode" : "Dark mode";
+      $("theme").setAttribute("aria-pressed", String(theme === "dark"));
+    }
+
+    applyTheme();
+
+    $("theme").onclick = () => {
+      theme = theme === "dark" ? "light" : "dark";
+      applyTheme();
+
+      try {
+        localStorage.setItem("contactNotesTheme", theme);
+      } catch (e) {}
+    };
+
+    function status(message, error = false) {
+      $("status").textContent = message;
+      $("status").className = "status" + (error ? " error" : "");
+    }
+
+    function tracksOff() {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+    }
+
+    // Validate the connection to the contact form.
+    let validSession = false;
+
+    try {
+      const origin = new URL(targetOrigin);
+
+      validSession =
+        !!window.opener &&
+        !window.opener.closed &&
+        origin.protocol === "https:" &&
+        origin.origin === targetOrigin &&
+        /^[a-f0-9]{32}$/.test(token);
+    } catch (e) {}
+
+    function sendError(message) {
+      if (window.opener && validSession) {
+        window.opener.postMessage({
+          app: "contact-notes-recorder",
+          token,
+          type: "error",
+          message
+        }, targetOrigin);
+      }
+    }
+
+    if (!validSession) {
+      status("Return to Contact Notes and open the recorder again.", true);
+      $("start").disabled = true;
+    }
+
+    function updateClock() {
+      const seconds = Math.floor((Date.now() - startedAt) / 1000);
+
+      $("clock").textContent =
+        String(Math.floor(seconds / 60)).padStart(2, "0") + ":" +
+        String(seconds % 60).padStart(2, "0");
+    }
+
+    function finishUI() {
+      clearInterval(timer);
+      tracksOff();
+      busy = false;
+      $("display").classList.remove("recording");
+      $("start").disabled = !validSession;
+      $("stop").disabled = true;
+    }
+
+    $("start").onclick = async () => {
+      if (busy || !validSession) return;
+
+      busy = true;
+      $("start").disabled = true;
+
+      try {
+        if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+          throw Error("This browser does not support microphone recording.");
+        }
+
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        previewUrl = null;
+
+        $("preview").pause();
+        $("preview").removeAttribute("src");
+        $("preview").hidden = true;
+        $("send").disabled = true;
+
+        blob = null;
+        chunks = [];
+
+        $("clock").textContent = "00:00";
+        $("state").textContent = "Connecting microphone…";
+        status("Allow microphone access when prompted.");
+
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        const mime = ["audio/webm", "audio/mp4", "audio/ogg"]
+          .find(m => MediaRecorder.isTypeSupported(m));
+
+        if (!mime) throw Error("No supported audio format found.");
+
+        recorder = new MediaRecorder(stream, { mimeType: mime });
+        let recordingFailed = false;
+
+        recorder.ondataavailable = e => {
+          if (e.data.size) chunks.push(e.data);
+        };
+
+        recorder.onerror = e => {
+          recordingFailed = true;
+          blob = null;
+          $("send").disabled = true;
+          finishUI();
+          $("state").textContent = "Recording interrupted";
+
+          const message =
+            e.error?.message || "Recording failed. Please try again.";
+
+          status(message, true);
+          sendError(message);
+        };
+
+        recorder.onstop = () => {
+          updateClock();
+          finishUI();
+
+          if (recordingFailed) return;
+
+          blob = new Blob(chunks, { type: mime });
+
+          if (!blob.size || blob.size > MAX) {
+            blob = null;
+            $("state").textContent = "Try a shorter recording";
+            status(
+              "No usable recording, or recording exceeds 8 MB. Please try again.",
+              true
+            );
+            return;
+          }
+
+          previewUrl = URL.createObjectURL(blob);
+          $("preview").src = previewUrl;
+          $("preview").hidden = false;
+          $("send").disabled = false;
+          $("start").textContent = "● Re-record";
+          $("state").textContent = "Ready to preview";
+          status("Listen to your note, then choose Use recording.");
+        };
+
+        recorder.start(1000);
+        startedAt = Date.now();
+
+        $("stop").disabled = false;
+        $("display").classList.add("recording");
+        $("state").textContent = "Recording in progress";
+        status("Press Stop when you have finished.");
+
+        timer = setInterval(() => {
+          updateClock();
+
+          const bytes = chunks.reduce((n, c) => n + c.size, 0);
+          if (bytes > MAX && recorder.state === "recording") {
+            recorder.stop();
+          }
+        }, 500);
+
+      } catch (e) {
+        finishUI();
+        $("state").textContent = "Microphone unavailable";
+
+        const message = e.name === "NotAllowedError"
+          ? "Microphone access was denied. Allow microphone access in your browser settings and try again."
+          : e.message || "Could not start recording.";
+
+        status(message, true);
+        sendError(message);
+      }
+    };
+
+    $("stop").onclick = () => {
+      if (recorder?.state === "recording") {
+        $("stop").disabled = true;
+        recorder.stop();
+      }
+    };
+
+    $("send").onclick = () => {
+      if (!blob || !validSession || !window.opener || window.opener.closed) {
+        status("Return to Contact Notes and open the recorder again.", true);
+        return;
+      }
+
+      try {
+        window.opener.postMessage({
+          app: "contact-notes-recorder",
+          token,
+          type: "audio",
+          blob
+        }, targetOrigin);
+
+        $("send").disabled = true;
+        $("start").disabled = true;
+        $("state").textContent = "Recording sent";
+
+        status(
+          "Your note is ready. Return to Contact Notes to save the contact."
+        );
+
+        setTimeout(() => window.close(), 600);
+      } catch (e) {
+        status("Could not send the recording. Please try again.", true);
+      }
+    };
+
+    window.addEventListener("pagehide", () => {
+      clearInterval(timer);
+      tracksOff();
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    });
+  </script>
+</body>
+</html>
