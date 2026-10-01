@@ -1146,7 +1146,7 @@
         if(type()!=='voice'){stopMic();recordingBusy=false;$('start').disabled=false;return}
         const mime=['audio/webm','audio/mp4','audio/ogg'].find(m=>MediaRecorder.isTypeSupported(m));
         if(!mime)throw Error('No supported audio format found.');
-        audioChunks=[];mediaRecorder=new MediaRecorder(micStream,{mimeType:mime});
+        audioChunks=[];mediaRecorder=new MediaRecorder(micStream,{mimeType:mime,audioBitsPerSecond: 64000});
         mediaRecorder.ondataavailable=e=>{if(e.data.size)audioChunks.push(e.data)};
         mediaRecorder.onerror=()=>{discardRecording=true;status('Recording interrupted. Please try again.',true);stopMic()};
         mediaRecorder.onstop=()=>{
