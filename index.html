@@ -758,7 +758,7 @@
           </div>
 
           <button class="primary" id="save" type="submit">Save record</button>
-          <button id="next" type="button" disabled>Add next person</button>
+          <button id="next" type="button" hidden disabled>Add next person</button>
 
           <div id="status" class="status" role="status" aria-live="polite"></div>
         </form>
@@ -1216,14 +1216,26 @@
             base64: await asBase64(audioBlob)
           };
         }
+        
+        status("Saving record…");
+        $("next").hidden = true;
+        $("next").disabled = true;
 
         await call("saveRecord", data);
+
         closeRecorder();
+        status("Saved in Records. Tap Add next person to continue.");
+        $("next").hidden = false;
         $("next").disabled = false;
-        status("Record saved. Tap Add next person to start a new contact.");
-        await loadRecords();
+
+        // Refresh records without keeping the form busy.
+        loadRecords().catch(console.error);
+
       } catch (err) {
-        status(err.message || "Save failed.", true);
+        $("next").hidden = true;
+        $("next").disabled = true;
+        status(err.message || "Save failed. Please try again.", true);
+
       } finally {
         loading = false;
         $("save").disabled = !$("next").disabled;
