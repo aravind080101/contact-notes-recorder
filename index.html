@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -674,7 +675,7 @@
     </div>
   </header>
 
-  <main class="shell"><div class="install-row"><button id="installApp" type="button" hidden>Install app</button><span id="connection" role="status"></span></div>
+  <main class="shell" hidden><div class="install-row"><span id="connection" role="status"></span></div>
     <div class="view-controls">
       <button id="viewToggle" class="swipe-handle" type="button"
         aria-controls="contactFace recordsFace"
@@ -697,8 +698,7 @@
           <label for="cardPhoto">
             Take or choose a business card photo (optional)
           </label>
-          <input id="cardPhoto" type="file"
-             accept="image/*,.jpg,.jpeg,.png,.webp">
+          <input id="cardPhoto" type="file" accept="image/*,.jpg,.jpeg,.png,.webp">
 
           <div id="scanStatus" class="hint" role="status" aria-live="polite">
             Choose a photo to suggest Person and Company.
@@ -1021,13 +1021,7 @@
     }
 
     async function call(name,...args){
-      if(!navigator.onLine)throw Error('You are offline. Reconnect before saving or loading contacts.');
-      const endpoint=window.CONTACT_CONFIG?.apiUrl;
-      if(!endpoint||endpoint.includes('YOUR-WORKER'))throw Error('The app connection has not been configured yet.');
-      const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:name,args})});
-      let result;try{result=await response.json()}catch(e){throw Error('Could not connect. Please try again.')}
-      if(!response.ok||!result.ok)throw Error(result.error||'Request failed.');
-      return result.data;
+      return window.contactApi(name,...args);
     }
 
     function asBase64(blob) {
@@ -1435,18 +1429,27 @@
 
     $("search").oninput = () => {
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(loadRecords, 300);
+      searchTimer = setTimeout(()=>{if(!document.querySelector("main.shell").hidden)loadRecords()}, 300);
     };
 
-    let installPrompt;
-    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installApp').hidden=false});
-    $('installApp').onclick=async()=>{if(installPrompt){await installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installApp').hidden=true}};
-    const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-    if(/iPad|iPhone|iPod/.test(navigator.userAgent)&&!installed){$('connection').textContent='To install: Share → Add to Home Screen'}
-    function updateConnection(){if(!navigator.onLine)$('connection').textContent='Offline — reconnect to save and scan';else if(installed)$('connection').textContent=''}
-    window.addEventListener('online',()=>{updateConnection();loadRecords()});window.addEventListener('offline',updateConnection);updateConnection();
+    function updateConnection(){$('connection').textContent=navigator.onLine?'':'Offline — reconnect to save and scan'}
+    window.addEventListener('online',()=>{updateConnection();if(!document.querySelector('main.shell').hidden)loadRecords()});window.addEventListener('offline',updateConnection);updateConnection();
     if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    loadRecords();
+    window.addEventListener('contact-auth-ready', loadRecords);
+    window.addEventListener('contact-auth-cleared', () => {
+      closeRecorder();
+      $('records').replaceChildren();
+      $('form').reset();
+      resetAudio();
+      $('textBox').classList.remove('hidden');
+      $('voiceBox').classList.add('hidden');
+      $('next').hidden=true;
+      $('next').disabled=true;
+      $('save').disabled=false;
+      status('');
+    });
+
   </script>
+<script src="./auth.js"></script>
 </body>
 </html>
