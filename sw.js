@@ -1,10 +1,11 @@
-const CACHE = "moolya-contact-shell-header-v6";
+const CACHE = "moolya-contact-shell-header-v7";
 
 const SHELL = [
   "./",
   "./index.html",
   "./config.js",
   "./auth.js",
+  "./auth.js?v=header-v7",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
@@ -51,7 +52,7 @@ self.addEventListener("fetch", event => {
   }
 
   event.respondWith(
-    fetch(event.request)
+    fetch(event.request, {cache: "no-cache"})
       .then(response => {
         if (response.ok) {
           const copy = response.clone();
