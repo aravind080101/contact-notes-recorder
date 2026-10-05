@@ -13,8 +13,11 @@
  <label for="confirmPassword">Confirm password</label><input id="confirmPassword" type="password" minlength="12" maxlength="256" autocomplete="new-password" required><button type="submit" class="primary">Change password</button></form>
  <p id="authStatus" role="status" aria-live="polite"></p>`;
  app.before(panel);app.hidden=true;
- const logout=document.createElement('button');logout.type='button';logout.textContent='Sign out';logout.hidden=true;logout.id='logoutButton';panel.before(logout);
- const style=document.createElement('style');style.textContent='[hidden]{display:none!important}.login-panel{width:calc(100% - 32px);max-width:460px;margin:24px auto;padding:28px;background:var(--panel);color:var(--ink);border-radius:24px}.login-panel h1{font-size:26px}.login-panel p{line-height:1.6}.login-panel button{margin-top:16px}#logoutButton{display:block;margin:12px auto}';document.head.append(style);
+ const logout=document.createElement('button');logout.type='button';logout.textContent='Sign out';logout.hidden=true;logout.id='logoutButton';const themeButton=document.querySelector('.theme-toggle');
+ const headerActions=document.createElement('div');headerActions.className='header-actions';
+ if(themeButton){themeButton.before(headerActions);headerActions.append(themeButton,logout);}
+ else{const header=document.querySelector('.topbar-inner');if(header){headerActions.append(logout);header.append(headerActions);}}
+ const style=document.createElement('style');style.textContent='[hidden]{display:none!important}.login-panel{width:calc(100% - 32px);max-width:460px;margin:24px auto;padding:28px;background:var(--panel);color:var(--ink);border-radius:24px}.login-panel h1{font-size:26px}.login-panel p{line-height:1.6}.login-panel button{margin-top:16px}.topbar-inner{flex-wrap:wrap}.brand{margin-right:auto}.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0}.header-actions .theme-toggle,#logoutButton{margin:0;min-height:44px;padding:9px 13px;border:1px solid var(--line);border-radius:24px;font-size:13px;white-space:nowrap}#logoutButton{color:var(--ink);background:var(--soft)}@media(max-width:520px){.header-actions{width:100%}.header-actions .theme-toggle,#logoutButton{font-size:12px;padding:9px 12px}}';document.head.append(style);
  const get=id=>document.getElementById(id);
  const message=text=>get('authStatus').textContent=text;
  let resetToken=new URLSearchParams(location.hash.slice(1)).get('reset');
