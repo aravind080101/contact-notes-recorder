@@ -687,13 +687,28 @@
       </button>
     </div>
 
-    <div id="flipCard">
-      <section id="contactFace" class="panel">
-        <div class="form-intro">
-          <div class="eyebrow">Make every connection count</div>
-          <div class="contact-heading"><h1>Add a contact</h1><button id="guestQR" type="button" class="qr-trigger" aria-label="Show QR code for visitor details">▦ <span>Visitor QR</span></button></div>
-          <p>Capture their details and keep a written or voice note.</p>
+<div id="flipCard">
+  <section id="contactFace" class="panel">
+    <div class="form-intro">
+      <div class="eyebrow">Make every connection count</div>
+
+      <div class="contact-heading">
+        <h1>Add a contact</h1>
+
+        <div class="qr-option">
+          <p style="font-size:12px; line-height:1.4; margin:0 0 6px;">
+            Prefer them to enter their details?
+          </p>
+
+          <button id="guestQR" type="button" class="qr-trigger"
+            aria-label="Share QR code">
+            ▦ <span>QR code</span>
+          </button>
         </div>
+      </div>
+
+      <p>Capture their details and add an optional written or voice note.</p>
+    </div>
 
         <form id="form">
           <label for="cardPhoto">
