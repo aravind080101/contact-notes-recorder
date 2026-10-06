@@ -2,20 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#215566">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Contact Notes</title>
   <base target="_top">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet"
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+  <link
+    rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/css/intlTelInput.css">
+
+  <script src="./config.js"></script>
 
   <style>
     :root {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
       color-scheme: light;
       --ink: #102b35;
       --muted: #526c74;
-      --panel: #fff;
+      --panel: #ffffff;
       --field: #f6f8f9;
       --line: #dce6e8;
       --teal: #207f89;
@@ -24,7 +33,7 @@
       --success: #157347;
       --bg: #215566;
       --glow: #2da0aa;
-      --rim: #fff;
+      --rim: #ffffff;
       --yellow: #ffda00;
     }
 
@@ -44,22 +53,40 @@
       --rim: #294b58;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden],
+    .hidden {
+      display: none !important;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
+      padding-bottom: env(safe-area-inset-bottom);
       font-size: 15px;
       line-height: 1.5;
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       background:
-        radial-gradient(ellipse at 10% 15%, var(--glow), transparent 46%),
-        radial-gradient(ellipse at 95% 65%, var(--glow), transparent 45%),
+        radial-gradient(
+          ellipse at 10% 15%,
+          var(--glow),
+          transparent 46%
+        ),
+        radial-gradient(
+          ellipse at 95% 65%,
+          var(--glow),
+          transparent 45%
+        ),
         var(--bg);
     }
 
-    .topbar { padding: 24px 20px 0; }
+    .topbar {
+      padding: max(14px, env(safe-area-inset-top)) 20px 0;
+    }
 
     .topbar-inner {
       max-width: 760px;
@@ -88,8 +115,7 @@
       width: 58px;
       height: 58px;
       object-fit: contain;
-      padding: 3px;
-      background: #fff;
+      background: #ffffff;
       border-radius: 12px;
       flex-shrink: 0;
     }
@@ -173,7 +199,9 @@
       line-height: 1.6;
     }
 
-    .form-intro { margin-bottom: 28px; }
+    .form-intro {
+      margin-bottom: 28px;
+    }
 
     .eyebrow {
       color: var(--teal);
@@ -184,6 +212,48 @@
       margin-bottom: 7px;
     }
 
+    .contact-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: nowrap;
+    }
+
+    .contact-heading h1 {
+      margin: 0;
+      min-width: 0;
+    }
+
+    .qr-option {
+      flex-shrink: 0;
+      width: 160px;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .qr-trigger {
+      min-height: 44px;
+      margin: 0;
+      border: 1px solid var(--line);
+      background: var(--soft);
+      color: var(--ink);
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 14px;
+    }
+
+    .form-intro .qr-caption {
+      margin: 7px 0 0;
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .contact-description {
+      margin-top: 12px;
+    }
+
     label {
       display: block;
       font-size: 12px;
@@ -192,7 +262,8 @@
       margin: 18px 0 7px;
     }
 
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
       min-width: 0;
       min-height: 46px;
@@ -205,7 +276,8 @@
       padding: 12px 14px;
     }
 
-    input::placeholder, textarea::placeholder {
+    input::placeholder,
+    textarea::placeholder {
       color: var(--muted);
       opacity: .8;
     }
@@ -265,8 +337,6 @@
       accent-color: var(--teal);
     }
 
-    .hidden { display: none !important; }
-
     button {
       font: inherit;
       font-weight: 600;
@@ -310,7 +380,9 @@
       margin-top: 12px;
     }
 
-    .controls button { flex: 1; }
+    .controls button {
+      flex: 1;
+    }
 
     audio {
       width: 100%;
@@ -330,8 +402,13 @@
       font-size: 14px;
     }
 
-    .error { color: var(--error); }
-    .success { color: var(--success); }
+    .error {
+      color: var(--error);
+    }
+
+    .success {
+      color: var(--success);
+    }
 
     details {
       margin-top: 12px;
@@ -339,17 +416,30 @@
       font-size: 13px;
     }
 
-    summary { cursor: pointer; }
-    details .note { margin-top: 8px; }
+    summary {
+      cursor: pointer;
+    }
+
+    details .note {
+      margin-top: 8px;
+    }
 
     .note {
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
 
-    input:focus, textarea:focus, button:focus-visible {
+    input:focus,
+    textarea:focus,
+    button:focus-visible {
       outline: 2px solid var(--teal);
       outline-offset: 3px;
+    }
+
+    .install-row {
+      color: #ffffff;
+      font-size: 12px;
+      margin-bottom: 8px;
     }
 
     .view-controls {
@@ -362,13 +452,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
       width: 100%;
       min-height: 44px;
       background: transparent;
       color: #e4f5f7;
       border: 0;
-      border-radius: 12px;
       padding: 4px 12px;
       touch-action: pan-y;
       cursor: grab;
@@ -381,43 +469,47 @@
       font-size: 20px;
       letter-spacing: 4px;
       line-height: 1.1;
-      color: #fff;
+      color: #ffffff;
     }
-
-    .swipe-handle:active { cursor: grabbing; }
 
     #flipCard {
       perspective: 1400px;
-      display: block;
       touch-action: pan-y;
-      cursor: grab;
     }
 
-    #flipCard:active { cursor: grabbing; }
-
     #flipCard .panel {
-      user-select: none;
       transform-origin: center;
       backface-visibility: hidden;
     }
 
-    #flipCard input,
-    #flipCard textarea,
-    #flipCard .note {
-      user-select: text;
+    .flip-out {
+      animation: flipOut .18s ease-in forwards;
     }
 
-    .flip-out { animation: flipOut .18s ease-in forwards; }
-    .flip-in { animation: flipIn .22s ease-out forwards; }
+    .flip-in {
+      animation: flipIn .22s ease-out forwards;
+    }
 
     @keyframes flipOut {
-      from { transform: rotateY(0); opacity: 1; }
-      to { transform: rotateY(-90deg); opacity: .3; }
+      from {
+        transform: rotateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: rotateY(-90deg);
+        opacity: .3;
+      }
     }
 
     @keyframes flipIn {
-      from { transform: rotateY(90deg); opacity: .3; }
-      to { transform: rotateY(0); opacity: 1; }
+      from {
+        transform: rotateY(90deg);
+        opacity: .3;
+      }
+      to {
+        transform: rotateY(0);
+        opacity: 1;
+      }
     }
 
     .records-heading {
@@ -428,7 +520,9 @@
       margin-bottom: 22px;
     }
 
-    .records-heading h2 { margin: 0 0 5px; }
+    .records-heading h2 {
+      margin: 0 0 5px;
+    }
 
     .section-description {
       font-size: 13px;
@@ -453,7 +547,6 @@
 
     .search-wrap input {
       padding-left: 40px;
-      font-size: 13px;
     }
 
     .search-icon {
@@ -462,7 +555,6 @@
       top: 8px;
       color: var(--muted);
       font-size: 24px;
-      line-height: 28px;
       pointer-events: none;
     }
 
@@ -495,12 +587,14 @@
       font-weight: 750;
     }
 
-    .record-identity { flex: 1; min-width: 0; }
+    .record-identity {
+      flex: 1;
+      min-width: 0;
+    }
 
     .record-name {
       font-size: 16px;
       font-weight: 700;
-      letter-spacing: -.2px;
       margin: 0;
       line-height: 1.4;
       overflow-wrap: anywhere;
@@ -508,7 +602,6 @@
 
     .record-company {
       font-size: 12px;
-      color: var(--muted);
       margin: 2px 0 0;
       overflow-wrap: anywhere;
     }
@@ -537,7 +630,6 @@
       padding-top: 14px;
       font-size: 13px;
       line-height: 1.75;
-      color: var(--ink);
     }
 
     .voice-play {
@@ -565,26 +657,53 @@
     .records-empty strong {
       display: block;
       font-size: 15px;
-      font-weight: 650;
       margin-bottom: 6px;
     }
 
     .records-empty p {
       font-size: 12px;
-      line-height: 1.7;
-      max-width: 340px;
-      margin: auto;
+    }
+
+    .guest-dialog {
+      width: calc(100% - 32px);
+      max-width: 420px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      color: var(--ink);
+      padding: 24px;
+    }
+
+    .guest-dialog::backdrop {
+      background: #0009;
+    }
+
+    .guest-dialog canvas {
+      display: block;
+      width: min(100%, 280px);
+      height: auto;
+      margin: 18px auto;
+      background: #ffffff;
+    }
+
+    .guest-dialog .controls {
+      justify-content: center;
     }
 
     .iti {
       width: 100%;
-      --iti-path-flags-1x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags.webp");
-      --iti-path-flags-2x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags@2x.webp");
-      --iti-path-globe-1x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe.webp");
-      --iti-path-globe-2x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe@2x.webp");
+      --iti-path-flags-1x:
+        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags.webp");
+      --iti-path-flags-2x:
+        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags@2x.webp");
+      --iti-path-globe-1x:
+        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe.webp");
+      --iti-path-globe-2x:
+        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe@2x.webp");
     }
 
-    .iti__dropdown-content, .iti__country-list {
+    .iti__dropdown-content,
+    .iti__country-list {
       background: var(--panel);
       color: var(--ink);
     }
@@ -598,61 +717,129 @@
       min-height: 46px;
       background: transparent;
       border: 0;
-      border-radius: 8px 0 0 8px;
       color: var(--ink);
     }
 
-    .iti__selected-dial-code { color: var(--ink); }
-    .iti__country.iti__highlight { background: var(--soft); }
+    .iti__selected-dial-code {
+      color: var(--ink);
+    }
+
+    .iti__country.iti__highlight {
+      background: var(--soft);
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .flip-out, .flip-in { animation: none; }
+      .flip-out,
+      .flip-in {
+        animation: none;
+      }
     }
 
     @media (max-width: 600px) {
-      .topbar { padding: 14px 12px 0; }
+      .topbar {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
       .topbar-inner {
         padding: 14px;
         min-height: 80px;
         border-radius: 20px;
       }
 
-      .brand { gap: 10px; }
-      .brand-mark { width: 46px; height: 46px; }
-      .brand-title { font-size: 19px; }
-      .brand-subtitle { font-size: 11px; }
-      .theme-toggle { font-size: 12px; padding: 8px 10px; }
+      .brand {
+        gap: 10px;
+      }
+
+      .brand-mark {
+        width: 46px;
+        height: 46px;
+      }
+
+      .brand-title {
+        font-size: 19px;
+      }
+
+      .brand-subtitle {
+        font-size: 11px;
+      }
 
       .shell {
-        margin: 10px auto 0;
+        margin-top: 10px;
         padding: 0 12px 24px;
       }
 
-      .panel { padding: 24px 18px; }
-      h1 { font-size: 27px; }
-      h2 { font-size: 23px; }
-      .form-intro { margin-bottom: 20px; }
-      input, textarea, .search-wrap input { font-size: 16px; }
-      input[type="file"] { padding: 12px; font-size: 12px; }
-      input[type="file"]::file-selector-button { margin-right: 8px; }
-      .controls button { min-width: 120px; }
-      .contact-record { padding: 16px; }
-      .record-head { flex-wrap: wrap; gap: 10px; }
-      .note-badge { margin-left: 52px; }
-      .records-heading { gap: 10px; }
-      .section-description { font-size: 12px; }
+      .panel {
+        padding: 24px 18px;
+      }
+
+      h2 {
+        font-size: 23px;
+      }
+
+      .form-intro {
+        margin-bottom: 20px;
+      }
+
+      input,
+      textarea {
+        font-size: 16px;
+      }
+
+      input[type="file"] {
+        padding: 12px;
+        font-size: 12px;
+      }
+
+      .contact-record {
+        padding: 16px;
+      }
+
+      .record-head {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .note-badge {
+        margin-left: 52px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-heading {
+        gap: 10px;
+      }
+
+      .contact-heading h1 {
+        font-size: clamp(24px, 6vw, 30px);
+      }
+
+      .qr-option {
+        width: 130px;
+      }
+
+      .qr-option .qr-trigger {
+        padding: 9px 11px;
+        font-size: 12px;
+      }
     }
 
     @media (max-width: 360px) {
-      .brand-subtitle { display: none; }
-      .brand-title { font-size: 17px; }
-      .brand { gap: 8px; }
-      .topbar-inner { padding: 12px; }
-      .brand-mark { width: 40px; height: 40px; }
+      .brand-subtitle {
+        display: none;
+      }
+
+      .brand-title {
+        font-size: 17px;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+      }
     }
-  .install-row{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;font-size:12px;margin-bottom:8px}.install-row button{font-size:12px;padding:8px 14px;min-height:40px}[hidden]{display:none!important}body{padding-bottom:env(safe-area-inset-bottom)}.topbar{padding-top:max(14px,env(safe-area-inset-top))}.contact-heading{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.contact-heading h1{margin:0}.qr-trigger{min-height:44px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:14px;padding:10px 14px;border-radius:14px}.guest-dialog{width:calc(100% - 32px);max-width:420px;border:1px solid var(--line);border-radius:24px;background:var(--panel);color:var(--ink);padding:24px}.guest-dialog::backdrop{background:#0009}.guest-dialog canvas{display:block;width:min(100%,280px);height:auto;margin:18px auto;background:white}.guest-dialog p{line-height:1.5}.guest-dialog .controls{justify-content:center}
-</style>
-<link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-192.png"><meta name="theme-color" content="#215566"><meta name="apple-mobile-web-app-capable" content="yes"><script src="./config.js"></script></head>
+  </style>
+</head>
 
 <body>
   <header class="topbar">
@@ -660,63 +847,90 @@
       <div class="brand">
         <img
           class="brand-mark"
-          src="data:image/png;base64,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"
+          src="./icons/icon-192.png"
           alt="Moolya">
 
         <div class="brand-copy">
           <span class="brand-title">Contact Notes</span>
-          <span class="brand-subtitle">Connections worth remembering</span>
+          <span class="brand-subtitle">
+            Connections worth remembering
+          </span>
         </div>
       </div>
 
-      <button id="themeToggle" class="theme-toggle"
-        type="button" aria-pressed="false">
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        type="button"
+        aria-pressed="false">
         Dark mode
       </button>
     </div>
   </header>
 
-  <main class="shell" hidden><div class="install-row"><span id="connection" role="status"></span></div>
+  <main class="shell" hidden>
+    <div class="install-row">
+      <span id="connection" role="status"></span>
+    </div>
+
     <div class="view-controls">
-      <button id="viewToggle" class="swipe-handle" type="button"
+      <button
+        id="viewToggle"
+        class="swipe-handle"
+        type="button"
         aria-controls="contactFace recordsFace"
         aria-expanded="false"
         aria-label="Swipe left or tap to view records">
-        <span class="swipe-grip" aria-hidden="true">‹ &nbsp; ▬ &nbsp; ›</span>
+        <span class="swipe-grip" aria-hidden="true">
+          ‹ &nbsp; ▬ &nbsp; ›
+        </span>
         <span id="swipeHint">Swipe left to view records</span>
       </button>
     </div>
 
-<div id="flipCard">
-  <section id="contactFace" class="panel">
-    <div class="form-intro">
-      <div class="eyebrow">Make every connection count</div>
+    <div id="flipCard">
+      <section id="contactFace" class="panel">
+        <div class="form-intro">
+          <div class="eyebrow">Make every connection count</div>
 
-      <div class="contact-heading">
-        <h1>Add a contact</h1>
+          <div class="contact-heading">
+            <h1>Add a contact</h1>
 
-        <div class="qr-option">
-          <p style="font-size:12px; line-height:1.4; margin:0 0 6px;">
-            Prefer them to enter their details?
+            <div class="qr-option">
+              <button
+                id="guestQR"
+                type="button"
+                class="qr-trigger"
+                aria-label="Share QR code">
+                ▦ <span>QR code</span>
+              </button>
+
+              <p class="qr-caption">
+                Prefer them to enter their details?
+              </p>
+            </div>
+          </div>
+
+          <p class="contact-description">
+            Capture their details and add an optional written or voice note.
           </p>
-
-          <button id="guestQR" type="button" class="qr-trigger"
-            aria-label="Share QR code">
-            ▦ <span>QR code</span>
-          </button>
         </div>
-      </div>
-
-      <p>Capture their details and add an optional written or voice note.</p>
-    </div>
 
         <form id="form">
           <label for="cardPhoto">
             Take or choose a business card photo (optional)
           </label>
-          <input id="cardPhoto" type="file" accept="image/*,.jpg,.jpeg,.png,.webp">
 
-          <div id="scanStatus" class="hint" role="status" aria-live="polite">
+          <input
+            id="cardPhoto"
+            type="file"
+            accept="image/*,.jpg,.jpeg,.png,.webp">
+
+          <div
+            id="scanStatus"
+            class="hint"
+            role="status"
+            aria-live="polite">
             Choose a photo to suggest Person and Company.
             The photo is sent to Google for analysis and is not saved.
             Review both fields before saving.
@@ -728,16 +942,29 @@
           </details>
 
           <label for="person">Person *</label>
-          <input id="person" required maxlength="120"
-            autocomplete="name" placeholder="Full name">
+          <input
+            id="person"
+            required
+            maxlength="120"
+            autocomplete="name"
+            placeholder="Full name">
 
           <label for="company">Company *</label>
-          <input id="company" required maxlength="120"
-            autocomplete="organization" placeholder="Company name">
+          <input
+            id="company"
+            required
+            maxlength="120"
+            autocomplete="organization"
+            placeholder="Company name">
 
           <label for="phone">Phone number (optional)</label>
-          <input id="phone" type="tel" maxlength="30"
-            autocomplete="tel" inputmode="tel" aria-label="Phone number">
+          <input
+            id="phone"
+            type="tel"
+            maxlength="30"
+            autocomplete="tel"
+            inputmode="tel"
+            aria-label="Phone number">
 
           <div class="hint">
             Select a country flag, then enter the phone number.
@@ -746,9 +973,14 @@
           <label>Note type (optional)</label>
           <div class="choice">
             <label>
-              <input type="radio" name="noteType" value="text" checked>
+              <input
+                type="radio"
+                name="noteType"
+                value="text"
+                checked>
               Written
             </label>
+
             <label>
               <input type="radio" name="noteType" value="voice">
               Voice
@@ -757,31 +989,60 @@
 
           <div id="textBox">
             <label for="note">Written note (optional)</label>
-            <textarea id="note" maxlength="5000"
-              placeholder="What would you like to remember?" aria-describedby="noteFilterHint"></textarea>
-            <div id="noteFilterHint" class="hint" role="status" aria-live="polite"></div>
+            <textarea
+              id="note"
+              maxlength="5000"
+              placeholder="What would you like to remember?"
+              aria-describedby="noteFilterHint"></textarea>
+
+            <div
+              id="noteFilterHint"
+              class="hint"
+              role="status"
+              aria-live="polite"></div>
           </div>
 
           <div id="voiceBox" class="hidden">
             <div class="controls">
-              <button id="start" type="button">● Start recording</button>
-              <button id="stopRecording" type="button" disabled>■ Stop</button><button id="clear" type="button" disabled>Re-record</button>
+              <button id="start" type="button">
+                ● Start recording
+              </button>
+              <button id="stopRecording" type="button" disabled>
+                ■ Stop
+              </button>
+              <button id="clear" type="button" disabled>
+                Re-record
+              </button>
             </div>
 
             <div id="timer" class="hint">
               Record your note here. Maximum 8 MB.
             </div>
+
             <audio id="preview" controls class="hidden"></audio>
           </div>
 
-          <button class="primary" id="save" type="submit">Save record</button>
-          <button id="next" type="button" hidden disabled>Add next person</button>
+          <button class="primary" id="save" type="submit">
+            Save record
+          </button>
 
-          <div id="status" class="status" role="status" aria-live="polite"></div>
+          <button id="next" type="button" hidden disabled>
+            Add next person
+          </button>
+
+          <div
+            id="status"
+            class="status"
+            role="status"
+            aria-live="polite"></div>
         </form>
       </section>
 
-      <section id="recordsFace" class="panel hidden" inert aria-hidden="true">
+      <section
+        id="recordsFace"
+        class="panel hidden"
+        inert
+        aria-hidden="true">
         <div class="records-heading">
           <div>
             <div class="eyebrow">Your network</div>
@@ -790,12 +1051,15 @@
               Find a connection and revisit your notes.
             </p>
           </div>
+
           <span id="recordCount" class="count-badge">—</span>
         </div>
 
         <div class="search-wrap">
           <span aria-hidden="true" class="search-icon">⌕</span>
-          <input id="search" type="search"
+          <input
+            id="search"
+            type="search"
             placeholder="Search person, company, or phone"
             aria-label="Search records">
         </div>
@@ -803,116 +1067,1021 @@
         <div id="records">
           <div class="records-empty">Loading records…</div>
         </div>
-        <button id="loadMore" type="button" hidden style="width:100%;margin-top:16px">Load more</button>
-        <div id="pageStatus" class="hint" role="status" aria-live="polite"></div>
+
+        <button
+          id="loadMore"
+          type="button"
+          hidden
+          style="width:100%;margin-top:16px">
+          Load more
+        </button>
+
+        <div
+          id="pageStatus"
+          class="hint"
+          role="status"
+          aria-live="polite"></div>
       </section>
     </div>
   </main>
 
+  <dialog id="guestDialog" class="guest-dialog">
+    <h2>Let them add their details</h2>
+    <p>
+      Scan this code to enter your name, company and phone number.
+      No login needed.
+    </p>
 
-<dialog id="guestDialog" class="guest-dialog"><h2>Let them add their details</h2><p>Scan this code to enter your name, company and phone number. No login needed.</p><canvas id="guestCanvas" hidden aria-label="Visitor form QR code"></canvas><p id="guestQRStatus" role="status"></p><div class="controls"><button id="copyGuestLink" type="button" disabled>Copy link</button><button id="closeGuestQR" type="button">Close</button></div></dialog>
-<script src="./qr.js"></script>
-<script src="./guest-qr.js"></script>
-<script>
-/* Obscenity 0.4.6 — https://github.com/jo3-l/obscenity
-# The MIT License (MIT)
+    <canvas
+      id="guestCanvas"
+      hidden
+      aria-label="Visitor form QR code"></canvas>
 
-Copyright © 2025 Joseph Liu.
+    <p id="guestQRStatus" role="status"></p>
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the “Software”), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
+    <div class="controls">
+      <button id="copyGuestLink" type="button" disabled>
+        Copy link
+      </button>
+      <button id="closeGuestQR" type="button">Close</button>
+    </div>
+  </dialog>
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+  <script src="./qr.js"></script>
+  <script src="./guest-qr.js"></script>
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-*/
-"use strict";var ContactObscenity=(()=>{var d=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports);var m=d(p=>{"use strict";Object.defineProperty(p,"__esModule",{value:!0});p.isHighSurrogate=Yt;p.isLowSurrogate=Gt;p.convertSurrogatePairToCodePoint=Jt;p.isWordChar=Qt;p.isDigit=Wt;p.isAlphabetic=Mt;p.isLowerCase=yt;p.isUpperCase=bt;p.invertCaseOfAlphabeticChar=Xt;p.getAndAssertSingleCodePoint=Zt;function Yt(t){return 55296<=t&&t<=56319}function Gt(t){return 56320<=t&&t<=57343}function Jt(t,e){return(t-55296)*1024+e-56320+65536}function Qt(t){return Wt(t)||Mt(t)}function Wt(t){return 48<=t&&t<=57}function Mt(t){return yt(t)||bt(t)}function yt(t){return 97<=t&&t<=122}function bt(t){return 65<=t&&t<=90}function Xt(t){return t^32}function Zt(t){if([...t].length!==1)throw new RangeError("Expected the input string to be one code point in length.");return t.codePointAt(0)}});var H=d(g=>{"use strict";Object.defineProperty(g,"__esModule",{value:!0});g.keepStartCensorStrategy=ee;g.keepEndCensorStrategy=re;g.asteriskCensorStrategy=ae;g.grawlixCensorStrategy=ne;g.fixedPhraseCensorStrategy=se;g.fixedCharCensorStrategy=_t;g.randomCharFromSetCensorStrategy=Ct;var te=m();function ee(t){return e=>e.overlapsAtStart?t(e):String.fromCodePoint(e.input.codePointAt(e.startIndex))+t({...e,matchLength:e.matchLength-1})}function re(t){return e=>{if(e.overlapsAtEnd)return t(e);let a=String.fromCodePoint(e.input.codePointAt(e.endIndex));return t({...e,matchLength:e.matchLength-1})+a}}function ae(){return _t("*")}function ne(){return Ct("%@$&*")}function se(t){return()=>t}function _t(t){return(0,te.getAndAssertSingleCodePoint)(t),e=>t.repeat(e.matchLength)}function Ct(t){let e=[...t];if(e.length<2)throw new Error("The character set passed must have at least 2 characters.");return a=>{if(a.matchLength===0)return"";let n=Math.floor(Math.random()*e.length),s=e[n];for(let l=1;l<a.matchLength;l++){let i=Math.floor(Math.random()*(e.length-1));i>=n&&i++,n=i,s+=e[i]}return s}}});var vt=d(K=>{"use strict";Object.defineProperty(K,"__esModule",{value:!0});K.compareIntervals=ie;function ie(t,e,a,n){return t<a?-1:a<t?1:e<n?-1:n<e?1:0}});var C=d(z=>{"use strict";Object.defineProperty(z,"__esModule",{value:!0});z.compareMatchByPositionAndId=oe;var de=vt();function oe(t,e){let a=(0,de.compareIntervals)(t.startIndex,t.endIndex,e.startIndex,e.endIndex);return a!==0?a:t.termId===e.termId?0:t.termId<e.termId?-1:1}});var wt=d(v=>{"use strict";Object.defineProperty(v,"__esModule",{value:!0});v.TextCensor=void 0;var le=C(),he=H(),F=class{strategy=(0,he.grawlixCensorStrategy)();setStrategy(e){return this.strategy=e,this}applyTo(e,a){if(a.length===0)return e;let n=[...a].sort(le.compareMatchByPositionAndId),s="",l=0;for(let i=0;i<n.length;i++){let o=n[i];if(l>o.endIndex)continue;let c=o.startIndex<l;c||(s+=e.slice(l,o.startIndex));let _=Math.max(l,o.startIndex),P=i<n.length-1&&o.endIndex>=n[i+1].startIndex&&o.endIndex<n[i+1].endIndex;s+=this.strategy({...o,startIndex:_,input:e,overlapsAtStart:c,overlapsAtEnd:P}),l=o.endIndex+1}return s+=e.slice(l),s}};v.TextCensor=F});var Y=d(V=>{"use strict";Object.defineProperty(V,"__esModule",{value:!0});V.assignIncrementingIds=ce;function ce(t){let e=0;return t.map(a=>({id:e++,pattern:a}))}});var J=d(W=>{"use strict";Object.defineProperty(W,"__esModule",{value:!0});W.PhraseBuilder=W.DataSet=void 0;var ue=Y(),G=class{containers=[];patternCount=0;patternIdToPhraseContainer=new Map;addAll(e){for(let a of e.containers)this.registerContainer(a);return this}removePhrasesIf(e){this.patternCount=0,this.patternIdToPhraseContainer.clear();let a=this.containers.splice(0);for(let n of a)e(n)||this.registerContainer(n);return this}addPhrase(e){let a=e(new w).build();return this.registerContainer(a),this}getPayloadWithPhraseMetadata(e){let a=this.patternIdToPhraseContainer.get(e.termId);if(a===void 0)throw new Error(`The pattern with ID ${e.termId} does not exist in this dataset.`);return{...e,phraseMetadata:this.containers[a].metadata}}build(){return{blacklistedTerms:(0,ue.assignIncrementingIds)(this.containers.flatMap(e=>e.patterns)),whitelistedTerms:this.containers.flatMap(e=>e.whitelistedTerms)}}registerContainer(e){let a=this.containers.push(e)-1;for(let n=0,s=this.patternCount;n<e.patterns.length;n++,s++)this.patternIdToPhraseContainer.set(s,a),this.patternCount++}};W.DataSet=G;var w=class{patterns=[];whitelistedTerms=[];metadata;addPattern(e){return this.patterns.push(e),this}addWhitelistedTerm(e){return this.whitelistedTerms.push(e),this}setMetadata(e){return this.metadata=e,this}build(){return{patterns:this.patterns,whitelistedTerms:this.whitelistedTerms,metadata:this.metadata}}};W.PhraseBuilder=w});var St=d(kt=>{"use strict";Object.defineProperty(kt,"__esModule",{value:!0})});var S=d(k=>{"use strict";Object.defineProperty(k,"__esModule",{value:!0});k.SyntaxKind=void 0;var xt;(function(t){t[t.Optional=0]="Optional",t[t.Wildcard=1]="Wildcard",t[t.Literal=2]="Literal",t[t.BoundaryAssertion=3]="BoundaryAssertion"})(xt||(k.SyntaxKind=xt={}))});var It=d(b=>{"use strict";Object.defineProperty(b,"__esModule",{value:!0});b.potentiallyMatchesEmptyString=pe;b.compilePatternToRegExp=fe;b.getRegExpStringForNode=Q;var x=S();function pe(t){return t.nodes.every(e=>e.kind===x.SyntaxKind.Optional)}function fe(t){let e="";t.requireWordBoundaryAtStart&&(e+="\\b");for(let a of t.nodes)e+=Q(a);return t.requireWordBoundaryAtEnd&&(e+="\\b"),new RegExp(e,"gs")}var me=["[",".","*","+","?","^","$","{","}","(",")","|","[","\\","]"].map(t=>t.charCodeAt(0));function Q(t){switch(t.kind){case x.SyntaxKind.Literal:{let e="";for(let a of t.chars)me.includes(a)&&(e+="\\"),e+=String.fromCodePoint(a);return e}case x.SyntaxKind.Optional:return`(?:${Q(t.childNode)})?`;case x.SyntaxKind.Wildcard:return"."}}});var qt=d(I=>{"use strict";Object.defineProperty(I,"__esModule",{value:!0});I.TransformerSet=void 0;var X=class{transformers;statefulTransformers;constructor(e){this.transformers=e,this.statefulTransformers=Array.from({length:this.transformers.length});for(let a=0;a<this.transformers.length;a++){let n=this.transformers[a];n.type===1&&(this.statefulTransformers[a]=n.factory())}}applyTo(e){let a=e;for(let n=0;n<this.transformers.length&&a!==void 0;n++){let s=this.transformers[n];s.type===0?a=s.transform(a):a=this.statefulTransformers[n].transform(a)}return a}resetAll(){for(let e=0;e<this.transformers.length;e++)this.transformers[e].type===1&&this.statefulTransformers[e].reset()}};I.TransformerSet=X});var A=d(q=>{"use strict";Object.defineProperty(q,"__esModule",{value:!0});q.CharacterIterator=void 0;var Z=m(),tt=class{_input;lastPosition=-1;currentPosition=0;_lastWidth=0;constructor(e){this._input=e??""}get input(){return this._input}setInput(e){return this._input=e,this.reset(),this}reset(){this.lastPosition=-1,this.currentPosition=0,this._lastWidth=0}next(){if(this.done)return{done:!0,value:void 0};this.lastPosition=this.currentPosition;let e=this._input.charCodeAt(this.currentPosition++);if(this._lastWidth=1,this.done||!(0,Z.isHighSurrogate)(e))return{done:!1,value:e};let a=this._input.charCodeAt(this.currentPosition);return(0,Z.isLowSurrogate)(a)?(this._lastWidth++,this.currentPosition++,{done:!1,value:(0,Z.convertSurrogatePairToCodePoint)(e,a)}):{done:!1,value:e}}get position(){return this.lastPosition}get lastWidth(){return this._lastWidth}get done(){return this.currentPosition>=this._input.length}[Symbol.iterator](){return this}};q.CharacterIterator=tt});var At=d(O=>{"use strict";Object.defineProperty(O,"__esModule",{value:!0});O.IntervalCollection=void 0;var et=class{dirty=!1;intervals=[];insert(e,a){this.intervals.push([e,a]),this.dirty=!0}query(e,a){if(this.intervals.length===0)return!1;this.dirty&&(this.dirty=!1,this.intervals.sort((n,s)=>n[0]<s[0]?-1:s[0]<n[0]?1:0));for(let n of this.intervals){if(n[0]>e)break;if(n[0]<=e&&a<=n[1])return!0}return!1}values(){return this.intervals.values()}[Symbol.iterator](){return this.values()}};O.IntervalCollection=et});var Et=d(j=>{"use strict";Object.defineProperty(j,"__esModule",{value:!0});j.RegExpMatcher=void 0;var Ot=It(),jt=qt(),M=m(),ge=A(),Pe=At(),Te=C(),rt=class{blacklistedTerms;whitelistedTerms;blacklistMatcherTransformers;whitelistMatcherTransformers;constructor({blacklistedTerms:e,whitelistedTerms:a=[],blacklistMatcherTransformers:n=[],whitelistMatcherTransformers:s=[]}){this.blacklistedTerms=this.compileTerms(e),this.validateWhitelistedTerms(a),this.whitelistedTerms=a,this.blacklistMatcherTransformers=new jt.TransformerSet(n),this.whitelistMatcherTransformers=new jt.TransformerSet(s)}getAllMatches(e,a=!1){let n=this.getWhitelistedIntervals(e),[s,l]=this.applyTransformers(e,this.blacklistMatcherTransformers),i=[];for(let o of this.blacklistedTerms)for(let c of l.matchAll(o.regExp)){let _=s[c.index],P=s[c.index+c[0].length-1];P<e.length-1&&(0,M.isHighSurrogate)(e.charCodeAt(P))&&(0,M.isLowSurrogate)(e.charCodeAt(P+1))&&P++,n.query(_,P)||i.push({termId:o.id,startIndex:_,endIndex:P,matchLength:[...c[0]].length})}return a&&i.sort(Te.compareMatchByPositionAndId),i}hasMatch(e){let a=this.getWhitelistedIntervals(e),[n,s]=this.applyTransformers(e,this.blacklistMatcherTransformers);for(let l of this.blacklistedTerms)for(let i of s.matchAll(l.regExp)){let o=n[i.index],c=n[i.index+i[0].length-1];if(c<e.length-1&&(0,M.isHighSurrogate)(e.charCodeAt(c))&&(0,M.isLowSurrogate)(e.charCodeAt(c+1))&&c++,!a.query(o,c))return!0}return!1}getWhitelistedIntervals(e){let a=new Pe.IntervalCollection,[n,s]=this.applyTransformers(e,this.whitelistMatcherTransformers);for(let l of this.whitelistedTerms){let i=0;for(let o=s.indexOf(l,i);o!==-1;o=s.indexOf(l,i)){let c=n[o+l.length-1];c<e.length-1&&(0,M.isHighSurrogate)(e.charCodeAt(c))&&(0,M.isLowSurrogate)(e.charCodeAt(c+1))&&c++,a.insert(n[o],c),i=o+l.length}}return a}applyTransformers(e,a){let n=[],s="",l=new ge.CharacterIterator(e);for(let i of l){let o=a.applyTo(i);if(o!==void 0)for(s+=String.fromCodePoint(o);n.length<s.length;)n.push(l.position)}return a.resetAll(),[n,s]}compileTerms(e){let a=[],n=new Set;for(let s of e){if(n.has(s.id))throw new Error(`Duplicate blacklisted term ID ${s.id}.`);if((0,Ot.potentiallyMatchesEmptyString)(s.pattern))throw new Error(`Pattern with ID ${s.id} potentially matches empty string; this is unsupported.`);a.push({id:s.id,regExp:(0,Ot.compilePatternToRegExp)(s.pattern)}),n.add(s.id)}return a}validateWhitelistedTerms(e){if(e.some(a=>a.length===0))throw new Error("Whitelisted term set contains empty string; this is unsupported.")}};j.RegExpMatcher=rt});var nt=d(E=>{"use strict";Object.defineProperty(E,"__esModule",{value:!0});E.ParserError=void 0;var at=class extends Error{name="ParserError";line;column;constructor(e,a,n){super(`${a}:${n}: ${e}`),this.line=a,this.column=n}};E.ParserError=at});var Rt=d(L=>{"use strict";Object.defineProperty(L,"__esModule",{value:!0});L.Parser=void 0;var st=m(),We=A(),T=S(),Me=nt(),Bt=[92,91,93,63,124],ye=Bt.map(t=>`'${String.fromCodePoint(t)}'`).join(", "),Lt=-1,it=class{input="";line=1;column=1;position=0;lastColumn=1;lastWidth=0;parse(e){this.setInput(e);let a=[],n=this.nextNode(),s=n?.kind===T.SyntaxKind.BoundaryAssertion;n&&!s&&a.push(n);let l=!1;for(;!this.done;){let i=this.mark(),o=this.nextNode();if(o.kind!==T.SyntaxKind.BoundaryAssertion){a.push(o);continue}this.done||this.reportError("Boundary assertions are not supported in this position; they are only allowed at the start / end of the pattern.",i),l=!0}return{requireWordBoundaryAtStart:s,requireWordBoundaryAtEnd:l,nodes:a}}setInput(e){return this.input=e,this.line=1,this.column=1,this.position=0,this.lastColumn=1,this.lastWidth=0,this}nextNode(){switch(this.peek()){case Lt:return;case 91:return this.parseOptional();case 93:this.reportError("Unexpected ']' with no corresponding '['.");case 63:return this.parseWildcard();case 124:return this.parseBoundaryAssertion();default:return this.parseLiteral()}}get done(){return this.position>=this.input.length}parseOptional(){let e=this.mark();this.next();let a=this.mark();this.done&&this.reportError("Unexpected unclosed '['.",e),this.accept("[")&&this.reportError("Unexpected nested optional node.",a);let n=this.nextNode();return n.kind===T.SyntaxKind.BoundaryAssertion&&this.reportError("Boundary assertions are not supported in this position; they are only allowed at the start / end of the pattern.",a),this.accept("]")||this.reportError("Unexpected unclosed '['."),{kind:T.SyntaxKind.Optional,childNode:n}}parseWildcard(){return this.next(),{kind:T.SyntaxKind.Wildcard}}parseBoundaryAssertion(){return this.next(),{kind:T.SyntaxKind.BoundaryAssertion}}parseLiteral(){let e=[];for(;!this.done;){if(this.accept("[]?|")){this.backup();break}let a=this.next();if(a===92){this.done&&(this.backup(),this.reportError("Unexpected trailing backslash."));let n=this.next();if(!Bt.includes(n)){let s=String.fromCodePoint(n);this.backup(),this.reportError(`Cannot escape character '${s}'; the only characters that can be escaped are the following: ${ye}.`)}e.push(n)}else e.push(a)}return{kind:T.SyntaxKind.Literal,chars:e}}reportError(e,{line:a=this.line,column:n=this.column}={}){throw new Me.ParserError(e,a,n)}mark(){return{line:this.line,column:this.column}}accept(e){let a=this.next(),n=new We.CharacterIterator(e);for(let s of n)if(s===a)return!0;return this.backup(),!1}peek(){let e=this.next();return this.backup(),e}next(){if(this.done)return Lt;let e=this.input.charCodeAt(this.position++);if(this.lastWidth=1,e===10)return this.lastColumn=this.column,this.column=1,this.line++,e;if(this.lastColumn=this.column++,!(0,st.isHighSurrogate)(e)||this.done)return e;let a=this.input.charCodeAt(this.position);return(0,st.isLowSurrogate)(a)?(this.position++,this.lastWidth++,(0,st.convertSurrogatePairToCodePoint)(e,a)):e}backup(){this.position-=this.lastWidth,this.column=this.lastColumn,this.lastWidth===1&&this.input.charCodeAt(this.position)===10&&this.line--}};L.Parser=it});var dt=d(B=>{"use strict";Object.defineProperty(B,"__esModule",{value:!0});B.pattern=_e;B.parseRawPattern=Ce;var be=Rt(),Dt=new be.Parser;function _e(t,...e){let a=t.raw[0];for(let[n,s]of e.entries())a+=String(s),a+=t.raw[n+1];return Dt.parse(a)}function Ce(t){return Dt.parse(t)}});var y=d(R=>{"use strict";Object.defineProperty(R,"__esModule",{value:!0});R.createSimpleTransformer=ve;R.createStatefulTransformer=we;function ve(t){return{type:0,transform:t}}function we(t){return{type:1,factory:t}}});var Nt=d(D=>{"use strict";Object.defineProperty(D,"__esModule",{value:!0});D.CollapseDuplicatesTransformer=void 0;var ot=class{defaultThreshold;customThresholds;remaining=-1;lastChar=-1;constructor({defaultThreshold:e,customThresholds:a}){this.defaultThreshold=e,this.customThresholds=a}transform(e){if(e===this.lastChar)return this.remaining-- >0?e:void 0;let a=this.customThresholds.get(e)??this.defaultThreshold;return this.remaining=a-1,this.lastChar=e,a>0?e:void 0}reset(){this.remaining=-1,this.lastChar=-1}};D.CollapseDuplicatesTransformer=ot});var ht=d(lt=>{"use strict";Object.defineProperty(lt,"__esModule",{value:!0});lt.collapseDuplicatesTransformer=Ie;var ke=m(),Se=y(),xe=Nt();function Ie({defaultThreshold:t=1,customThresholds:e=new Map}={}){let a=qe(e);return(0,Se.createStatefulTransformer)(()=>new xe.CollapseDuplicatesTransformer({defaultThreshold:t,customThresholds:a}))}function qe(t){let e=new Map;for(let[a,n]of t){if(n<0)throw new RangeError("Expected all thresholds to be non-negative.");let s=(0,ke.getAndAssertSingleCodePoint)(a);e.set(s,n)}return e}});var N=d(ct=>{"use strict";Object.defineProperty(ct,"__esModule",{value:!0});ct.remapCharactersTransformer=Ee;var Ae=m(),Oe=A(),je=y();function Ee(t){let e=Le(t);return(0,je.createSimpleTransformer)(a=>e.get(a)??a)}function Le(t){let e=new Map,a=t instanceof Map?t.entries():Object.entries(t);for(let[n,s]of a){let l=(0,Ae.getAndAssertSingleCodePoint)(n),i=new Oe.CharacterIterator(s);for(let o of i)e.set(o,l)}return e}});var $t=d($=>{"use strict";Object.defineProperty($,"__esModule",{value:!0});$.confusables=void 0;$.confusables=new Map([[" "," "],["0","\u24FF"],["1","\u24F5\u278A\u2474\xB9\u{1D7CF}\u{1D7D9}\uFF11\u{1D7F7}\u{1D7E3}\u2488\u{1D7ED}1\u2780\u2081\u2460\u2776\u2960"],["2","\u24F6\u2489\u2475\u278B\u01BB\xB2\u14BF\u{1D7DA}\uFF12\u{1D7EE}\u{1D7E4}\u14BE\u{1D7F8}\u01A7\u{1D7D0}\u2461\u1D24\u2082\u2781\u2777\u161D\u01A8"],["3","\xB3\u2CCC\uA7AB\u{1D7D1}\u2128\u{1D7DB}\u{1D7EF}\u{1D7E5}\uA76A\u278C\u0417\u021C\u24F7\u04E0\u01B7\uFF13\u{1D7F9}\u2476\u248A\u0292\u0293\u01EF\u01EE\u01BA\u{1D574}\u1DBE\u0437\u19A1\u2782\u2462\u2083\u1D9A\u1D23\u1D1F\u2778\u0498\u0499\u04EC\u04E1\u04ED\u04DF\u04DE"],["4","\u278D\u04B6\u13CE\u{1D7DC}\u04B7\u24F8\u04B8\u04B9\u04F4\u04F5\u1DA3\uFF14\u0447\u3129\u2074\u2783\u2084\u2463\u2779\u04CB\u2477\u248B"],["5","\u{1D7F1}\u24F9\u278E\u01BC\u{1D7D3}\u{1D7FB}\u{1D7DD}\u{1D7E7}\uFF15\u2784\u2085\u2464\u2075\u277A\u01BD\u2478\u248C"],["6","\u2CD2\u13EE\u{1D7DE}\u{1D7E8}\u{1D7D4}\u278F\u24FA\u03EC\u03ED\u2076\u0431\uFF16\u19C8\u2465\u2785\u2086\u277B\u2479\u248D"],["7","\u24FB\u{104D2}\u2790\uFF17\u2077\u2466\u2087\u277C\u2786\u247A\u248E"],["8","\u{1031A}\u2791\u24FC\uFF18\u{1D7E0}\u{1D7EA}\u09EA\u2078\u2088\u{1D7F4}\u2787\u2467\u277D\u{1D7FE}\u{1D7D6}\u247B\u248F"],["9","\uA76E\u2CCA\u24FD\u2792\u0A67\u09ED\u0B68\uFF19\u{1D7EB}\u{1D7FF}\u{1D7D7}\u2079\u2089\u0533\u2788\u2468\u277E\u247C\u2490"],["A","\u{1F130}\u13AF\u{102A0}\u{1D56C}\u{1D71C}\u{1D434}\uA4EE\u13AA\u{1D6A8}\uAB7A\u{1D756}\u{1F150}\u212B\u2200\u{1F1E6}\u20B3\u{1F170}\u{1D49C}\u{1D608}\u{1D400}\u{1D538}\u0434\u01FA\u15C5\u24B6\uFF21\u0391\u1F8B\u15E9\u0102\xC3\xC5\u01CD\u0200\u0202\u0100\u023A\u0104\u028C\u039B\u03BB\u019B\u1D00\u1D2C\u0414\u0410\u120D\xC4\u2090\u1571\xAA\u01DE\u04D2\u0386\u1EA0\u1EA2\u1EA6\u1EA8\u1EAC\u1EAE\u1EB0\u1EB2\u1EB4\u1EB6\u1FB8\u1FB9\u1FBA\u1FBB\u1FBC\u1F88\u1F89\u1F8A\u1F8C\u1F8D\u1F8E\u1F8F\u1F08\u1F09\u1F0A\u1F0B\u1F0C\u1F0D\u1F0E\u1F0F\u1E00\u0226\u01E0\u04D0\xC0\xC1\xC2\u1EA4\u1EAA\u{1D6E2}\u{1D4D0}\u{1D670}\u{1D63C}"],["a","\u2202\u237A\u24D0\u0571\u01DF\u1D43\u1D8F\u249C\u0430\u0252\uFF41\u03B1\u0203\u0201\u0E04\u01CE\u10DB\xE4\u0251\u0101\u0250\u0105\u1F84\u1E9A\u1EA1\u1EA3\u01E1\u1EA7\u1EB5\u1E01\u0227\u04D1\u04D3\xE3\xE5\u03AC\u1F70\u1F71\u0103\u1EA9\u1EB1\u1EB3\u1EB7\u1F80\u1F81\u1F82\u1F83\u1F85\u1F86\u1FB0\u1FB1\u1FB2\u1FB3\u1FB4\u1D90\u1FB6\u1FB7\u1F00\u1F01\u1F02\u1F03\u1F04\u1F05\u1F06\u1F07\u1F87\u1EAD\u1EAF\xE0\xE1\xE2\u1EA5\u1EAB\u01FB\u2C65\u{1D41A}\u{1D44E}\u{1D482}\u{1D4B6}\u{1D4EA}\u{1D51E}\u{1D552}\u{1D586}\u{1D5BA}\u{1D5EE}\u{1D622}\u{1D656}\u{1D68A}\u{1D6C2}\u{1D6FC}\u{1D736}\u{1D770}\u{1D7AA}\u2376"],["B","\u{10301}\u{1D469}\u{1D56D}\u{1F131}\u{102A1}\u{1D5A1}\u{1D63D}\uA4D0\u{1D5D5}\u{1D609}\u{1D71D}\u{10282}\u{1D6A9}\u{1D401}\u{1D6E3}\u{1D757}\u{1D435}\u{1D671}\u{1D539}\u13F4\u13FC\u{1D791}\uA7B4\u{1D505}\u{1F151}\u0E3F\u{1D4D1}\u15FF\u15FE\u15FD\u{1F171}\u24B7\uFF22\u0432\u03D0\u15F7\u0181\u4E43\xDF\u10EA\u10E9\u0E56\u03B2\u026E\u0411\u0545\u0E52\u1656\u0299\u1D2E\u1D47\u130C\u1E04\u212C\u0392\u0412\u1E9E\u1E02\u1E06\u0243\u0D26\u15F9\u15F8\u1D5D\u165E\u165F\u165D\u16D2\u1657\u1658\u1D03\u{1F1E7}"],["b","\u13CF\u{1D41B}\u{1D623}\u{1D4B7}\u{1D51F}\u{1D4EB}\u{1D587}\u{1D5BB}\u{1D44F}\u{1D657}\u{1D553}\u{1D483}\u{1D5EF}\u{1D68B}\u266D\u1473\u1488\uFF42\u159A\u1579\u157A\u24D1\u1E03\u1E05\u048D\u044A\u1E07\u0183\u0253\u0185\u15AF\u0184\u042C\u1472\xFE\u0182\u249D\u042A\u1D80\u147F\u1480\u1482\u1481\u147E\u044C\u0180\u048C\u0462\u0463\u150E"],["C","\u13DF\u2CA4\u{1F132}\uA4DA\u{102A2}\u{10302}\u{1F172}\u{10415}\u{1F152}\u263E\u010C\xC7\u24B8\uFF23\u2183\u0187\u1455\u3108\xA2\u096E\u21BB\u0108\u03FE\u0547\u023B\u1645\u1D9C\u249E\u0106\u0480\u010A\xA9\u091F\u0186\u2102\u212D\u03F9\u0421\u531A\u1E08\u04AA\u0297\u1456\u1461\u1462\u1463\u1464\u1465\u216D\u{1D402}\u{1D436}\u{1D46A}\u{1D49E}\u{1D4D2}\u{1D56E}\u{1D5A2}\u{1D5D6}\u{1D60A}\u{1D63E}\u150D"],["c","\u2CA5\u{1043D}\uABAF\u0109\uFF43\u24D2\u0107\u010D\u010B\xE7\u0481\u0188\u1E09\u023C\u2184\u0441\u122D\u1D04\u03F2\u04AB\uA49D\u03C2\u027D\u03DB\u{1D672}\u1466\u19DA\u{1D41C}\u{1D450}\u{1D484}\u{1D4B8}\u{1D4EC}\u{1D520}\u{1D554}\u{1D588}\u{1D5BC}\u{1D5F0}\u{1D624}\u{1D658}\u{1D68C}\u20B5\u{1F1E8}\u1974\u14BC\u217D"],["D","\u13A0\u{1F133}\u{1D521}\u{1D589}\u{1D53B}\u{1D5D7}\u{1D60B}\u{1D673}\u{1D437}\u{1D4D3}\u{1D403}\u{1D46B}\u{1D56F}\u{1D5A3}\u{1D507}\u{1D63F}\uAB70\u2145\u{1D49F}\uA4D3\u{1F173}\u{1F153}\u24B9\uFF24\u0189\u15EA\u018A\xD0\u053A\u1D05\u1D30\u2181\u1E0A\u0110\xDE\u216E\u15DE\u146F\u010E\u1E0C\u1E10\u1E12\u1E0E\u15EB\u15EC\u15DF\u15E0\u1D9B\u1D06\u{1F1E9}"],["d","\u13E7\uA4D2\u{1D4ED}\u1D6D\u20AB\u0503\u24D3\uFF44\u1E0B\u010F\u1E0D\u1E11\u1E13\u1E0F\u0111\u018C\u0256\u0257\u1D48\u249F\u0501\u217E\u1D81\u0500\u147A\u147B\u147C\u147D\u1484\u1470\u1471\u1D91\u{1D555}\u{1D5BD}\u{1D451}\u{1D625}\u{1D485}\u{1D659}\u{1D41D}\u{1D5F1}\u{1D68D}\u2146\u{1D4B9}\u02A0\u056A"],["E","\uAB7C\u{1F134}\u{1D640}\u{1D53C}\u{10286}\u{1D6AC}\uA4F0\u{1D75A}\u{1D794}\u{1D4D4}\u{1D46C}\u{1D5D8}\u{1F174}\u{1F154}\u24BA\u0388\uFF25\u018E\u1F1D\u156E\u0190\u30E2\u0404\u1D07\u1D31\u1D49\xC9\u4E47\u0401\u0246\uA085\u20AC\xC8\u2130\u0395\u0415\u2D39\u13AC\u0112\u0114\u0116\u0118\u011A\xCA\xCB\u0510\u1EC0\u1EBE\u1EC4\u1EC2\u1EBC\u1E14\u1E16\u1EBA\u0204\u0206\u1EB8\u1EC6\u0228\u1E1C\u1E18\u1E1A\u1F18\u1F19\u1F1A\u1F1B\u1F1C\u1FC8\u1FC9\u04D6\u1F72\u1F73\u0400\u03F5\u{1F1EA}"],["e","\u{1D452}\u{1D4EE}\u{1D556}\u{1D58A}\u{1D626}\u{1D5F2}\u{1D68E}\u{1D65A}\u{1D486}\u{1D522}\u{1D5BE}\u{1D41E}\u04BE\u04BF\u24D4\uFF45\u24A0\xE8\u19C9\xE9\u1D92\xEA\u0258\u1F14\u1EC1\u1EBF\u1EC5\u0AEF\u01DD\u0454\u03B5\u0113\u04BD\u025B\u1EC3\u1EBD\u1E15\u1E17\u0115\u0117\xEB\u1EBB\u011B\u0205\u0207\u1EB9\u1EC7\u0229\u0247\u2091\u0119\u1E1D\u1E19\u1E1B\u212E\u0435\u0511\u0450\u04D7\u1971\u0451\u1F10\u1F11\u1F12\u1F13\u1F15\u212F"],["F","\u{1F135}\u{10287}\u{1D509}\u{1D60D}\u{102A5}\uA4DD\uA798\u{1F175}\u{1F155}\u{1D4D5}\u24BB\uFF26\u0493\u0492\u15B4\u0191\u0532\u03DD\u127B\u1E1E\u2131\u03DC\u20A3\u{1F1EB}\u2132"],["f","\u{1D41F}\u{1D58B}\u24D5\uFF46\u0192\u1E1F\u0283\u0562\u1DA0\u24A1\u017F\uA2B0\u0284\u2231\u1D82\u{1D627}"],["G","\uA4D6\u13F3\u{1F136}\u13C0\u13FB\u{1D53E}\u{1D4D6}\u{1D46E}\u{1D572}\uAB90\u{1D4A2}\u{1D642}\u{1D5A6}\u{1D676}\u{1D50A}\u{1D43A}\u{1D406}\u{1F176}\u{1F156}\u24BC\uFF27\u0262\u0193\u029B\u0122\u161C\u1D33\u01F4\u0120\u050C\u011C\u1E20\u011E\u01E6\u01E4\u050D\u20B2\u{1F1EC}\u2141"],["g","\u24D6\uFF47\u01F5\u011D\u1E21\u011F\u0121\u01E7\u0123\u0581\u0AED\u01E5\u0260\uFEED\uFEEE\u1D4D\u24A2\u210A\u0261\u19C1\u{1D420}\u{1D454}\u{1D488}\u{1D4F0}\u{1D524}\u{1D558}\u{1D58C}\u{1D5C0}\u{1D5F4}\u{1D628}\u{1D65C}\u{1D690}"],["H","\u{1F137}\u{1D722}\uA4E7\u{1D60F}\u{1D43B}\u{1D75C}\u{1D5A7}\u{102CF}\u{1D5DB}\uAB8B\u210D\u13BB\u210C\u2C8E\u{1D46F}\u{1D796}\u{1F177}\u{1F157}\u12DE\u01F6\u050B\u24BD\uFF28\u0124\u16BA\u1E22\u1E26\u021E\u1E24\u1E28\u1E2A\u0126\u2C67\u04A2\u04A3\u04A4\u1FCA\u1FCB\u1FCC\u1F28\u1F29\u1F2A\u1F2B\u1F2D\u1F2E\u1F2F\u1F98\u1F99\u1F9A\u1F9B\u1F9C\u1F9D\u1F9E\u1F9F\u04C9\u04C8\u04A5\u0389\u043D\u5344\u2653\u{1D4D7}\u210B\u041D\u{1D407}\u{1D643}\u{1D677}\u029C\u{1D6E8}\u0397\u{1D6AE}\u157C\u04C7\u1D34\u1D78\u{1F1ED}"],["h","\u04BA\u24A3\u0452\u24D7\uFF48\u0125\u1E23\u1E27\u021F\u1E25\u1E29\u1E2B\u1E96\u0127\u2C68\u0570\u04BB\u12A8\u12A9\u12AA\u12AB\u0266\u210E\u{1D421}\u{1D489}\u{1D4BD}\u{1D4F1}\u{1D525}\u{1D559}\u{1D58D}\u{1D5C1}\u{1D5F5}\u{1D629}\u{1D65D}\u{1D691}\u056B\u02B0\u144B\u15C1\u0267\u3093\u0265"],["I","\u{1F138}\u0407\uA024\u13C6\u{1F178}\u{1F158}\u0625\uFE87\u0673\u0623\uFE83\u0672\u0675\u24BE\uFF29\u17F8\xCC\xCD\xCE\u0128\u012A\u012C\u0130\xCF\u1E2E\u1EC8\u01CF\u0208\u020A\u1ECA\u012E\u1E2C\u0197\u30A7\u30A8\u1FD8\u1FD9\u1FDA\u1FDB\u1F38\u1F39\u1F3A\u1F3B\u1F3C\u1F3D\u1F3E\u2160\u03AA\u038A\u026A\u1DA6\u144A\u1963\u{1D6EA}\u{1D408}\u{1D644}\u{1D678}\u{1D4F5}\u{1D661}\u{1D43C}\u1D35\u{1D6B0}\u{1D470}\u{1F1EE}"],["i","\u24D8\uFF49\xEC\xED\xEE\u0129\u012B\u012D\xEF\u1E2F\u1EC9\u01D0\u0209\u020B\u1ECB\u1E2D\u1FD0\u1FD1\u1FD2\u1FD3\u1FD6\u1FD7\u1F30\u1F31\u1F32\u2170\u217C\u2223\u2D4F\uFFE8\u05C0\u0627\u0661\u06F1\u07CA\u16C1\u1F33\u1F34\u1F35\u0268\u0456\u1F76\u1F77\u1D96\u{1D526}\u{1D692}\u{1D778}\u{1D5C2}\u{1D422}\u{1D55A}\u{1D58E}\u{1D5F6}\u{1D62A}\u{1D65E}\u03AF\u2071\u1D62\u{1D4F2}\u24A4"],["J","\u{1F139}\u{1F179}\u{1F159}\u24BF\uFF2A\u0408\u029D\u148D\u05E0\uFF8C\u0134\u0286\u0E27\u0644\u0575\u0296\u1D0A\u1D36\uFEDD\u130B\u0248\u2C7C\u0542\u0E45\u10B1\u012F\u13AB\u0237\u4E3F\u2110\u2111\u1498\u1499\u149A\u149B\u14B4\u14B5\u148E\u148F\u{1F1EF}"],["j","\u24D9\uFF4A\u03F3\u02B2\u24A5\u0249\u0135\u01F0\u0458\u06B6\u1DA8\u{1D4BF}\u{1D62B}\u{1D5F7}\u{1D457}\u{1D65F}\u{1D527}\u{1D48B}\u{1D5C3}\u{1D4F3}\u{1D55B}\u{1D693}\u{1D58F}\u{1D423}"],["K","\u{1D5DE}\u{1F13A}\u{1D725}\u{1D612}\uA4D7\u{1D646}\u{1D542}\u2C94\u{1D50E}\u{1D6EB}\u13E6\u{1D799}\u{1D4A6}\u{1F17A}\u{1F15A}\u20AD\u24C0\uFF2B\u0138\u1E30\u045C\u0198\u043A\u04A0\u03BA\u049B\u049F\u04C4\u029E\u049A\u041A\u04A1\u1D0B\u1D37\u1D4F\u24A6\u16D5\u040C\u1315\u1E32\u039A\u212A\u049C\u049D\u049E\u0136\u1E34\u01E8\u2C69\u03D7\u04C3\u{1F1F0}"],["k","\u24DA\uFF4B\u1E31\u01E9\u1E33\u0137\u1E35\u0199\u2C6A\u1D84\u{1D424}\u{1D62C}\u{1D5C4}\u{1D55C}\u{1D705}\u{1D718}\u{1D73F}\u{1D752}\u{1D779}\u{1D78C}\u{1D7B3}\u{1D660}\u{1D694}\u{1D458}\u{1D48C}\u03F0\u{1D6CB}\u{1D6DE}\u{1D7C6}\u{1D5F8}\u{1D4F4}\u{1D4C0}"],["L","\u{1F13B}\u{1041B}\u2CD0\u{1D473}\u{1D67B}\u{10443}\u{1D4DB}\u2CD1\uABAE\u13DE\uA4E1\u{1F17B}\u{1F15B}\uFE88\u2514\u24C1\u0582\uFF2C\u013F\u14AA\u4E5A\u0546\u029F\uA4F6\u03B9\u053C\u1D38\u02E1\u0139\u1228\u1E36\u2097\u0393\u056C\u013B\u1102\u216C\u2112\u2C62\u1967\u1968\u14BB\u14B6\u14B7\u1DAB\uFE8E\u14BA\u14B9\u14B8\u14AB\u23B3\u3125\u0141\u2C60\uFE84\u023D\u{1F1F1}"],["l","\u24DB\uFF4C\u0140\u013A\u013E\u1E37\u1E39\u013C\u04C0\u2113\u1E3D\u1E3B\u0142\uFF9A\u026D\u019A\u026B\u2C61|\u0196\u24A7\u0285\u01C0\u05D5\u05DF\u0399\u0406\uFF5C\u1DA9\u04CF\u{1D4D8}\u{1D540}\u{1D5A8}\u{1D5DC}\u{1D610}\u{1D425}\u{1D459}\u{1D48D}\u{1D4C1}\u{1D529}\u{1D55D}\u{1D591}\u{1D5C5}\u{1D5F9}\u{1D62D}\u{1D695}\u{1D724}\u{1D75E}\u0131\u{1D6A4}\u0269\u1FBE\u{1D6CA}\u{1D704}\u{1D73E}\u{1D7B2}"],["M","\u{1F13C}\u{10311}\u{102B0}\uA4DF\u2C98\u13B7\u{1F17C}\u{1F15C}\u24C2\uFF2D\u043C\u1E42\u0D71\u15F0\u5DDE\u163B\u10DD\u0E53\u264F\u028D\u164F\u1D0D\u1D39\u1D50\u24A8\u1E3E\u041C\u1E40\u0BF1\u216F\u2133\u039C\u03FA\u16D6\u04CD\u04CE\u{1D40C}\u{1D440}\u{1D474}\u{1D4DC}\u{1D510}\u{1D544}\u{1D578}\u{1D5AC}\u{1D5E0}\u{1D614}\u{1D648}\u{1D67C}\u{1D6B3}\u{1D6ED}\u{1D727}\u{1D761}\u{1D79B}\u{1F1F2}"],["m","\u20A5\u1D6F\u{1D592}\u{1D426}\u{1D5C6}\u{1D52A}\u{1D55E}\u{1D4C2}\u24DC\uFF4D\u0D28\u1662\u0D69\u1E3F\u1E41\u217F\u03FB\u1E43\u1320\u0271\u17F3\u1D86\u{1D662}\u{1D4F6}\u{1D696}\u{1D45A}\u{1D5FA}\u19D5\u19D7"],["N","\u{1F13D}\u2115\uA4E0\u{1D6EE}\u{1D762}\u{1D67D}\u{1D6B4}\u{1D475}\u{1D441}\u2C9A\u{1D40D}\u{1D4A9}\u{1D79C}\u{1D5E1}\u{1D615}\u{1D728}\u{1D4DD}\u{1D5AD}\u{1F17D}\u20A6\u{1F15D}\u0419\u040D\u24C3\u048B\u17F7\uFF2E\u1D0E\u0274\u019D\u144E\u51E0\u0438\u0548\u057C\u0418\u05D4\u041B\u03C0\u1D3A\u1DB0\u0143\u5200\u12AD\u1E44\u207F\xD1\u041F\u039D\u1D28\u0578\u03D6\u01F8\u0147\u1E46\u0145\u1E4A\u1E48\u0E17\u014A\u04E2\u04E3\u04E4\u04E5\u045B\u045D\u0439\u1962\u048A\u1D3B\u{1F1F3}"],["n","\u05D7\u{1D48F}\u{1D4F7}\u{1D663}\u{1D45B}\u{1D593}\u{1D52B}\u{1D5C7}\u{1D697}\u{1D5FB}\u1952\u24DD\u03AE\uFF4E\u01F9\u1D12\u0144\xF1\u1F97\u03B7\u1E45\u0148\u1E47\u0272\u0146\u1E4B\u1E49\u0572\u0E96\u054C\u019E\u014B\u24A9\u0E20\u0E01\u0273\u043F\u0149\u043B\u0509\u0220\u1F20\u1F21\u1FC3\u0564\u1F90\u1F91\u1F92\u1F93\u1F94\u1F95\u1F96\u1FC4\u1FC6\u1FC7\u1FC2\u1F22\u1F23\u1F24\u1F25\u1F26\u1F27\u1F74\u1F75\u1260\u1261\u1262\u1263\u1264\u1265\u1266\u0235\u{1D6C8}\u{1D702}\u{1D73C}\u{1D776}\u{1D7B0}\u{1D55F}\u{1D62F}\u{1D427}\u{1D4C3}\u1D87\u1D70\u1965\u2229"],["O","\uA132\u{1F13E}\u{10292}\u{1D7EC}\uA4F3\u2C9E\u{10404}\u{102AB}\u{104C2}\u{1D79E}\u{1F15E}\u2365\u25EF\u2D41\u2296\uFF10\u229D\u{1D764}\u0472\u03F4\u{1D6B6}\u{1D72A}\u047A\u04E6\u04E8\u04EA\u038C\u0298\u{1D40E}\u01D1\xD2\u014E\xD3\xD4\xD5\u020C\u020E\u31FF\u274D\u24C4\uFF2F\u1F4B\u30ED\u2764\u0AE6\u2295\xD8\u0424\u053E\u0398\u01A0\u1D3C\u1D52\u24AA\u0150\xD6\u2092\xA4\u25CA\u03A6\u3007\u039F\u041E\u0555\u0B20\u0D20\u0BE6\u05E1\u1ED2\u1ED0\u1ED6\u1ED4\u1E4C\u022C\u1E4E\u014C\u1E50\u1E52\u022E\u0230\u022A\u1ECE\u1EDC\u1EDA\u1EE0\u1EDE\u1EE2\u1ECC\u1ED8\u01EA\u01EC\u01FE\u019F\u2D54\u07C0\u17F0\u235C\u2394\u2395\u29B0\u29B1\u29B2\u29B3\u29B4\u29B5\u29B6\u29B7\u29B8\u29B9\u29BA\u29BB\u29BC\u29BD\u29BE\u29BF\u29C0\u29C1\u29C2\u29C3\u1F48\u1F49\u1F4A\u1F4C\u1F4D"],["o","\u{1D698}\u{1D6D0}\u{1D5C8}\u{1D7BC}\u101D\u2C9F\u{1D664}\u1040\u{1042C}\u{1D52C}\u{104EA}\u{1D4F8}\u{1F1F4}\u2364\u25CB\u03D9\u{1F17E}\u{1D4AA}\u{1D5AE}\u{1D7E2}\u{1D7F6}\u{1D67E}\u{1D630}\u{1D5FC}\u{1D560}\u{1D70A}\u{1D428}\u{1D77E}\u{1D7B8}\u1424\u24DE\u0473\u19D0\u1972\xF0\uFF4F\u0C20\u199E\u0553\xF2\u04E9\u04E7\xF3\xBA\u014D\xF4\u01D2\u020F\u014F\u1ED3\u1ED1\u020D\u1ED7\u1ED5\xF5\u03C3\u1E4D\u022D\u1E4F\u1F44\u1E51\u1E53\u022F\u022B\u0E4F\u1D0F\u0151\xF6\u047B\u043E\u12D0\u01ED\u0231\u09E6\u0B66\u0665\u0C66\u0CE6\u0D66\u0E50\u0ED0\u03BF\u0585\u1D11\u0966\u0A66\u1ECF\u01A1\u1EDD\u1EDB\u1EE1\u1EDF\u1EE3\u1ECD\u1ED9\u01EB\xF8\u01FF\u0275\u056E\u1F40\u1F41\u03CC\u1F78\u1F79\u1F42\u1F43\u1F45"],["P","\u{1F13F}\uA4D1\u{1D6B8}\u{1D67F}\u{1D7A0}\u{1D64B}\uABB2\u2CA2\u{1D4AB}\u{1D766}\u{1D443}\u{1D477}\u{1D5E3}\u{1D40F}\u{10295}\u{1D72C}\u{1D617}\u{1D4DF}\u{1D5AF}\u{1D6F2}\u13E2\u{1F15F}\u048E\u{1F17F}\u24C5\uFF30\u01A4\u146D\u5C38\u1E56\u0580\u03C6\u0584\u1D18\u1D3E\u1D56\u24AB\u1E54\uFF71\u05E7\u0420\u12E8\u1D29\u2C63\u2119\u03A1\u1FEC\u1478\u1476\u1477\u1479\u146C\u146E\u{1F1F5}\u20B1"],["p","\u048F\u2117\u24DF\uFF50\u1E55\u1E57\u01A5\u1D7D\u1FE5\u03C1\u0440\u01BF\u01F7\u1FE4\u2374\u{1D4F9}\u{1D4C5}\u{1D429}\u{1D45D}\u{1D491}\u{1D52D}\u{1D561}\u{1D595}\u{1D5C9}\u{1D5FD}\u{1D631}\u{1D665}\u{1D699}\u{1D6D2}\u{1D746}\u{1D7BA}\u{1D70C}\u{1D780}"],["Q","\u{1F140}\u{1F180}\u{1F160}\u24C6\uFF31\u211A\u2D55\u051A\u{1D410}\u{1D444}\u{1D478}\u{1D4AC}\u{1D4E0}\u{1D680}\u{1D618}\u{1D64C}\u{1D5B0}\u{1D57C}\u{1D514}\u{1D5E4}\u{1F1F6}"],["q","\u24E0\uFF51\u0563\u24AC\u06F9\u0566\u146B\u024B\u024A\u051B\u{1D5CA}\u{1D45E}\u{1D632}\u{1D562}\u{1D69A}\u{1D492}\u{1D596}\u{1D42A}\u{1D52E}\u{1D4FA}\u{1D666}"],["R","\u211E\u211F\uAB71\u13D2\u{104B4}\uABA2\u13A1\uA4E3\u{1F181}\u{1F161}\u24C7\uFF32\u1D19\u0212\u0280\u1587\u044F\u5C3A\u0154\u042F\u0AB0\u01A6\u1D3F\u12EA\u1E5A\u024C\u0281\u211B\u211C\u211D\u1E58\u0158\u0210\u1E5C\u0156\u1E5E\u2C64\u{1D411}\u{1D445}\u{1D479}\u{1D4E1}\u{1D57D}\u{1D5B1}\u{1D5E5}\u{1D619}\u{1D64D}\u{1D681}\u16B1\u{1F1F7}\u1D1A"],["r","\u24E1\uFF52\u0155\u1E59\u0159\u0211\u0213\u1E5B\u1E5D\u0157\u0433\u0550\u027E\u196C\u1E5F\u024D\u02B3\u24AD\u027C\u0453\u1D26\u1D89\u{1D42B}\u{1D45F}\u{1D493}\u{1D4C7}\u{1D4FB}\u{1D52F}\u{1D563}\u{1D597}\u{1D5CB}\u{1D5FF}\u{1D633}\u{1D667}\u1D72\u0491\u1D63"],["S","\u{1F142}\uA1D9\u{1D4E2}\u{1D5E6}\u13DA\u{1D4AE}\u13D5\u{1D682}\u{1D412}\uA4E2\u{1D5B2}\u{1D516}\u{1D64E}\u{10296}\u{1D57E}\u{10420}\u{1D61A}\u{1D54A}\u{1D446}\u{1D47A}\u{1F182}\u{1F162}\u24C8\uFF33\u1E68\u015E\u0586\u054F\u0218\u02E2\u24AE\u0405\u1E60\u0160\u015A\u1E64\u015C\u1E66\u1E62\u0D1F\u1515\u1516\u1522\u1521\u1523\u1524"],["s","\u24E2\uA731\u{10448}\uABAA\uFF53\u015B\u1E65\u015D\u1E61\u0161\u1E67\u0282\u1E63\u1E69\u0455\u015F\u0219\u023F\u1D8A\u0C15\u{1D42C}\u{1D460}\u{1D494}\u{1D4C8}\u{1D4FC}\u{1D530}\u{1D564}\u{1D598}\u{1D5CC}\u{1D600}\u{1D634}\u{1D668}\u{1D69C}\u078E\u{1F1F8}"],["T","\u{1F143}\u{1F183}\u{10315}\u{1D6BB}\u{1D6F5}\u{1D54B}\u{1D57F}\u{1D47B}\u{102B1}\u{10297}\u{1D5B3}\u{1D64F}\u{1F768}\u{1D769}\u{1D7A3}\u{1D683}\u{1D61B}\u{1D447}\uA4D4\u27D9\u{1D413}\u2CA6\u{1D5E7}\u22A4\u{1D517}\u13A2\uAB72\u{1D4AF}\u{1F163}\u23C7\u23C9\u24C9\uFF34\u0442\u04AC\u04AD\u01AC\u30A4\u0166\u0535\u03C4\u1D1B\u1D40\uFF72\u1355\u03EE\u0164\u22A5\u01AE\u03A4\u0422\u4E0B\u1E6A\u1E6C\u021A\u0162\u1E70\u1E6E\u4E05\u4E01\u142A\u{1D6D5}\u{1D70F}\u{1D749}\u{1D783}\u{1D7BD}\u{1D4E3}\u3112\u{1F1F9}\u1325"],["t","\u24E3\uFF54\u1E6B\u1E97\u0165\u1E6D\u021B\u0236\u0A6E\u0567\u0287\u2020\u0163\u1E71\u1E6F\u01AD\u0167\u1D57\u24AF\u0288\u0565\u01AB\u{1D42D}\u{1D461}\u{1D495}\u{1D4C9}\u{1D4FD}\u{1D531}\u{1D565}\u{1D599}\u{1D5CD}\u{1D601}\u{1D635}\u{1D669}\u{1D69D}\u30CA"],["U","\u{1F144}\uA4F4\u{104CE}\uA4A4\u{1F184}\u{1F164}\u0168\u016C\u016E\u1457\u1458\u01D3\u01D5\u01D7\u01D9\u24CA\uFF35\u0216\u144C\u51F5\u01B1\u0574\u0531\uA4F5\u0426\u016A\u0544\u01B2\u1640\u1D41\u1D58\u24B0\u0170\u0AAA\xDC\u054D\xD9\xDA\xDB\u1E78\u1E7A\u01DB\u1EE6\u0214\u01AF\u1EEA\u1EE8\u1EEE\u1EEC\u1EF0\u1EE4\u1E72\u0172\u1E76\u1E74\u0244\u1969\u1467\u222A\u162E\u22C3\u{1D414}\u{1D448}\u{1D47C}\u{1D4B0}\u{1D4E4}\u{1D518}\u{1D54C}\u{1D580}\u{1D5B4}\u{1D5E8}\u{1D61C}\u{1D650}\u{1D684}\u{1F1FA}"],["u","\u1F7A\u1F7B\u24E4\uFF55\xF9\u0169\u016B\u1EEB\u1E77\u1E79\u016D\u01D6\u1EEF\u1959\u01DA\u01DC\u1F57\u03C5\u03B0\u0E19\u057D\u028A\u01D8\u01D4\xFA\u016F\u1D1C\u0171\u0173\u0E22\xFB\u1E7B\u0446\u1201\xFC\u1D7E\u1D64\xB5\u028B\u1EE7\u0215\u0217\u01B0\u1EE9\u1EED\u1EF1\u1EE5\u1E73\u1E75\u0289\u1FE0\u1FE1\u1FE2\u1FE3\u1FE6\u1FE7\u1F50\u1F51\u03CB\u03CD\u1F52\u1F53\u1F54\u1F55\u1F56\u1954\u{1D42E}\u{1D462}\u{1D496}\u{1D4CA}\u{1D4FE}\u{1D532}\u{1D566}\u{1D59A}\u{1D5CE}\u1D99"],["V","\u{1F145}\uA4E6\u{1D47D}\u{1D5B5}\u{1D61D}\u13D9\u{1D685}\u{1D651}\u{1D415}\u{1F185}\u{1F165}\u24CB\uFF36\u142F\u0474\u1D5B\u24B1\u06F7\u1E7E\u2174\u2164\u1E7C\u0667\u2D38\u0476\u143A\u143B\u{1F1FB}\u{1D4E5}"],["v","\u1200\u24E5\uFF56\u{1D710}\u{1D74A}\u1E7D\u1E7F\u0C6E\u0E07\u0475\u05E2\u1D20\u03BD\u05D8\u1D65\u0477\u17F4\u1601\u{1D66B}\u{1D69F}\u{1D6CE}\u{1D708}\u{1D742}\u{1D77C}\u{1D7B6}\u{1D637}\u{1D603}\u{1D4FF}"],["W","\u{1F146}\u13D4\u13B3\u{1D47E}\uA4EA\u{1D4B2}\u{1D61E}\u{1F186}\u24CC\u{1F166}\uFF57\uFF37\u1E82\u1FA7\u15EF\u1955\u5C71\u0460\u0E9F\u0C1A\u0561\u0429\u0428\u03CE\u0449\u0E2C\u0448\u164E\u1D42\u02B7\u24B2\u0E1D\u1220\u1E84\u051C\u1E80\u0174\u1E86\u1E88\u0D27\u163A\u047F\u1661\u019C\u20A9\u{1F1FC}"],["w","\u1E81\uAB83\u1E83\u24E6\u2375\u0175\u1E87\u1E85\u1E98\u1E89\u2C73\u1F7C\u1F60\u1F61\u1F62\u1F63\u03C9\u1F64\u1F65\u1F66\u1F67\u1FF2\u1FF3\u1FF4\u1FF6\u1FF7\u2C72\u0461\u051D\u1D21\u1F7D\u1FA0\u1FA1\u1FA2\u1FA3\u1FA4\u1FA5\u1FA6\u026F\u{1D755}\u{1D7C9}\u{1D78F}"],["X","\u{1F7A8}\u{1F7A9}\u{1F7AA}\u{1F147}\u{1F7AB}\u{1F7AC}\u{10317}\u2CAC\uA4EB\u{1D583}\u{1D7A6}\u{1D61F}\u{10290}\u{1D6BE}\u{1D76C}\u{1D732}\uA7B3\u{10322}\u{1D5B7}\u{1D44B}\u{1D54F}\u{1D51B}\u{102B4}\u{1D5EB}\u{1F187}\u{1F167}\u274C\u24CD\u{1D4E7}\uFF38\u1E8A\u166D\u03C7\u3128\u{1D4B3}\u04FE\u10EF\u04FC\u04B3\u0416\u03A7\u04B2\u1D61\u02E3\u24B3\u05D0\u1238\u1E8C\uA2BC\u2169\u0425\u2573\u166E\u1541\u157D\u2179\u16B7\u2D5D\u{1D653}\u{1D687}\u4E42\u{1D417}\u{1F1FD}"],["x","\u24E7\uFF58\u0445\u1E8B\xD7\u2093\u292B\u292C\u2A2F\u1E8D\u1D8D\u{1D66D}\u04FD\u{1D639}\u{1D431}\u{1D6A1}\u2A30\uFF92\u{1D501}"],["Y","\u2CA8\u{1D688}\u{1D44C}\u{1D5EC}\u{1D418}\uA4EC\u{1D480}\u{1D730}\u{102B2}\u{1F188}\u{1F168}\u24CE\uFF39\u1F5B\u01B3\u311A\u028F\u2144\u03D4\uFFE5\xA5\u054E\u03D3\u03B3\u05E5\u04F2\u0427\u040E\u1203\u0178\u024E\u03E4\u03A5\u03D2\u04AE\u1EF2\xDD\u0176\u1EF8\u0232\u1E8E\u1EF6\u1EF4\u1FE8\u1FE9\u1FEA\u1FEB\u1F59\u1F5D\u1F5F\u03AB\u038E\u04EE\u04F0\u04B0\u04B1\u{1D550}\u{1F1FE}"],["y","\u{1F148}\u13BD\u13A9\u24E8\uFF59\u1EF3\xFD\u0177\u1EF9\u0233\u1E8F\xFF\u1EF7\u0443\u10E7\u1E99\u1EF5\u01B4\u024F\u1D5E\u0263\u02B8\u1D8C\u04AF\u24B4\u04F3\u04F1\u04EF\u045E\u0423\u028E"],["Z","\u{1F149}\uA4DC\u{1D5ED}\u{1D419}\u2621\u13C3\u{1D621}\u{1F189}\u{1F169}\u24CF\uFF3A\u1E94\u01B5\u4E59\u1E90\u0224\u1DBB\u24B5\u0179\u2124\u0396\u017B\u017D\u1E92\u2C6B\u{1F1FF}"],["z","\uAB93\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u1D22\u130A\u0290\u2C6C\u1D8E\u0291\u1646"]])});var pt=d(ut=>{"use strict";Object.defineProperty(ut,"__esModule",{value:!0});ut.resolveConfusablesTransformer=De;var Be=N(),Re=$t();function De(){return(0,Be.remapCharactersTransformer)(Re.confusables)}});var Ut=d(U=>{"use strict";Object.defineProperty(U,"__esModule",{value:!0});U.dictionary=void 0;U.dictionary=new Map([["a","@4"],["c","("],["e","3"],["g","6"],["i","1|!"],["l","/"],["o","0"],["s","$5"],["t","7"],["z","2"]])});var mt=d(ft=>{"use strict";Object.defineProperty(ft,"__esModule",{value:!0});ft.resolveLeetSpeakTransformer=Ue;var Ne=N(),$e=Ut();function Ue(){return(0,Ne.remapCharactersTransformer)($e.dictionary)}});var Pt=d(gt=>{"use strict";Object.defineProperty(gt,"__esModule",{value:!0});gt.toAsciiLowerCaseTransformer=Ke;var Ht=m(),He=y();function Ke(){return(0,He.createSimpleTransformer)(t=>(0,Ht.isUpperCase)(t)?(0,Ht.invertCaseOfAlphabeticChar)(t):t)}});var Ft=d(f=>{"use strict";Object.defineProperty(f,"__esModule",{value:!0});f.englishDataset=f.englishRecommendedTransformers=f.englishRecommendedWhitelistMatcherTransformers=f.englishRecommendedBlacklistMatcherTransformers=void 0;var ze=J(),r=dt(),Kt=ht(),Fe=pt(),Ve=mt(),zt=Pt();f.englishRecommendedBlacklistMatcherTransformers=[(0,Fe.resolveConfusablesTransformer)(),(0,Ve.resolveLeetSpeakTransformer)(),(0,zt.toAsciiLowerCaseTransformer)(),(0,Kt.collapseDuplicatesTransformer)({defaultThreshold:1,customThresholds:new Map([["b",2],["e",2],["o",2],["l",2],["s",2],["g",2]])})];f.englishRecommendedWhitelistMatcherTransformers=[(0,zt.toAsciiLowerCaseTransformer)(),(0,Kt.collapseDuplicatesTransformer)({defaultThreshold:Number.POSITIVE_INFINITY,customThresholds:new Map([[" ",1]])})];f.englishRecommendedTransformers={blacklistMatcherTransformers:f.englishRecommendedBlacklistMatcherTransformers,whitelistMatcherTransformers:f.englishRecommendedWhitelistMatcherTransformers};f.englishDataset=new ze.DataSet().addPhrase(t=>t.setMetadata({originalWord:"abo"}).addPattern((0,r.pattern)`|ab[b]o[s]|`)).addPhrase(t=>t.setMetadata({originalWord:"abeed"}).addPattern((0,r.pattern)`ab[b]eed`)).addPhrase(t=>t.setMetadata({originalWord:"africoon"}).addPattern((0,r.pattern)`africoon`)).addPhrase(t=>t.setMetadata({originalWord:"anal"}).addPattern((0,r.pattern)`|anal`).addWhitelistedTerm("analabos").addWhitelistedTerm("analagous").addWhitelistedTerm("analav").addWhitelistedTerm("analy").addWhitelistedTerm("analog").addWhitelistedTerm("an al").addPattern((0,r.pattern)`danal`).addPattern((0,r.pattern)`eanal`).addPattern((0,r.pattern)`fanal`).addWhitelistedTerm("fan al").addPattern((0,r.pattern)`ganal`).addWhitelistedTerm("gan al").addPattern((0,r.pattern)`ianal`).addWhitelistedTerm("ian al").addPattern((0,r.pattern)`janal`).addWhitelistedTerm("trojan al").addPattern((0,r.pattern)`kanal`).addPattern((0,r.pattern)`lanal`).addWhitelistedTerm("lan al").addPattern((0,r.pattern)`lanal`).addWhitelistedTerm("lan al").addPattern((0,r.pattern)`oanal|`).addPattern((0,r.pattern)`panal`).addWhitelistedTerm("pan al").addPattern((0,r.pattern)`qanal`).addPattern((0,r.pattern)`ranal`).addPattern((0,r.pattern)`sanal`).addPattern((0,r.pattern)`tanal`).addWhitelistedTerm("tan al").addPattern((0,r.pattern)`uanal`).addWhitelistedTerm("uan al").addPattern((0,r.pattern)`vanal`).addWhitelistedTerm("van al").addPattern((0,r.pattern)`wanal`).addPattern((0,r.pattern)`xanal`).addWhitelistedTerm("texan al").addPattern((0,r.pattern)`yanal`).addPattern((0,r.pattern)`zanal`)).addPhrase(t=>t.setMetadata({originalWord:"anus"}).addPattern((0,r.pattern)`anus`).addWhitelistedTerm("an us").addWhitelistedTerm("tetanus").addWhitelistedTerm("uranus").addWhitelistedTerm("janus").addWhitelistedTerm("manus")).addPhrase(t=>t.setMetadata({originalWord:"arabush"}).addPattern((0,r.pattern)`arab[b]ush`)).addPhrase(t=>t.setMetadata({originalWord:"arse"}).addPattern((0,r.pattern)`|ars[s]e`).addWhitelistedTerm("arsen")).addPhrase(t=>t.setMetadata({originalWord:"ass"}).addPattern((0,r.pattern)`|ass`).addWhitelistedTerm("45s").addWhitelistedTerm("assa").addWhitelistedTerm("assem").addWhitelistedTerm("assen").addWhitelistedTerm("asser").addWhitelistedTerm("assess").addWhitelistedTerm("asset").addWhitelistedTerm("assev").addWhitelistedTerm("assi").addWhitelistedTerm("assoc").addWhitelistedTerm("assoi").addWhitelistedTerm("assu")).addPhrase(t=>t.setMetadata({originalWord:"bastard"}).addPattern((0,r.pattern)`bas[s]tard`)).addPhrase(t=>t.setMetadata({originalWord:"bestiality"}).addPattern((0,r.pattern)`be[e][a]s[s]tial`)).addPhrase(t=>t.setMetadata({originalWord:"bitch"}).addPattern((0,r.pattern)`bitch`).addPattern((0,r.pattern)`bich|`)).addPhrase(t=>t.setMetadata({originalWord:"blowjob"}).addPattern((0,r.pattern)`b[b]l[l][o]wj[o]b`)).addPhrase(t=>t.setMetadata({originalWord:"bollocks"}).addPattern((0,r.pattern)`bol[l]ock`)).addPhrase(t=>t.setMetadata({originalWord:"boob"}).addPattern((0,r.pattern)`boob`)).addPhrase(t=>t.setMetadata({originalWord:"boonga"}).addPattern((0,r.pattern)`boonga`).addWhitelistedTerm("baboon ga")).addPhrase(t=>t.setMetadata({originalWord:"buttplug"}).addPattern((0,r.pattern)`buttplug`)).addPhrase(t=>t.setMetadata({originalWord:"chingchong"}).addPattern((0,r.pattern)`chingchong`)).addPhrase(t=>t.setMetadata({originalWord:"chink"}).addPattern((0,r.pattern)`chink`).addWhitelistedTerm("chin k")).addPhrase(t=>t.setMetadata({originalWord:"cock"}).addPattern((0,r.pattern)`|cock|`).addPattern((0,r.pattern)`|cocks`).addPattern((0,r.pattern)`|cockp`).addPattern((0,r.pattern)`|cocke[e]|`).addWhitelistedTerm("cockney")).addPhrase(t=>t.setMetadata({originalWord:"cuck"}).addPattern((0,r.pattern)`cuck`).addWhitelistedTerm("cuckoo")).addPhrase(t=>t.setMetadata({originalWord:"cum"}).addPattern((0,r.pattern)`|cum`).addWhitelistedTerm("cumu").addWhitelistedTerm("cumb")).addPhrase(t=>t.setMetadata({originalWord:"cunt"}).addPattern((0,r.pattern)`|cunt`).addPattern((0,r.pattern)`cunt|`)).addPhrase(t=>t.setMetadata({originalWord:"deepthroat"}).addPattern((0,r.pattern)`deepthro[o]at`).addPattern((0,r.pattern)`deepthro[o]t`)).addPhrase(t=>t.setMetadata({originalWord:"dick"}).addPattern((0,r.pattern)`|dck|`).addPattern((0,r.pattern)`dick`).addWhitelistedTerm("benedick").addWhitelistedTerm("dickens").addWhitelistedTerm("dickety").addWhitelistedTerm("dickory")).addPhrase(t=>t.setMetadata({originalWord:"dildo"}).addPattern((0,r.pattern)`dildo`)).addPhrase(t=>t.setMetadata({originalWord:"doggystyle"}).addPattern((0,r.pattern)`d[o]g[g]ys[s]t[y]l[l]`)).addPhrase(t=>t.setMetadata({originalWord:"double penetration"}).addPattern((0,r.pattern)`double penetra`)).addPhrase(t=>t.setMetadata({originalWord:"dyke"}).addPattern((0,r.pattern)`dyke`).addWhitelistedTerm("van dyke")).addPhrase(t=>t.setMetadata({originalWord:"ejaculate"}).addPattern((0,r.pattern)`e[e]jacul`).addPattern((0,r.pattern)`e[e]jakul`).addPattern((0,r.pattern)`e[e]acul[l]ate`)).addPhrase(t=>t.setMetadata({originalWord:"fag"}).addPattern((0,r.pattern)`|fag`).addPattern((0,r.pattern)`fggot`)).addPhrase(t=>t.setMetadata({originalWord:"felch"}).addPattern((0,r.pattern)`fe[e]l[l]ch`)).addPhrase(t=>t.setMetadata({originalWord:"fellatio"}).addPattern((0,r.pattern)`f[e][e]llat`)).addPhrase(t=>t.setMetadata({originalWord:"finger bang"}).addPattern((0,r.pattern)`fingerbang`)).addPhrase(t=>t.setMetadata({originalWord:"fisting"}).addPattern((0,r.pattern)`fistin`)).addPhrase(t=>t.setMetadata({originalWord:"fuck"}).addPattern((0,r.pattern)`f[?]ck`).addPattern((0,r.pattern)`|fk`).addPattern((0,r.pattern)`|fu|`).addPattern((0,r.pattern)`|fuk`).addWhitelistedTerm("fick").addWhitelistedTerm("kung-fu").addWhitelistedTerm("kung fu")).addPhrase(t=>t.setMetadata({originalWord:"gangbang"}).addPattern((0,r.pattern)`g[?]ngbang`)).addPhrase(t=>t.setMetadata({originalWord:"handjob"}).addPattern((0,r.pattern)`h[?]ndjob`)).addPhrase(t=>t.setMetadata({originalWord:"hentai"}).addPattern((0,r.pattern)`h[e][e]ntai`)).addPhrase(t=>t.setMetadata({originalWord:"hooker"}).addPattern((0,r.pattern)`hooker`)).addPhrase(t=>t.setMetadata({originalWord:"incest"}).addPattern((0,r.pattern)`incest`)).addPhrase(t=>t.setMetadata({originalWord:"jerk off"}).addPattern((0,r.pattern)`jerkoff`)).addPhrase(t=>t.setMetadata({originalWord:"jizz"}).addPattern((0,r.pattern)`jizz`)).addPhrase(t=>t.setMetadata({originalWord:"kike"}).addPattern((0,r.pattern)`kike`)).addPhrase(t=>t.setMetadata({originalWord:"lubejob"}).addPattern((0,r.pattern)`lubejob`)).addPhrase(t=>t.setMetadata({originalWord:"masturbate"}).addPattern((0,r.pattern)`m[?]sturbate`).addPattern((0,r.pattern)`masterbate`)).addPhrase(t=>t.setMetadata({originalWord:"negro"}).addPattern((0,r.pattern)`negro`).addWhitelistedTerm("montenegro").addWhitelistedTerm("negron").addWhitelistedTerm("stoneground").addWhitelistedTerm("winegrow")).addPhrase(t=>t.setMetadata({originalWord:"nigger"}).addPattern((0,r.pattern)`n[i]gger`).addPattern((0,r.pattern)`n[i]gga`).addPattern((0,r.pattern)`|nig|`).addPattern((0,r.pattern)`|nigs|`).addWhitelistedTerm("snigger")).addPhrase(t=>t.setMetadata({originalWord:"orgasm"}).addPattern((0,r.pattern)`[or]gasm`).addWhitelistedTerm("gasma")).addPhrase(t=>t.setMetadata({originalWord:"orgy"}).addPattern((0,r.pattern)`orgy`).addPattern((0,r.pattern)`orgies`).addWhitelistedTerm("porgy")).addPhrase(t=>t.setMetadata({originalWord:"penis"}).addPattern((0,r.pattern)`pe[e]nis`).addPattern((0,r.pattern)`|pnis`).addWhitelistedTerm("pen is")).addPhrase(t=>t.setMetadata({originalWord:"piss"}).addPattern((0,r.pattern)`|piss`)).addPhrase(t=>t.setMetadata({originalWord:"porn"}).addPattern((0,r.pattern)`|prn|`).addPattern((0,r.pattern)`porn`).addWhitelistedTerm("p orna")).addPhrase(t=>t.setMetadata({originalWord:"prick"}).addPattern((0,r.pattern)`|prick[s]|`)).addPhrase(t=>t.setMetadata({originalWord:"pussy"}).addPattern((0,r.pattern)`p[u]ssy`)).addPhrase(t=>t.setMetadata({originalWord:"rape"}).addPattern((0,r.pattern)`|rape`).addPattern((0,r.pattern)`|rapis[s]t`).addWhitelistedTerm("rapper")).addPhrase(t=>t.setMetadata({originalWord:"retard"}).addPattern((0,r.pattern)`retard`)).addPhrase(t=>t.setMetadata({originalWord:"scat"}).addPattern((0,r.pattern)`|s[s]cat|`)).addPhrase(t=>t.setMetadata({originalWord:"semen"}).addPattern((0,r.pattern)`|s[s]e[e]me[e]n`)).addPhrase(t=>t.setMetadata({originalWord:"sex"}).addPattern((0,r.pattern)`|s[s]e[e]x|`).addPattern((0,r.pattern)`|s[s]e[e]xy|`)).addPhrase(t=>t.setMetadata({originalWord:"shit"}).addPattern((0,r.pattern)`|shit`).addPattern((0,r.pattern)`shit|`).addWhitelistedTerm("s hit").addWhitelistedTerm("sh it").addWhitelistedTerm("shi t").addWhitelistedTerm("shitake")).addPhrase(t=>t.setMetadata({originalWord:"slut"}).addPattern((0,r.pattern)`s[s]lut`)).addPhrase(t=>t.setMetadata({originalWord:"spastic"}).addPattern((0,r.pattern)`|spastic`)).addPhrase(t=>t.setMetadata({originalWord:"tit"}).addPattern((0,r.pattern)`|tit|`).addPattern((0,r.pattern)`|tits|`).addPattern((0,r.pattern)`|titt`).addPattern((0,r.pattern)`|tiddies`).addPattern((0,r.pattern)`|tities`)).addPhrase(t=>t.setMetadata({originalWord:"tranny"}).addPattern((0,r.pattern)`|trany`)).addPhrase(t=>t.setMetadata({originalWord:"turd"}).addPattern((0,r.pattern)`|turd`).addWhitelistedTerm("turducken")).addPhrase(t=>t.setMetadata({originalWord:"twat"}).addPattern((0,r.pattern)`|twat`).addWhitelistedTerm("twattle")).addPhrase(t=>t.setMetadata({originalWord:"vagina"}).addPattern((0,r.pattern)`vagina`).addPattern((0,r.pattern)`|v[?]gina`)).addPhrase(t=>t.setMetadata({originalWord:"wank"}).addPattern((0,r.pattern)`|wank`)).addPhrase(t=>t.setMetadata({originalWord:"whore"}).addPattern((0,r.pattern)`|wh[o]re|`).addPattern((0,r.pattern)`|who[o]res[s]|`).addWhitelistedTerm("who're"))});var Vt=d(Tt=>{"use strict";Object.defineProperty(Tt,"__esModule",{value:!0});Tt.skipNonAlphabeticTransformer=Je;var Ye=m(),Ge=y();function Je(){return(0,Ge.createSimpleTransformer)(t=>(0,Ye.isAlphabetic)(t)?t:void 0)}});var Xe=d(h=>{var Qe=h&&h.__createBinding||(Object.create?(function(t,e,a,n){n===void 0&&(n=a);var s=Object.getOwnPropertyDescriptor(e,a);(!s||("get"in s?!e.__esModule:s.writable||s.configurable))&&(s={enumerable:!0,get:function(){return e[a]}}),Object.defineProperty(t,n,s)}):(function(t,e,a,n){n===void 0&&(n=a),t[n]=e[a]})),u=h&&h.__exportStar||function(t,e){for(var a in t)a!=="default"&&!Object.prototype.hasOwnProperty.call(e,a)&&Qe(e,t,a)};Object.defineProperty(h,"__esModule",{value:!0});u(H(),h);u(wt(),h);u(J(),h);u(Y(),h);u(St(),h);u(C(),h);u(Et(),h);u(S(),h);u(nt(),h);u(dt(),h);u(Ft(),h);u(ht(),h);u(N(),h);u(pt(),h);u(mt(),h);u(Vt(),h);u(y(),h);u(Pt(),h)});return Xe();})();
-
-</script>
-  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/intlTelInput.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/intlTelInput.min.js"></script>
 
   <script>
     const $ = id => document.getElementById(id);
-    
+    const MAX_AUDIO_BYTES = 8 * 1024 * 1024;
 
-    let audioBlob, previewUrl;
+    let accountEpoch = 0;
     let loading = false;
     let scanning = false;
-    let accountEpoch = 0;
-    let searchTimer;
-    let recorderWindow = null;
-    let recordingToken = null;
+    let recordingBusy = false;
+    let saved = false;
+
+    let audioBlob = null;
+    let previewUrl = null;
+    let mediaRecorder = null;
+    let micStream = null;
+    let audioChunks = [];
+    let recordingTimer = null;
+    let discardRecording = false;
+
+    let searchTimer = null;
+    let recordRequest = 0;
+    let nextRecordCursor = null;
+    let currentRecordQuery = "";
+    let shownRecordCount = 0;
+    let recordPageBusy = false;
 
     // Theme
-    const themeButton = $("themeToggle");
-    let currentTheme = "light";
+    let currentTheme;
 
     try {
-      currentTheme = localStorage.getItem("contactNotesTheme") ||
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    } catch (e) {
+      currentTheme = localStorage.getItem("contactNotesTheme");
+    } catch {}
+
+    if (!["light", "dark"].includes(currentTheme)) {
       currentTheme = matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark" : "light";
     }
 
     function applyTheme(theme) {
       document.documentElement.dataset.theme = theme;
-      themeButton.textContent = theme === "dark" ? "Light mode" : "Dark mode";
-      themeButton.setAttribute("aria-pressed", String(theme === "dark"));
-      themeButton.setAttribute("aria-label",
-        theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      $("themeToggle").textContent =
+        theme === "dark" ? "Light mode" : "Dark mode";
+
+      $("themeToggle").setAttribute(
+        "aria-pressed",
+        String(theme === "dark")
+      );
     }
 
     applyTheme(currentTheme);
 
-    themeButton.onclick = () => {
+    $("themeToggle").onclick = () => {
       currentTheme = currentTheme === "dark" ? "light" : "dark";
       applyTheme(currentTheme);
+
       try {
         localStorage.setItem("contactNotesTheme", currentTheme);
-      } catch (e) {}
+      } catch {}
     };
 
-    // Card switching
+    function status(message, error = false) {
+      $("status").textContent = message;
+      $("status").className =
+        "status " + (error ? "error" : "success");
+    }
+
+    function noteType() {
+      return document.querySelector(
+        'input[name="noteType"]:checked'
+      ).value;
+    }
+
+    function updateSaveButton() {
+      $("save").disabled =
+        loading || scanning || recordingBusy || saved;
+    }
+
+    // Country-specific phone validation
+    const phonePicker = window.intlTelInput
+      ? window.intlTelInput($("phone"), {
+          initialCountry: "in",
+          separateDialCode: true,
+          countrySearch: true,
+          strictMode: true,
+          validationNumberTypes: ["MOBILE", "FIXED_LINE"],
+          loadUtils: () => import(
+            "https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/utils.js"
+          )
+        })
+      : null;
+
+    async function internationalPhone() {
+      const raw = $("phone").value.trim();
+      if (!raw) return "";
+
+      if (!phonePicker) {
+        throw Error(
+          "Phone validation could not load. Reload the page."
+        );
+      }
+
+      try {
+        await phonePicker.promise;
+      } catch {
+        throw Error(
+          "Phone validation could not load. Check your connection."
+        );
+      }
+
+      if (!window.intlTelInput.utils) {
+        throw Error("Phone validation could not load. Reload the page.");
+      }
+
+      const country = phonePicker.getSelectedCountryData();
+      const number = phonePicker.getNumber();
+
+      if (!country.iso2) {
+        throw Error("Select a country for the phone number.");
+      }
+
+      if (
+        country.iso2 === "in" &&
+        !/^\+91[0-9]{10}$/.test(number || "")
+      ) {
+        throw Error(
+          "Indian phone numbers must contain exactly 10 digits, excluding +91."
+        );
+      }
+
+      if (
+        !/^[+0-9()\s.-]+$/.test(raw) ||
+        !phonePicker.isValidNumberPrecise() ||
+        !/^\+[1-9][0-9]{1,14}$/.test(number || "")
+      ) {
+        throw Error(
+          "Enter a valid phone number for " +
+          (country.name || country.iso2.toUpperCase()) + "."
+        );
+      }
+
+      return number;
+    }
+
+    async function call(name, ...args) {
+      const requestEpoch = accountEpoch;
+
+      if (name === "saveRecord") {
+        args[0].phone = await internationalPhone();
+
+        if (requestEpoch !== accountEpoch) {
+          throw Error("Session changed. Please sign in again.");
+        }
+      }
+
+      return window.contactApi(name, ...args);
+    }
+
+    function asBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(
+          String(reader.result).split(",")[1]
+        );
+
+        reader.onerror = () => reject(
+          Error("Could not read the recording.")
+        );
+
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    // Obscenity: validate without deleting or changing typed text.
+    let noteMatcher = null;
+
+    const profanityReady = import(
+      "https://cdn.jsdelivr.net/npm/obscenity@0.4.6/+esm"
+    ).then(module => {
+      noteMatcher = new module.RegExpMatcher({
+        ...module.englishDataset.build(),
+        ...module.englishRecommendedTransformers
+      });
+      return true;
+    }).catch(() => false);
+
+    function filterWrittenNote() {
+      if (!noteMatcher) return false;
+
+      const text = $("note").value;
+      const bad = noteMatcher.getAllMatches(text, true).some(match =>
+        !/[\p{L}\p{N}]/u.test(
+          text[match.startIndex - 1] || ""
+        ) &&
+        !/[\p{L}\p{N}]/u.test(
+          text[match.endIndex + 1] || ""
+        )
+      );
+
+      $("noteFilterHint").textContent = bad
+        ? "Please edit the inappropriate language before saving."
+        : "";
+
+      return bad;
+    }
+
+    $("note").addEventListener("blur", filterWrittenNote);
+
+    $("note").addEventListener("input", () => {
+      $("noteFilterHint").textContent = "";
+    });
+
+    // Photo scanning
+    async function photoPayload(file) {
+      const bitmap = await createImageBitmap(file);
+
+      try {
+        const scale = Math.min(
+          1,
+          1800 / Math.max(bitmap.width, bitmap.height)
+        );
+
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+        canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+
+        canvas.getContext("2d").drawImage(
+          bitmap, 0, 0, canvas.width, canvas.height
+        );
+
+        const data = canvas.toDataURL("image/jpeg", .85);
+
+        return {
+          mimeType: "image/jpeg",
+          base64: data.slice(data.indexOf(",") + 1)
+        };
+      } finally {
+        bitmap.close();
+      }
+    }
+
+    $("cardPhoto").onchange = async () => {
+      if (loading || recordingBusy) return;
+
+      const epoch = accountEpoch;
+      const file = $("cardPhoto").files[0];
+
+      if (!file) return;
+
+      $("scanDetails").classList.add("hidden");
+
+      if (
+        !file.type.startsWith("image/") &&
+        !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)
+      ) {
+        $("scanStatus").textContent = "Choose an image.";
+        return;
+      }
+
+      if (file.size > 12 * 1024 * 1024) {
+        $("scanStatus").textContent =
+          "Choose an image smaller than 12 MB.";
+        return;
+      }
+
+      scanning = true;
+      saved = false;
+      updateSaveButton();
+      $("cardPhoto").disabled = true;
+      $("scanStatus").textContent = "Reading the photo…";
+
+      try {
+        const payload = await photoPayload(file);
+        if (epoch !== accountEpoch) return;
+
+        const result = await call("scanPhoto", payload);
+        if (epoch !== accountEpoch) return;
+
+        $("person").value = result.person || "";
+        $("company").value = result.company || "";
+        $("scanText").textContent =
+          result.evidence || "Review the suggestions against the photo.";
+
+        $("scanDetails").classList.remove("hidden");
+
+        $("scanStatus").textContent =
+          result.person || result.company
+            ? "Photo scanned. Check Person and Company before saving."
+            : "No readable details found. Enter them manually or try a clearer photo.";
+      } catch (error) {
+        if (epoch !== accountEpoch) return;
+
+        $("scanStatus").textContent =
+          "Could not scan this photo: " + error.message;
+      } finally {
+        if (epoch === accountEpoch) {
+          scanning = false;
+          $("cardPhoto").disabled = false;
+          updateSaveButton();
+        }
+      }
+    };
+
+    // Voice recording
+    function stopMic() {
+      if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+        micStream = null;
+      }
+    }
+
+    function closeRecorder() {
+      discardRecording = true;
+      clearInterval(recordingTimer);
+
+      if (mediaRecorder?.state === "recording") {
+        mediaRecorder.stop();
+      }
+
+      stopMic();
+    }
+
+    function resetAudio() {
+      audioBlob = null;
+
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+
+      $("preview").pause();
+      $("preview").removeAttribute("src");
+      $("preview").classList.add("hidden");
+      $("clear").disabled = true;
+      $("timer").textContent =
+        "Record your note here. Maximum 8 MB.";
+    }
+
+    document.querySelectorAll(
+      'input[name="noteType"]'
+    ).forEach(radio => {
+      radio.addEventListener("change", () => {
+        closeRecorder();
+        resetAudio();
+
+        $("textBox").classList.toggle(
+          "hidden", noteType() !== "text"
+        );
+
+        $("voiceBox").classList.toggle(
+          "hidden", noteType() !== "voice"
+        );
+      });
+    });
+
+    $("start").onclick = async () => {
+      if (recordingBusy || loading || scanning) return;
+
+      const epoch = accountEpoch;
+      recordingBusy = true;
+      discardRecording = false;
+      saved = false;
+
+      $("start").disabled = true;
+      resetAudio();
+      updateSaveButton();
+
+      try {
+        if (
+          !navigator.mediaDevices?.getUserMedia ||
+          !window.MediaRecorder
+        ) {
+          throw Error(
+            "Microphone recording is unavailable in this browser."
+          );
+        }
+
+        const acquired = await navigator.mediaDevices.getUserMedia({
+          audio: true
+        });
+
+        if (epoch !== accountEpoch || noteType() !== "voice") {
+          acquired.getTracks().forEach(track => track.stop());
+
+          if (epoch === accountEpoch) {
+            recordingBusy = false;
+            $("start").disabled = false;
+            updateSaveButton();
+          }
+
+          return;
+        }
+
+        micStream = acquired;
+
+        const mime = [
+          "audio/webm",
+          "audio/mp4",
+          "audio/ogg"
+        ].find(value => MediaRecorder.isTypeSupported(value));
+
+        if (!mime) {
+          throw Error("No supported audio format found.");
+        }
+
+        audioChunks = [];
+
+        mediaRecorder = new MediaRecorder(micStream, {
+          mimeType: mime,
+          audioBitsPerSecond: 64000
+        });
+
+        mediaRecorder.ondataavailable = event => {
+          if (epoch === accountEpoch && event.data.size) {
+            audioChunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onerror = () => {
+          if (epoch !== accountEpoch) return;
+
+          discardRecording = true;
+          clearInterval(recordingTimer);
+          stopMic();
+          recordingBusy = false;
+          $("start").disabled = false;
+          $("stopRecording").disabled = true;
+          updateSaveButton();
+          status("Recording interrupted. Please try again.", true);
+        };
+
+        mediaRecorder.onstop = () => {
+          if (epoch !== accountEpoch) return;
+
+          clearInterval(recordingTimer);
+          stopMic();
+
+          recordingBusy = false;
+          $("start").disabled = false;
+          $("stopRecording").disabled = true;
+          updateSaveButton();
+
+          if (discardRecording) return;
+
+          audioBlob = new Blob(audioChunks, {type: mime});
+
+          if (
+            !audioBlob.size ||
+            audioBlob.size > MAX_AUDIO_BYTES
+          ) {
+            resetAudio();
+            status(
+              "Recording is empty or exceeds 8 MB. Try a shorter note.",
+              true
+            );
+            return;
+          }
+
+          previewUrl = URL.createObjectURL(audioBlob);
+          $("preview").src = previewUrl;
+          $("preview").classList.remove("hidden");
+          $("clear").disabled = false;
+          $("timer").textContent = "Ready to preview and save.";
+          status("Recording ready.");
+        };
+
+        mediaRecorder.start(1000);
+
+        const started = Date.now();
+        $("stopRecording").disabled = false;
+        status("Recording…");
+
+        recordingTimer = setInterval(() => {
+          const seconds = Math.floor((Date.now() - started) / 1000);
+
+          $("timer").textContent =
+            "Recording " +
+            Math.floor(seconds / 60) + ":" +
+            String(seconds % 60).padStart(2, "0");
+
+          const size = audioChunks.reduce(
+            (total, chunk) => total + chunk.size, 0
+          );
+
+          if (
+            size > MAX_AUDIO_BYTES &&
+            mediaRecorder.state === "recording"
+          ) {
+            mediaRecorder.stop();
+          }
+        }, 500);
+      } catch (error) {
+        if (epoch !== accountEpoch) return;
+
+        stopMic();
+        recordingBusy = false;
+        $("start").disabled = false;
+        $("stopRecording").disabled = true;
+        updateSaveButton();
+
+        status(
+          error.name === "NotAllowedError"
+            ? "Allow microphone access in your browser settings, then try again."
+            : error.message,
+          true
+        );
+      }
+    };
+
+    $("stopRecording").onclick = () => {
+      if (mediaRecorder?.state === "recording") {
+        $("stopRecording").disabled = true;
+        mediaRecorder.stop();
+      }
+    };
+
+    $("clear").onclick = () => {
+      closeRecorder();
+      resetAudio();
+      status("");
+    };
+
+    window.addEventListener("pagehide", closeRecorder);
+
+    // Save
+    $("form").onsubmit = async event => {
+      event.preventDefault();
+
+      if (loading || scanning || recordingBusy || saved) return;
+
+      const epoch = accountEpoch;
+      loading = true;
+      $("next").hidden = true;
+      $("next").disabled = true;
+      updateSaveButton();
+      status("Checking details…");
+
+      try {
+        const phone = await internationalPhone();
+        if (epoch !== accountEpoch) return;
+
+        const selectedType = noteType();
+        const written = selectedType === "text"
+          ? $("note").value.trim() : "";
+
+        if (written) {
+          const ready = await profanityReady;
+          if (epoch !== accountEpoch) return;
+
+          if (!ready) {
+            throw Error(
+              "The word checker could not load. Check your connection and try again."
+            );
+          }
+
+          if (filterWrittenNote()) {
+            $("note").focus();
+            throw Error(
+              "Please edit the inappropriate language before saving."
+            );
+          }
+        }
+
+        if (selectedType === "voice" && !audioBlob) {
+          throw Error(
+            "Stop and preview your recording before saving."
+          );
+        }
+
+        const data = {
+          person: $("person").value,
+          company: $("company").value,
+          phone,
+          noteType: selectedType === "voice"
+            ? "voice" : written ? "text" : "none",
+          writtenNote: written
+        };
+
+        if (selectedType === "voice") {
+          data.audio = {
+            mimeType: audioBlob.type,
+            base64: await asBase64(audioBlob)
+          };
+        }
+
+        if (epoch !== accountEpoch) return;
+
+        status("Saving record…");
+        await call("saveRecord", data);
+
+        if (epoch !== accountEpoch) return;
+
+        saved = true;
+        closeRecorder();
+        $("next").hidden = false;
+        $("next").disabled = false;
+
+        status(
+          "Saved in Records. Tap Add next person to continue."
+        );
+
+        loadRecords();
+      } catch (error) {
+        if (epoch === accountEpoch) {
+          status(error.message || "Save failed. Please try again.", true);
+        }
+      } finally {
+        if (epoch === accountEpoch) {
+          loading = false;
+          updateSaveButton();
+        }
+      }
+    };
+
+    function resetContact() {
+      closeRecorder();
+      $("form").reset();
+      resetAudio();
+
+      saved = false;
+
+      if (phonePicker) {
+        phonePicker.setNumber("");
+        phonePicker.setCountry("in");
+      }
+
+      $("noteFilterHint").textContent = "";
+      $("scanDetails").classList.add("hidden");
+      $("scanText").textContent = "";
+
+      $("scanStatus").textContent =
+        "Choose a photo to suggest Person and Company. Review the details before saving.";
+
+      $("textBox").classList.remove("hidden");
+      $("voiceBox").classList.add("hidden");
+      $("next").hidden = true;
+      $("next").disabled = true;
+
+      updateSaveButton();
+    }
+
+    $("next").onclick = () => {
+      if (loading || scanning || recordingBusy) return;
+
+      resetContact();
+      status("Ready for the next person.");
+      $("person").focus();
+      window.scrollTo({top: 0, behavior: "smooth"});
+    };
+
+    $("form").addEventListener("input", () => {
+      if (!loading && !scanning && !recordingBusy) {
+        saved = false;
+        updateSaveButton();
+      }
+    });
+
+    // Records
+    function releaseRecordAudio() {
+      $("records").querySelectorAll("audio").forEach(player => {
+        player.pause();
+
+        if (player.dataset.objectUrl) {
+          URL.revokeObjectURL(player.dataset.objectUrl);
+        }
+      });
+    }
+
+    function emptyRecords(title, message) {
+      releaseRecordAudio();
+      $("records").replaceChildren();
+
+      const box = document.createElement("div");
+      box.className = "records-empty";
+
+      const heading = document.createElement("strong");
+      heading.textContent = title;
+
+      const detail = document.createElement("p");
+      detail.textContent = message;
+
+      box.append(heading, detail);
+      $("records").append(box);
+    }
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      node.className = className;
+
+      if (text !== undefined) node.textContent = text;
+
+      return node;
+    }
+
+    function renderRecord(record) {
+      const card = element("article", "contact-record");
+      const head = element("div", "record-head");
+
+      const initials = String(record.person || "?")
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(word => word[0])
+        .join("")
+        .toUpperCase();
+
+      const avatar = element("div", "record-avatar", initials);
+      avatar.setAttribute("aria-hidden", "true");
+
+      const identity = element("div", "record-identity");
+
+      identity.append(
+        element("h3", "record-name", record.person),
+        element("p", "record-company", record.company)
+      );
+
+      const badge = element(
+        "span",
+        "note-badge",
+        record.type === "Text"
+          ? "Written note"
+          : record.type === "Voice"
+            ? "Voice note"
+            : "Contact details"
+      );
+
+      head.append(avatar, identity, badge);
+
+      const meta = element("div", "record-meta");
+
+      if (record.phone) {
+        meta.append(
+          element("span", "record-phone", record.phone)
+        );
+      }
+
+      const date = new Date(record.date);
+
+      meta.append(
+        element(
+          "time",
+          "record-date",
+          Number.isNaN(date.getTime())
+            ? ""
+            : date.toLocaleDateString(undefined, {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+              })
+        )
+      );
+
+      card.append(head, meta);
+
+      if (record.type === "Text") {
+        card.append(
+          element("div", "note record-note", record.note)
+        );
+      } else if (record.hasAudio) {
+        const button = element(
+          "button", "voice-play", "▶ Play voice note"
+        );
+
+        button.type = "button";
+
+        const feedback = element("div", "audio-feedback");
+        feedback.setAttribute("role", "status");
+
+        button.onclick = async () => {
+          const epoch = accountEpoch;
+          button.disabled = true;
+          button.textContent = "Loading recording…";
+          feedback.textContent = "";
+
+          try {
+            const audio = await call("getAudio", record.id);
+
+            if (epoch !== accountEpoch || !card.isConnected) return;
+
+            const binary = atob(audio.base64);
+            const bytes = Uint8Array.from(
+              binary, character => character.charCodeAt(0)
+            );
+
+            let player = card.querySelector("audio");
+
+            if (!player) {
+              player = document.createElement("audio");
+              player.controls = true;
+              card.append(player);
+            }
+
+            if (player.dataset.objectUrl) {
+              URL.revokeObjectURL(player.dataset.objectUrl);
+            }
+
+            const url = URL.createObjectURL(
+              new Blob([bytes], {type: audio.mimeType})
+            );
+
+            player.dataset.objectUrl = url;
+            player.src = url;
+            await player.play();
+          } catch (error) {
+            if (epoch === accountEpoch) {
+              feedback.textContent =
+                error.message || "Could not play recording.";
+            }
+          } finally {
+            button.disabled = false;
+            button.textContent = "▶ Play voice note";
+          }
+        };
+
+        card.append(button, feedback);
+      }
+
+      $("records").append(card);
+    }
+
+    async function loadRecords(append = false) {
+      append = append === true;
+
+      if (document.querySelector("main.shell").hidden) return;
+
+      if (
+        append &&
+        (recordPageBusy || nextRecordCursor == null)
+      ) return;
+
+      const query = $("search").value.trim();
+
+      if (append && query !== currentRecordQuery) {
+        return loadRecords();
+      }
+
+      const request = ++recordRequest;
+      recordPageBusy = true;
+      $("loadMore").disabled = true;
+      $("loadMore").textContent = "Loading…";
+
+      if (!append) {
+        nextRecordCursor = null;
+        shownRecordCount = 0;
+        currentRecordQuery = query;
+        $("loadMore").hidden = true;
+        $("pageStatus").textContent = "";
+
+        emptyRecords(
+          "Loading contacts",
+          "Getting your latest records…"
+        );
+      }
+
+      try {
+        const result = await call(
+          "listRecords",
+          query,
+          append ? {cursor: nextRecordCursor} : {}
+        );
+
+        if (
+          request !== recordRequest ||
+          query !== $("search").value.trim()
+        ) return;
+
+        if (!result || !Array.isArray(result.records)) {
+          throw Error(
+            "Could not read contacts. Check the Apps Script deployment."
+          );
+        }
+
+        if (!append) {
+          releaseRecordAudio();
+          $("records").replaceChildren();
+        }
+
+        nextRecordCursor = query ? result.nextCursor : null;
+        shownRecordCount += result.records.length;
+
+        $("recordCount").textContent =
+          shownRecordCount + " shown";
+
+        $("loadMore").hidden = nextRecordCursor == null;
+
+        $("pageStatus").textContent = query
+          ? nextRecordCursor == null
+            ? "All matching contacts shown."
+            : "More matching contacts are available."
+          : window.contactUser?.role === "admin"
+            ? "Latest 10 contacts from all users. Search to find older contacts."
+            : "Your latest 10 contacts. Search to find older contacts.";
+
+        if (!result.records.length && !append) {
+          emptyRecords(
+            query ? "No matching contacts" : "Your connections start here",
+            query
+              ? "Try a different name, company, or phone number."
+              : "Save your first contact to see their details here."
+          );
+        } else {
+          result.records.forEach(renderRecord);
+        }
+      } catch (error) {
+        if (request !== recordRequest) return;
+
+        if (append) {
+          $("pageStatus").textContent =
+            "Could not load more contacts. Try again.";
+        } else {
+          $("recordCount").textContent = "—";
+
+          emptyRecords(
+            "Unable to load contacts",
+            error.message || "Please refresh and try again."
+          );
+        }
+      } finally {
+        if (request === recordRequest) {
+          recordPageBusy = false;
+          $("loadMore").disabled = false;
+          $("loadMore").textContent = "Load more";
+        }
+      }
+    }
+
+    $("loadMore").onclick = () => loadRecords(true);
+
+    $("search").oninput = () => {
+      clearTimeout(searchTimer);
+      ++recordRequest;
+
+      nextRecordCursor = null;
+      $("loadMore").hidden = true;
+
+      searchTimer = setTimeout(() => loadRecords(), 300);
+    };
+
+    // Swipe between contact form and records
     let showingRecords = false;
     let flipping = false;
     let drag = null;
     let suppressSwipeClick = false;
 
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-    const flipSurface = $("flipCard");
+    const reducedMotion = matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
 
-    async function switchCard(toRecords, focusHeading = false) {
+    async function switchCard(toRecords) {
       if (flipping || toRecords === showingRecords) return;
+
       flipping = true;
 
-      const oldFace = $(showingRecords ? "recordsFace" : "contactFace");
-      const newFace = $(toRecords ? "recordsFace" : "contactFace");
+      const oldFace = $(
+        showingRecords ? "recordsFace" : "contactFace"
+      );
 
-      oldFace.querySelectorAll("audio").forEach(a => a.pause());
+      const newFace = $(
+        toRecords ? "recordsFace" : "contactFace"
+      );
 
-      const animate = (face, className, ms) => new Promise(resolve => {
-        face.classList.add(className);
-        setTimeout(() => {
-          face.classList.remove(className);
-          resolve();
-        }, reducedMotion.matches ? 0 : ms);
-      });
+      oldFace.querySelectorAll("audio").forEach(audio => audio.pause());
+
+      const animate = (face, className, milliseconds) =>
+        new Promise(resolve => {
+          face.classList.add(className);
+
+          setTimeout(() => {
+            face.classList.remove(className);
+            resolve();
+          }, reducedMotion.matches ? 0 : milliseconds);
+        });
 
       await animate(oldFace, "flip-out", 180);
 
@@ -926,10 +2095,16 @@ OTHER DEALINGS IN THE SOFTWARE.
 
       showingRecords = toRecords;
 
-      $("viewToggle").setAttribute("aria-expanded", String(toRecords));
-      $("viewToggle").setAttribute("aria-label", toRecords
-        ? "Swipe right or tap to return to contact"
-        : "Swipe left or tap to view records");
+      $("viewToggle").setAttribute(
+        "aria-expanded", String(toRecords)
+      );
+
+      $("viewToggle").setAttribute(
+        "aria-label",
+        toRecords
+          ? "Swipe right or tap to add a contact"
+          : "Swipe left or tap to view records"
+      );
 
       $("swipeHint").textContent = toRecords
         ? "Swipe right to add a contact"
@@ -938,58 +2113,63 @@ OTHER DEALINGS IN THE SOFTWARE.
       await animate(newFace, "flip-in", 220);
       flipping = false;
 
-      if (focusHeading) {
-        const heading = newFace.querySelector("h1,h2");
-        heading.tabIndex = -1;
-        heading.focus({ preventScroll: true });
-      }
+      if (toRecords) loadRecords();
     }
 
     $("viewToggle").onclick = () => {
-      if (!suppressSwipeClick) switchCard(!showingRecords, true);
+      if (!suppressSwipeClick) switchCard(!showingRecords);
     };
 
     function clearDrag() {
       if (!drag) return;
+
       drag.face.style.transform = "";
       drag.face.style.opacity = "";
       drag = null;
     }
 
-    function beginSwipe(e) {
-      const interactive = e.target.closest(
+    function beginSwipe(event) {
+      const interactive = event.target.closest(
         "input,textarea,button,a,audio,select,summary,.iti"
       );
 
-      if (flipping || !e.isPrimary || e.button !== 0 ||
-        (e.currentTarget !== $("viewToggle") && interactive)) return;
+      if (
+        flipping ||
+        !event.isPrimary ||
+        event.button !== 0 ||
+        (event.currentTarget !== $("viewToggle") && interactive)
+      ) return;
 
       drag = {
-        id: e.pointerId,
-        x: e.clientX,
-        y: e.clientY,
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
         dx: 0,
         active: false,
         face: $(showingRecords ? "recordsFace" : "contactFace"),
-        surface: e.currentTarget
+        surface: event.currentTarget
       };
     }
 
-    function moveSwipe(e) {
-      if (!drag || e.pointerId !== drag.id) return;
+    function moveSwipe(event) {
+      if (!drag || event.pointerId !== drag.id) return;
 
-      const dx = e.clientX - drag.x;
-      const dy = e.clientY - drag.y;
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
 
       if (!drag.active) {
         if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) {
           clearDrag();
           return;
         }
-        if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+
+        if (
+          Math.abs(dx) < 10 ||
+          Math.abs(dx) < Math.abs(dy) * 1.3
+        ) return;
 
         drag.active = true;
-        drag.surface.setPointerCapture(e.pointerId);
+        drag.surface.setPointerCapture(event.pointerId);
       }
 
       const direction = showingRecords ? 1 : -1;
@@ -997,631 +2177,106 @@ OTHER DEALINGS IN THE SOFTWARE.
 
       const progress = Math.min(
         Math.max(dx * direction, 0) /
-          Math.min(flipSurface.clientWidth, 420),
+        Math.min($("flipCard").clientWidth, 420),
         1
       );
 
       drag.face.style.transform =
-        `translateX(${dx * .12}px) rotateY(${direction * progress * 75}deg)`;
+        `translateX(${dx * .12}px) ` +
+        `rotateY(${direction * progress * 75}deg)`;
+
       drag.face.style.opacity = String(1 - progress * .25);
     }
 
-    function endDrag(e) {
-      if (!drag || e.pointerId !== drag.id) return;
+    function endSwipe(event) {
+      if (!drag || event.pointerId !== drag.id) return;
 
       const direction = showingRecords ? 1 : -1;
+
       const shouldFlip = drag.active &&
-        drag.dx * direction > Math.min(80, flipSurface.clientWidth * .18);
+        drag.dx * direction >
+        Math.min(80, $("flipCard").clientWidth * .18);
 
       const surface = drag.surface;
       const wasDragged = drag.active;
+
       clearDrag();
 
       if (wasDragged) {
         suppressSwipeClick = true;
-        setTimeout(() => { suppressSwipeClick = false; }, 350);
+        setTimeout(() => {
+          suppressSwipeClick = false;
+        }, 350);
       }
 
-      if (surface.hasPointerCapture(e.pointerId)) {
-        surface.releasePointerCapture(e.pointerId);
+      if (surface.hasPointerCapture(event.pointerId)) {
+        surface.releasePointerCapture(event.pointerId);
       }
 
       if (shouldFlip) switchCard(!showingRecords);
     }
 
-    for (const surface of [flipSurface, $("viewToggle")]) {
+    for (const surface of [$("flipCard"), $("viewToggle")]) {
       surface.addEventListener("pointerdown", beginSwipe);
       surface.addEventListener("pointermove", moveSwipe);
-      surface.addEventListener("pointerup", endDrag);
+      surface.addEventListener("pointerup", endSwipe);
       surface.addEventListener("pointercancel", clearDrag);
       surface.addEventListener("lostpointercapture", clearDrag);
     }
 
-    // Country picker
-    let phonePicker = null;
-
-    if (window.intlTelInput) {
-      phonePicker = window.intlTelInput($("phone"), {
-        initialCountry: "in",
-        separateDialCode: true,
-        countrySearch: true,
-        strictMode: true,
-        validationNumberTypes: ["MOBILE", "FIXED_LINE"],
-        loadUtils: () => import(
-          "https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/utils.js"
-        )
-      });
+    // Connectivity and authentication
+    function updateConnection() {
+      $("connection").textContent = navigator.onLine
+        ? ""
+        : "Offline — reconnect to save and scan";
     }
 
-    async function internationalPhone() {
-      const raw = $("phone").value.trim();
-      if (!raw) return "";
-      if (!phonePicker) {
-        throw Error("Phone validation could not load. Reload the page and try again.");
-      }
-      try {
-        await phonePicker.promise;
-      } catch (error) {
-        throw Error("Phone validation could not load. Check your connection and reload the page.");
-      }
-      if (!window.intlTelInput.utils) {
-        throw Error("Phone validation could not load. Reload the page and try again.");
-      }
-      const country = phonePicker.getSelectedCountryData();
-      if (!country.iso2) throw Error("Select a country for the phone number.");
-      const countryName = country.name || country.iso2.toUpperCase();
-      const number = phonePicker.getNumber();
-      if (country.iso2 === "in" && !/^\+91[0-9]{10}$/.test(number || "")) {
-        throw Error("Indian phone numbers must contain exactly 10 digits, excluding +91.");
-      }
-      if (!/^[+0-9()\s.-]+$/.test(raw) || phonePicker.isValidNumberPrecise() !== true ||
-          !/^\+[1-9][0-9]{1,14}$/.test(number || "")) {
-        throw Error("Enter a valid mobile or landline number for " + countryName + ". Check its length and starting digits.");
-      }
-      return number;
-    }
-
-    function status(message, error = false) {
-      $("status").textContent = message;
-      $("status").className = "status " + (error ? "error" : "success");
-    }
-
-    function type() {
-      return document.querySelector('input[name="noteType"]:checked').value;
-    }
-
-    async function call(name,...args){
-      if (name === "saveRecord") {
-        // Recheck immediately before sending the record to the server.
-        args[0].phone = await internationalPhone();
-        if (saveEpoch !== accountEpoch) return;
-      }
-      return window.contactApi(name,...args);
-    }
-
-    function asBase64(blob) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () =>
-          resolve(String(reader.result).split(",")[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    }
-
-    // Photo scanning
-    async function photoPayload(source) {
-      const bitmap = await createImageBitmap(source);
-      let canvas;
-
-      try {
-        const scale = Math.min(1, 1800 / Math.max(bitmap.width, bitmap.height));
-        canvas = document.createElement("canvas");
-        canvas.width = Math.round(bitmap.width * scale);
-        canvas.height = Math.round(bitmap.height * scale);
-        canvas.getContext("2d").drawImage(
-          bitmap, 0, 0, canvas.width, canvas.height
-        );
-      } finally {
-        bitmap.close();
-      }
-
-      const data = canvas.toDataURL("image/jpeg", .85);
-      return {
-        mimeType: "image/jpeg",
-        base64: data.slice(data.indexOf(",") + 1)
-      };
-    }
-
-    $("cardPhoto").onchange = async () => {
-      const scanEpoch = accountEpoch;
-      const file = $("cardPhoto").files[0];
-      if (!file) return;
-
-      const scan = $("scanStatus");
-      $("scanDetails").classList.add("hidden");
-
-      if (!file.type.startsWith("image/")) {
-        scan.textContent = "Choose an image.";
-        return;
-      }
-
-      if (file.size > 12 * 1024 * 1024) {
-        scan.textContent = "Choose an image smaller than 12 MB.";
-        return;
-      }
-
-      scanning = true;
-      scan.textContent = "Reading the photo…";
-      $("save").disabled = true;
-      $("cardPhoto").disabled = true;
-
-      try {
-        const payload = await photoPayload(file);
-        if (scanEpoch !== accountEpoch) return;
-        const result = await call("scanPhoto", payload);
-        if (scanEpoch !== accountEpoch) return;
-
-        $("person").value = result.person || "";
-        $("company").value = result.company || "";
-        $("scanText").textContent =
-          result.evidence || "Review the suggestions against the photo.";
-        $("scanDetails").classList.remove("hidden");
-
-        scan.textContent = result.person || result.company
-          ? "Photo scanned. Check Person and Company before saving."
-          : "No readable person or company found. Enter the details manually or try a clearer photo.";
-      } catch (err) {
-        if (scanEpoch !== accountEpoch) return;
-        scan.textContent = "Could not scan this photo: " +
-          (err.message || "Try another image or enter the details manually.");
-      } finally {
-        if (scanEpoch !== accountEpoch) return;
-        scanning = false;
-        $("cardPhoto").disabled = false;
-        $("save").disabled = loading;
-      }
-    };
-
-    // Voice recorder
-    function resetAudio() {
-      audioBlob = null;
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-      previewUrl = null;
-
-      $("preview").removeAttribute("src");
-      $("preview").classList.add("hidden");
-      $("clear").disabled = true;
-      $("timer").textContent =
-        "Record your note here. Maximum 8 MB.";
-    }
-
-    let mediaRecorder,micStream,audioChunks=[],recordingTimer,recordingStart,recordingBusy=false,discardRecording=false;
-    function stopMic(){if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null}}
-    function closeRecorder(){
-      discardRecording=true;
-      if(mediaRecorder?.state==='recording')mediaRecorder.stop();
-      stopMic();clearInterval(recordingTimer);
-    }
-    document.querySelectorAll('input[name="noteType"]').forEach(r => {
-      r.addEventListener("change", () => {
-        closeRecorder();
-        resetAudio();
-        $("textBox").classList.toggle("hidden", type() !== "text");
-        $("voiceBox").classList.toggle("hidden", type() !== "voice");
-      });
+    window.addEventListener("online", () => {
+      updateConnection();
+      loadRecords();
     });
 
-    $('start').onclick=async()=>{
-      if(recordingBusy||loading||scanning)return;
-      const recordEpoch=accountEpoch;
-      recordingBusy=true;discardRecording=false;$('start').disabled=true;resetAudio();
-      try{
-        if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw Error('Microphone recording is unavailable in this browser.');
-        const acquiredStream=await navigator.mediaDevices.getUserMedia({audio:true});
-        if(recordEpoch!==accountEpoch){acquiredStream.getTracks().forEach(t=>t.stop());return}
-        micStream=acquiredStream;
-        if(type()!=='voice'){stopMic();recordingBusy=false;$('start').disabled=false;return}
-        const mime=['audio/webm','audio/mp4','audio/ogg'].find(m=>MediaRecorder.isTypeSupported(m));
-        if(!mime)throw Error('No supported audio format found.');
-        audioChunks=[];mediaRecorder=new MediaRecorder(micStream,{mimeType:mime,audioBitsPerSecond: 64000});
-        mediaRecorder.ondataavailable=e=>{if(recordEpoch!==accountEpoch)return;if(e.data.size)audioChunks.push(e.data)};
-        mediaRecorder.onerror=()=>{if(recordEpoch!==accountEpoch)return;discardRecording=true;status('Recording interrupted. Please try again.',true);stopMic()};
-        mediaRecorder.onstop=()=>{
-          if(recordEpoch!==accountEpoch)return;
-          clearInterval(recordingTimer);stopMic();recordingBusy=false;$('start').disabled=false;$('stopRecording').disabled=true;$('save').disabled=loading||scanning;
-          if(discardRecording)return;
-          audioBlob=new Blob(audioChunks,{type:mime});
-          if(!audioBlob.size||audioBlob.size>8*1024*1024){resetAudio();status('Recording is empty or exceeds 8 MB. Try a shorter note.',true);return}
-          previewUrl=URL.createObjectURL(audioBlob);$('preview').src=previewUrl;$('preview').classList.remove('hidden');$('clear').disabled=false;$('timer').textContent='Ready to preview and save.';status('Recording ready.');
-        };
-        mediaRecorder.start(1000);recordingStart=Date.now();$('stopRecording').disabled=false;$('save').disabled=true;
-        recordingTimer=setInterval(()=>{const n=Math.floor((Date.now()-recordingStart)/1000);$('timer').textContent=`Recording ${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;if(audioChunks.reduce((n,c)=>n+c.size,0)>8*1024*1024&&mediaRecorder.state==='recording')mediaRecorder.stop()},500);
-        status('Recording…');
-      }catch(e){if(recordEpoch!==accountEpoch)return;stopMic();recordingBusy=false;$('start').disabled=false;status(e.name==='NotAllowedError'?'Allow microphone access in your browser settings, then try again.':e.message,true)}
-    };
-    $('stopRecording').onclick=()=>{if(mediaRecorder?.state==='recording'){mediaRecorder.stop();$('save').disabled=loading||scanning}};
-    window.addEventListener('pagehide',closeRecorder);
+    window.addEventListener("offline", updateConnection);
+    updateConnection();
 
-    $("clear").onclick = () => {
-      closeRecorder();
-      resetAudio();
-      status("");
-    };
-
-    // Local English profanity filtering (Obscenity).
-    const noteMatcher = new ContactObscenity.RegExpMatcher({
-      ...ContactObscenity.englishDataset.build(),
-      ...ContactObscenity.englishRecommendedTransformers
-    });
-
-    function filterWrittenNote() {
-      const text = $("note").value;
-      // Accept ordinary words containing a matching prefix or substring.
-      const bad = noteMatcher.getAllMatches(text, true).some(m =>
-        !/[\p{L}\p{N}]/u.test(text[m.startIndex - 1] || "") &&
-        !/[\p{L}\p{N}]/u.test(text[m.endIndex + 1] || ""));
-      $("noteFilterHint").textContent = bad
-        ? "Please edit the inappropriate language before saving." : "";
-      return bad;
-    }
-    $("note").addEventListener("blur", filterWrittenNote);
-    $("note").addEventListener("input", () => { $("noteFilterHint").textContent = ""; });
-    $("form").addEventListener("reset", () => { $("noteFilterHint").textContent = ""; });
-
-    // Saving
-    $("form").onsubmit = async e => {
-      e.preventDefault();
-      if (loading || scanning || recordingBusy) return;
-      const saveEpoch = accountEpoch;
-
-      let phone;
-      try {
-        phone = await internationalPhone();
-      } catch (err) {
-        if (saveEpoch !== accountEpoch) return;
-        return status(err.message || "Could not format the phone number.", true);
-      }
-
-      if (phone && !/^[+0-9()\s.-]{7,30}$/.test(phone)) {
-        return status("Enter a valid phone number.", true);
-      }
-
-      const noteType = type() === "voice" ? "voice" : ($("note").value.trim() ? "text" : "none");
-      if (noteType === "text" && filterWrittenNote()) {
-        $("note").focus();
-        return status("Please edit the inappropriate language before saving.", true);
-      }
-
-      if (noteType === "voice" && !audioBlob) {
-        return status("Stop and preview your recording before saving.", true);
-      }
-
-
-      if (loading || scanning || recordingBusy || saveEpoch !== accountEpoch) return;
-      loading = true;
-      $("next").disabled = true;
-      $("save").disabled = true;
-      status("Saving…");
-
-      try {
-        const data = {
-          person: $("person").value,
-          company: $("company").value,
-          phone,
-          noteType,
-          writtenNote: noteType === "text" ? $("note").value : ""
-        };
-
-        if (noteType === "voice") {
-          data.audio = {
-            mimeType: audioBlob.type,
-            base64: await asBase64(audioBlob)
-          };
-        }
-        
-        if (saveEpoch !== accountEpoch) return;
-        status("Saving record…");
-        $("next").hidden = true;
-        $("next").disabled = true;
-
-        await call("saveRecord", data);
-        if (saveEpoch !== accountEpoch) return;
-
-        closeRecorder();
-        status("Saved in Records. Tap Add next person to continue.");
-        $("next").hidden = false;
-        $("next").disabled = false;
-
-        // Refresh records without keeping the form busy.
-        loadRecords().catch(console.error);
-
-      } catch (err) {
-        if (saveEpoch !== accountEpoch) return;
-        $("next").hidden = true;
-        $("next").disabled = true;
-        status(err.message || "Save failed. Please try again.", true);
-
-      } finally {
-        if (saveEpoch !== accountEpoch) return;
-        loading = false;
-        $("save").disabled = !$("next").disabled;
-      }
-    };
-
-    $("next").onclick = () => {
-      if (loading || scanning || recordingBusy) return;
-
-      closeRecorder();
-      $("form").reset();
-
-      if (phonePicker) {
-        phonePicker.setNumber("");
-        phonePicker.setCountry("in");
-      }
-
-      resetAudio();
-      $("scanDetails").classList.add("hidden");
-      $("scanStatus").textContent =
-        "Take or choose a photo to fill Person and Company automatically. Review the details before saving.";
-
-      $("textBox").classList.remove("hidden");
-      $("voiceBox").classList.add("hidden");
-      $("save").disabled = false;
-      $("next").disabled = true;
-      status("Ready for the next person.");
-
-      $("person").focus();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    $("form").addEventListener("input", () => {
-      if (!loading && !scanning && !recordingBusy) $("save").disabled = false;
-    });
-
-    // Records
-    let recordRequest = 0;
-    let nextRecordCursor = null;
-    let currentRecordQuery = "";
-    let shownRecordCount = 0;
-    let recordPageBusy = false;
-
-    async function loadRecords(append = false) {
-      // Event listeners pass an Event object: only literal true means append.
-      append = append === true;
-      if (append && (recordPageBusy || nextRecordCursor == null)) return;
-      const query = $("search").value.trim();
-      if (append && query !== currentRecordQuery) return loadRecords();
-      const request = ++recordRequest;
-      const container = $("records");
-      recordPageBusy = true;
-      $("loadMore").disabled = true;
-      $("loadMore").textContent = "Loading…";
-      $("pageStatus").textContent = "";
-      if (!append) {
-        nextRecordCursor = null;
-        shownRecordCount = 0;
-        currentRecordQuery = query;
-        $("loadMore").hidden = true;
-      }
-
-      function empty(title, message) {
-        container.querySelectorAll("audio").forEach(player => {
-          player.pause();
-          if (player.dataset.objectUrl) {
-            URL.revokeObjectURL(player.dataset.objectUrl);
-          }
-        });
-
-        container.replaceChildren();
-        const box = document.createElement("div");
-        box.className = "records-empty";
-
-        const heading = document.createElement("strong");
-        heading.textContent = title;
-
-        const detail = document.createElement("p");
-        detail.textContent = message;
-
-        box.append(heading, detail);
-        container.append(box);
-      }
-
-      if (!append) empty("Loading contacts", "Getting your latest records…");
-
-      try {
-        if (!window.CONTACT_CONFIG?.apiUrl) {
-          $("recordCount").textContent = "—";
-          empty("Records unavailable", "Please try again later.");
-          return;
-        }
-
-        const result = await call("listRecords", query,
-          append ? {cursor: nextRecordCursor} : {});
-        if (request !== recordRequest || query !== $("search").value.trim()) return;
-        if (!result || !Array.isArray(result.records)) {
-          throw Error("Update the Apps Script pagination function and deployment first.");
-        }
-        const records = result.records;
-        nextRecordCursor = query ? result.nextCursor : null;
-        if (!append) container.replaceChildren();
-        shownRecordCount += records.length;
-        $("recordCount").textContent = shownRecordCount + " shown";
-        $("loadMore").hidden = nextRecordCursor == null;
-        $("pageStatus").textContent = query
-          ? (nextRecordCursor == null ? "All matching contacts shown." : "More matching contacts are available.")
-          : (window.contactUser?.role === 'admin'
-            ? "Latest 10 contacts from all users. Search to find older contacts."
-            : "Your latest 10 contacts. Search to find older contacts.");
-
-        if (!records.length && !append) {
-          const searching = $("search").value.trim();
-          empty(
-            searching ? "No matching contacts" : "Your connections start here",
-            searching
-              ? "Try a different name, company, or phone number."
-              : "Save your first contact to see their details and notes here."
-          );
-          return;
-        }
-
-        records.forEach(r => {
-          const el = (tag, className, text) => {
-            const node = document.createElement(tag);
-            node.className = className;
-            if (text !== undefined) node.textContent = text;
-            return node;
-          };
-
-          const card = el("article", "contact-record");
-          const head = el("div", "record-head");
-
-          const initials = String(r.person || "?")
-            .trim().split(/\s+/).slice(0, 2)
-            .map(w => w[0]).join("").toUpperCase();
-
-          const avatar = el("div", "record-avatar", initials);
-          avatar.setAttribute("aria-hidden", "true");
-
-          const identity = el("div", "record-identity");
-          identity.append(
-            el("h3", "record-name", r.person),
-            el("p", "record-company", r.company)
-          );
-
-          const badge = el("span", "note-badge",
-            r.type === "Text" ? "Written note" : r.type === "Voice" ? "Voice note" : "Contact details");
-
-          head.append(avatar, identity, badge);
-
-          const meta = el("div", "record-meta");
-          if (r.phone) meta.append(el("span", "record-phone", r.phone));
-
-          const date = new Date(r.date);
-          meta.append(el("time", "record-date",
-            Number.isNaN(date.getTime()) ? "" :
-              date.toLocaleDateString(undefined, {
-                day: "numeric", month: "short", year: "numeric"
-              })
-          ));
-
-          card.append(head, meta);
-
-          if (r.type === "Text") {
-            card.append(el("div", "note record-note", r.note));
-          } else if (r.hasAudio) {
-            const btn = el("button", "voice-play", "▶  Play voice note");
-            btn.type = "button";
-
-            const feedback = el("div", "audio-feedback");
-            feedback.setAttribute("role", "status");
-
-            btn.onclick = async () => {
-              btn.disabled = true;
-              btn.textContent = "Loading recording…";
-              feedback.textContent = "";
-
-              try {
-                const audio = await call("getAudio", r.id);
-                const binary = atob(audio.base64);
-                const bytes = new Uint8Array(binary.length);
-
-                for (let i = 0; i < binary.length; i++) {
-                  bytes[i] = binary.charCodeAt(i);
-                }
-
-                let player = card.querySelector("audio");
-                if (!player) {
-                  player = document.createElement("audio");
-                  player.controls = true;
-                  card.append(player);
-                }
-
-                if (player.dataset.objectUrl) {
-                  URL.revokeObjectURL(player.dataset.objectUrl);
-                }
-
-                const url = URL.createObjectURL(
-                  new Blob([bytes], { type: audio.mimeType })
-                );
-
-                player.dataset.objectUrl = url;
-                player.src = url;
-                await player.play();
-              } catch (err) {
-                feedback.textContent =
-                  err.message || "Could not play recording.";
-              } finally {
-                btn.disabled = false;
-                btn.textContent = "▶  Play voice note";
-              }
-            };
-
-            card.append(btn, feedback);
-          }
-
-          container.append(card);
-        });
-      } catch (err) {
-        if (request !== recordRequest) return;
-        if (append) {
-          $("pageStatus").textContent = err.message || "Could not load more contacts. Try again.";
-        } else {
-          $("recordCount").textContent = "—";
-          empty("Unable to load contacts", err.message || "Please refresh the page and try again.");
-        }
-      } finally {
-        if (request === recordRequest) {
-          recordPageBusy = false;
-          $("loadMore").disabled = false;
-          $("loadMore").textContent = "Load more";
-        }
-      }
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
     }
 
-    $("loadMore").onclick = () => loadRecords(true);
-    $("search").oninput = () => {
-      clearTimeout(searchTimer);
-      ++recordRequest;
-      nextRecordCursor = null;
-      $("loadMore").hidden = true;
-      searchTimer = setTimeout(()=>{if(!document.querySelector("main.shell").hidden)loadRecords()}, 300);
-    };
+    window.addEventListener("contact-auth-ready", () => {
+      loadRecords();
+    });
 
-    function updateConnection(){$('connection').textContent=navigator.onLine?'':'Offline — reconnect to save and scan'}
-    window.addEventListener('online',()=>{updateConnection();if(!document.querySelector('main.shell').hidden)loadRecords()});window.addEventListener('offline',updateConnection);updateConnection();
-    if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    window.addEventListener('contact-auth-ready', loadRecords);
-    window.addEventListener('contact-auth-cleared', () => {
+    window.addEventListener("contact-auth-cleared", () => {
       ++accountEpoch;
-      loading=false; scanning=false; recordingBusy=false;
-      $('start').disabled=false; $('stopRecording').disabled=true;
-      clearTimeout(searchTimer);
-      $('search').value='';
-      $('cardPhoto').disabled=false;
-      $('scanStatus').textContent='';
-      $('scanText').textContent='';
-      $('scanDetails').classList.add('hidden');
-      $('recordCount').textContent='0 shown';
-      $('records').querySelectorAll('audio').forEach(player=>{player.pause();if(player.dataset.objectUrl)URL.revokeObjectURL(player.dataset.objectUrl)});
-      closeRecorder();
       ++recordRequest;
-      nextRecordCursor=null;
-      recordPageBusy=false;
-      $('loadMore').hidden=true;
-      $('pageStatus').textContent='';
-      $('records').replaceChildren();
-      $('form').reset();
-      resetAudio();
-      $('textBox').classList.remove('hidden');
-      $('voiceBox').classList.add('hidden');
-      $('next').hidden=true;
-      $('next').disabled=true;
-      $('save').disabled=false;
-      status('');
-    });
 
+      clearTimeout(searchTimer);
+      clearDrag();
+      closeRecorder();
+      releaseRecordAudio();
+
+      loading = false;
+      scanning = false;
+      recordingBusy = false;
+      recordPageBusy = false;
+      nextRecordCursor = null;
+      shownRecordCount = 0;
+
+      $("start").disabled = false;
+      $("stopRecording").disabled = true;
+      $("cardPhoto").disabled = false;
+      $("search").value = "";
+      $("records").replaceChildren();
+      $("recordCount").textContent = "0 shown";
+      $("loadMore").hidden = true;
+      $("pageStatus").textContent = "";
+
+      resetContact();
+      status("");
+    });
   </script>
-<script src="./auth.js?v=individual-v4"></script>
+
+  <script src="./auth.js?v=individual-v4"></script>
 </body>
 </html>
