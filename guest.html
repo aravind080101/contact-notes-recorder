@@ -6,7 +6,7 @@
 <script src="./config.js"></script><script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/intlTelInput.min.js"></script><script>
 const token=new URLSearchParams(location.hash.slice(1)).get('guest');
 history.replaceState(null,'',location.pathname+location.search);
-const get=id=>document.getElementById(id);let busy=false;
+const get=id=>document.getElementById(id);let busy=false;const requestId=crypto.randomUUID();let pendingDetails=null;
 const picker=window.intlTelInput ? window.intlTelInput(get('phone'),{initialCountry:'in',separateDialCode:true,loadUtils:()=>import('https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/utils.js')}) : null;
 if(!/^[a-f0-9]{64}$/.test(token||'')){get('submit').disabled=true;get('status').textContent='Ask your contact for a new QR code.';}
 get('guestForm').onsubmit=async event=>{
@@ -19,7 +19,8 @@ get('guestForm').onsubmit=async event=>{
    if(!window.intlTelInput.utils||!picker.isValidNumberPrecise())throw Error('Enter a valid phone number for the selected country.');
    phone=picker.getNumber();
   }
-  const response=await fetch(window.CONTACT_CONFIG.apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({action:'guestSubmit',args:[{token,person:get('person').value,company:get('company').value,phone}]})});
+  if(!pendingDetails)pendingDetails={token,requestId,person:get('person').value,company:get('company').value,phone};
+  const response=await fetch(window.CONTACT_CONFIG.apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({action:'guestSubmit',args:[pendingDetails]})});
   const result=await response.json();if(!response.ok||!result.ok)throw Error(result.error||'Could not save. Please try again.');
   get('guestForm').hidden=true;get('status').textContent='Thank you! Your contact details have been saved.';
  }catch(error){get('status').textContent=error.message;get('submit').disabled=false;}finally{busy=false;}

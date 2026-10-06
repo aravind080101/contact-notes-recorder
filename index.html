@@ -1122,6 +1122,8 @@
     let scanning = false;
     let recordingBusy = false;
     let saved = false;
+    let saveRequestId = crypto.randomUUID();
+    let pendingSaveData = null;
 
     let audioBlob = null;
     let previewUrl = null;
@@ -1259,7 +1261,7 @@
       const requestEpoch = accountEpoch;
 
       if (name === "saveRecord") {
-        args[0].phone = await internationalPhone();
+        if (!pendingSaveData) args[0].phone = await internationalPhone();
 
         if (requestEpoch !== accountEpoch) {
           throw Error("Session changed. Please sign in again.");
@@ -1679,7 +1681,8 @@
           );
         }
 
-        const data = {
+        let data = {
+          requestId: saveRequestId,
           person: $("person").value,
           company: $("company").value,
           phone,
@@ -1697,6 +1700,9 @@
 
         if (epoch !== accountEpoch) return;
 
+        // Retry the original payload and ID if a response was lost.
+        if (pendingSaveData) data = pendingSaveData;
+        else pendingSaveData = data;
         status("Saving record…");
         await call("saveRecord", data);
 
@@ -1730,6 +1736,8 @@
       resetAudio();
 
       saved = false;
+      saveRequestId = crypto.randomUUID();
+      pendingSaveData = null;
 
       if (phonePicker) {
         phonePicker.setNumber("");
@@ -1762,7 +1770,6 @@
 
     $("form").addEventListener("input", () => {
       if (!loading && !scanning && !recordingBusy) {
-        saved = false;
         updateSaveButton();
       }
     });
@@ -1885,6 +1892,13 @@
           feedback.textContent = "";
 
           try {
+            const existingPlayer = card.querySelector("audio");
+            if (existingPlayer?.dataset.objectUrl) {
+              existingPlayer.currentTime = 0;
+              try { await existingPlayer.play(); }
+              catch { feedback.textContent = "Tap Play on the audio player to listen."; }
+              return;
+            }
             const audio = await call("getAudio", record.id);
 
             if (epoch !== accountEpoch || !card.isConnected) return;
@@ -1912,7 +1926,8 @@
 
             player.dataset.objectUrl = url;
             player.src = url;
-            await player.play();
+            try { await player.play(); }
+            catch { feedback.textContent = "Tap Play on the audio player to listen."; }
           } catch (error) {
             if (epoch === accountEpoch) {
               feedback.textContent =
