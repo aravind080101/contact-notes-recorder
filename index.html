@@ -1052,7 +1052,7 @@
             </p>
           </div>
 
-          <span id="recordCount" class="count-badge">—</span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end"><span id="recordCount" class="count-badge">—</span><button id="refreshRecords" type="button" style="min-height:40px;padding:8px 12px;font-size:12px" aria-label="Refresh contacts">↻ Refresh</button></div>
         </div>
 
         <div class="search-wrap">
@@ -1930,111 +1930,84 @@
       $("records").append(card);
     }
 
+    let recordsLoaded = false;
+    let pendingRecordReload = false;
+    let activeRecordQuery = "";
+
     async function loadRecords(append = false) {
       append = append === true;
-
       if (document.querySelector("main.shell").hidden) return;
-
-      if (
-        append &&
-        (recordPageBusy || nextRecordCursor == null)
-      ) return;
-
       const query = $("search").value.trim();
-
-      if (append && query !== currentRecordQuery) {
-        return loadRecords();
+      if (recordPageBusy) {
+        // Coalesce refreshes and searches; never overlap list requests.
+        if (!append) pendingRecordReload = true;
+        return;
       }
-
+      if (append && (nextRecordCursor == null || query !== currentRecordQuery)) return;
+      const epoch = accountEpoch;
       const request = ++recordRequest;
+      const hadRecords = $("records").querySelectorAll(".contact-record").length > 0;
       recordPageBusy = true;
+      activeRecordQuery = query;
       $("loadMore").disabled = true;
       $("loadMore").textContent = "Loading…";
-
-      if (!append) {
-        nextRecordCursor = null;
-        shownRecordCount = 0;
-        currentRecordQuery = query;
-        $("loadMore").hidden = true;
-        $("pageStatus").textContent = "";
-
-        emptyRecords(
-          "Loading contacts",
-          "Getting your latest records…"
-        );
+      $("refreshRecords").disabled = true;
+      $("pageStatus").textContent = append ? "Loading more contacts…" : "Updating contacts…";
+      if (!append && !recordsLoaded && !hadRecords) {
+        emptyRecords("Loading contacts", "Getting your latest records…");
       }
-
       try {
-        const result = await call(
-          "listRecords",
-          query,
-          append ? {cursor: nextRecordCursor} : {}
-        );
-
-        if (
-          request !== recordRequest ||
-          query !== $("search").value.trim()
-        ) return;
-
-        if (!result || !Array.isArray(result.records)) {
-          throw Error(
-            "Could not read contacts. Check the Apps Script deployment."
-          );
-        }
-
+        const result = await call("listRecords", query,
+          append ? {cursor: nextRecordCursor} : {});
+        if (epoch !== accountEpoch || request !== recordRequest || query !== $("search").value.trim()) return;
+        if (!result || !Array.isArray(result.records)) throw Error("Could not read contacts.");
         if (!append) {
           releaseRecordAudio();
           $("records").replaceChildren();
+          shownRecordCount = 0;
+          currentRecordQuery = query;
         }
-
+        recordsLoaded = true;
         nextRecordCursor = query ? result.nextCursor : null;
         shownRecordCount += result.records.length;
-
-        $("recordCount").textContent =
-          shownRecordCount + " shown";
-
+        $("recordCount").textContent = shownRecordCount + " shown";
         $("loadMore").hidden = nextRecordCursor == null;
-
         $("pageStatus").textContent = query
-          ? nextRecordCursor == null
-            ? "All matching contacts shown."
-            : "More matching contacts are available."
+          ? nextRecordCursor == null ? "All matching contacts shown." : "More matching contacts are available."
           : window.contactUser?.role === "admin"
             ? "Latest 10 contacts from all users. Search to find older contacts."
             : "Your latest 10 contacts. Search to find older contacts.";
-
         if (!result.records.length && !append) {
-          emptyRecords(
-            query ? "No matching contacts" : "Your connections start here",
-            query
-              ? "Try a different name, company, or phone number."
-              : "Save your first contact to see their details here."
-          );
-        } else {
-          result.records.forEach(renderRecord);
-        }
+          emptyRecords(query ? "No matching contacts" : "Your connections start here",
+            query ? "Try a different name, company, or phone number." : "Save your first contact to see their details here.");
+        } else result.records.forEach(renderRecord);
       } catch (error) {
-        if (request !== recordRequest) return;
-
-        if (append) {
-          $("pageStatus").textContent =
-            "Could not load more contacts. Try again.";
+        if (epoch !== accountEpoch || request !== recordRequest || query !== $("search").value.trim()) return;
+        if (hadRecords || recordsLoaded) {
+          $("pageStatus").textContent = query !== currentRecordQuery
+            ? "Search could not complete. Previous results remain visible. Tap Refresh to retry."
+            : "Could not update right now. Your loaded contacts remain visible. Tap Refresh to retry.";
         } else {
           $("recordCount").textContent = "—";
-
-          emptyRecords(
-            "Unable to load contacts",
-            error.message || "Please refresh and try again."
-          );
+          emptyRecords("Contacts are taking longer to load", "Tap Refresh to try again.");
+          $("pageStatus").textContent = "Your saved records have not been changed.";
         }
       } finally {
-        if (request === recordRequest) {
+        if (epoch === accountEpoch) {
           recordPageBusy = false;
           $("loadMore").disabled = false;
           $("loadMore").textContent = "Load more";
+          $("refreshRecords").disabled = false;
+          if (pendingRecordReload) {
+            pendingRecordReload = false;
+            clearTimeout(searchTimer);
+            loadRecords();
+          }
         }
       }
     }
+
+    $("refreshRecords").onclick = () => loadRecords();
 
     $("loadMore").onclick = () => loadRecords(true);
 
@@ -2113,7 +2086,7 @@
       await animate(newFace, "flip-in", 220);
       flipping = false;
 
-      if (toRecords) loadRecords();
+      if (toRecords && !recordsLoaded && !recordPageBusy) loadRecords();
     }
 
     $("viewToggle").onclick = () => {
@@ -2260,6 +2233,9 @@
       scanning = false;
       recordingBusy = false;
       recordPageBusy = false;
+      recordsLoaded = false;
+      pendingRecordReload = false;
+      $("refreshRecords").disabled = false;
       nextRecordCursor = null;
       shownRecordCount = 0;
 
