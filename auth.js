@@ -59,13 +59,13 @@
   headerActions.append(inviteButton, logout);
   const admin = document.createElement('section');
   admin.id = 'userAdminPanel'; admin.className = 'login-panel'; admin.hidden = true;
-  admin.innerHTML = `<h2>Manage users</h2><p>Create a private registration link for each person.</p>
+  admin.innerHTML = `<h2>Manage users</h2><p>Email an invitation so each person can create their own account.</p>
     <form id="inviteForm"><label for="newUserEmail">Person’s email</label>
       <input id="newUserEmail" type="email" autocomplete="off" required maxlength="254">
-      <button type="submit" class="primary">Create invitation</button></form>
+      <button type="submit" class="primary">Send invitation</button></form>
     <div id="inviteResult" hidden><label for="inviteLink">Registration link</label>
       <input id="inviteLink" readonly><button id="copyInvite" type="button">Copy link</button>
-      <p class="auth-hint">Share privately with this person. Valid for 48 hours and one account.</p></div>
+      <p class="auth-hint">This private link creates one account. It has no automatic expiry.</p></div>
     <p id="adminStatus" role="status" aria-live="polite"></p><div id="userList"></div>`;
   app.before(admin);
   const style = document.createElement('style');
@@ -187,12 +187,12 @@
     if (!admin.hidden) { adminMessage(''); try { await loadUsers(); } catch (error) { adminMessage(error.message); } }
   };
   get('inviteForm').onsubmit = async event => {
-    event.preventDefault(); const form = event.currentTarget; busy(form, true); adminMessage('Creating invitation…');
+    event.preventDefault(); const form = event.currentTarget; busy(form, true); adminMessage('Sending invitation…');
     get('inviteResult').hidden = true;
     try {
       const result = await window.contactApi('createInvitation', {email: get('newUserEmail').value});
       get('inviteLink').value = result.link; get('inviteResult').hidden = false;
-      adminMessage('Invitation ready for ' + result.email + '. Send this private link to them.');
+      adminMessage('Invitation emailed to ' + result.email + '. They can use it to create their account.');
     } catch (error) { adminMessage(error.message); } finally { busy(form, false); }
   };
   get('copyInvite').onclick = async () => {

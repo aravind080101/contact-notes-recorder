@@ -1455,7 +1455,9 @@ OTHER DEALINGS IN THE SOFTWARE.
         $("loadMore").hidden = nextRecordCursor == null;
         $("pageStatus").textContent = query
           ? (nextRecordCursor == null ? "All matching contacts shown." : "More matching contacts are available.")
-          : "Your latest 10 contacts. Search to find older contacts.";
+          : (window.contactUser?.role === 'admin'
+            ? "Latest 10 contacts from all users. Search to find older contacts."
+            : "Your latest 10 contacts. Search to find older contacts.");
 
         if (!records.length && !append) {
           const searching = $("search").value.trim();
@@ -1625,6 +1627,6 @@ OTHER DEALINGS IN THE SOFTWARE.
     });
 
   </script>
-<script src="./auth.js?v=individual-v1"></script>
+<script src="./auth.js?v=individual-v3"></script>
 </body>
 </html>

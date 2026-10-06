@@ -1,11 +1,11 @@
-const CACHE = "moolya-contact-shell-individual-v1";
+const CACHE = "moolya-contact-shell-individual-v3";
 
 const SHELL = [
   "./",
   "./index.html",
   "./config.js",
   "./auth.js",
-  "./auth.js?v=individual-v1",
+  "./auth.js?v=individual-v3",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
