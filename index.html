@@ -650,7 +650,8 @@
       .topbar-inner { padding: 12px; }
       .brand-mark { width: 40px; height: 40px; }
     }
-  .install-row{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;font-size:12px;margin-bottom:8px}.install-row button{font-size:12px;padding:8px 14px;min-height:40px}[hidden]{display:none!important}body{padding-bottom:env(safe-area-inset-bottom)}.topbar{padding-top:max(14px,env(safe-area-inset-top))}</style>
+  .install-row{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;font-size:12px;margin-bottom:8px}.install-row button{font-size:12px;padding:8px 14px;min-height:40px}[hidden]{display:none!important}body{padding-bottom:env(safe-area-inset-bottom)}.topbar{padding-top:max(14px,env(safe-area-inset-top))}.contact-heading{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.contact-heading h1{margin:0}.qr-trigger{min-height:44px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:14px;padding:10px 14px;border-radius:14px}.guest-dialog{width:calc(100% - 32px);max-width:420px;border:1px solid var(--line);border-radius:24px;background:var(--panel);color:var(--ink);padding:24px}.guest-dialog::backdrop{background:#0009}.guest-dialog canvas{display:block;width:min(100%,280px);height:auto;margin:18px auto;background:white}.guest-dialog p{line-height:1.5}.guest-dialog .controls{justify-content:center}
+</style>
 <link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-192.png"><meta name="theme-color" content="#215566"><meta name="apple-mobile-web-app-capable" content="yes"><script src="./config.js"></script></head>
 
 <body>
@@ -690,7 +691,7 @@
       <section id="contactFace" class="panel">
         <div class="form-intro">
           <div class="eyebrow">Make every connection count</div>
-          <h1>Add a contact</h1>
+          <div class="contact-heading"><h1>Add a contact</h1><button id="guestQR" type="button" class="qr-trigger" aria-label="Show QR code for visitor details">▦ <span>Visitor QR</span></button></div>
           <p>Capture their details and keep a written or voice note.</p>
         </div>
 
@@ -727,7 +728,7 @@
             Select a country flag, then enter the phone number.
           </div>
 
-          <label>Note type *</label>
+          <label>Note type (optional)</label>
           <div class="choice">
             <label>
               <input type="radio" name="noteType" value="text" checked>
@@ -740,7 +741,7 @@
           </div>
 
           <div id="textBox">
-            <label for="note">Written note *</label>
+            <label for="note">Written note (optional)</label>
             <textarea id="note" maxlength="5000"
               placeholder="What would you like to remember?" aria-describedby="noteFilterHint"></textarea>
             <div id="noteFilterHint" class="hint" role="status" aria-live="polite"></div>
@@ -794,6 +795,9 @@
   </main>
 
 
+<dialog id="guestDialog" class="guest-dialog"><h2>Let them add their details</h2><p>Scan this code to enter your name, company and phone number. No login needed.</p><canvas id="guestCanvas" hidden aria-label="Visitor form QR code"></canvas><p id="guestQRStatus" role="status"></p><div class="controls"><button id="copyGuestLink" type="button" disabled>Copy link</button><button id="closeGuestQR" type="button">Close</button></div></dialog>
+<script src="./qr.js"></script>
+<script src="./guest-qr.js"></script>
 <script>
 /* Obscenity 0.4.6 — https://github.com/jo3-l/obscenity
 # The MIT License (MIT)
@@ -1236,39 +1240,18 @@ OTHER DEALINGS IN THE SOFTWARE.
       ...ContactObscenity.englishRecommendedTransformers
     });
 
-    function removeNoteProfanity(text, cursor = text.length) {
-      const matches = noteMatcher.getAllMatches(text, true);
-      const ranges = [];
-      for (const match of matches) {
-        const last = ranges[ranges.length - 1];
-        const end = match.endIndex + 1;
-        if (last && match.startIndex <= last[1]) last[1] = Math.max(last[1], end);
-        else ranges.push([match.startIndex, end]);
-      }
-      let clean = "", lastEnd = 0, removedBeforeCursor = 0;
-      for (const [start, end] of ranges) {
-        clean += text.slice(lastEnd, start);
-        removedBeforeCursor += Math.max(0, Math.min(cursor, end) - start);
-        lastEnd = end;
-      }
-      clean += text.slice(lastEnd);
-      return {text: clean, cursor: cursor - removedBeforeCursor, changed: ranges.length > 0};
-    }
-
     function filterWrittenNote() {
-      const input = $("note");
-      const result = removeNoteProfanity(input.value, input.selectionStart ?? input.value.length);
-      if (result.changed) {
-        input.value = result.text;
-        input.setSelectionRange(result.cursor, result.cursor);
-        $("noteFilterHint").textContent = "Inappropriate words aren’t allowed. Detected words were removed.";
-      }
-      return result.changed;
+      const text = $("note").value;
+      // Accept ordinary words containing a matching prefix or substring.
+      const bad = noteMatcher.getAllMatches(text, true).some(m =>
+        !/[\p{L}\p{N}]/u.test(text[m.startIndex - 1] || "") &&
+        !/[\p{L}\p{N}]/u.test(text[m.endIndex + 1] || ""));
+      $("noteFilterHint").textContent = bad
+        ? "Please edit the inappropriate language before saving." : "";
+      return bad;
     }
-    $("note").addEventListener("input", event => {
-      if (!event.isComposing) filterWrittenNote();
-    });
-    $("note").addEventListener("compositionend", filterWrittenNote);
+    $("note").addEventListener("blur", filterWrittenNote);
+    $("note").addEventListener("input", () => { $("noteFilterHint").textContent = ""; });
     $("form").addEventListener("reset", () => { $("noteFilterHint").textContent = ""; });
 
     // Saving
@@ -1289,19 +1272,16 @@ OTHER DEALINGS IN THE SOFTWARE.
         return status("Enter a valid phone number.", true);
       }
 
-      const noteType = type();
+      const noteType = type() === "voice" ? "voice" : ($("note").value.trim() ? "text" : "none");
       if (noteType === "text" && filterWrittenNote()) {
         $("note").focus();
-        return status("Inappropriate words were removed. Review your note and save again.", true);
+        return status("Please edit the inappropriate language before saving.", true);
       }
 
       if (noteType === "voice" && !audioBlob) {
         return status("Stop and preview your recording before saving.", true);
       }
 
-      if (noteType === "text" && !$("note").value.trim()) {
-        return status("Write a note before saving.", true);
-      }
 
       if (loading || scanning || recordingBusy || saveEpoch !== accountEpoch) return;
       loading = true;
@@ -1495,7 +1475,7 @@ OTHER DEALINGS IN THE SOFTWARE.
           );
 
           const badge = el("span", "note-badge",
-            r.type === "Text" ? "Written note" : "Voice note");
+            r.type === "Text" ? "Written note" : r.type === "Voice" ? "Voice note" : "Contact details");
 
           head.append(avatar, identity, badge);
 
@@ -1627,6 +1607,6 @@ OTHER DEALINGS IN THE SOFTWARE.
     });
 
   </script>
-<script src="./auth.js?v=individual-v3"></script>
+<script src="./auth.js?v=individual-v4"></script>
 </body>
 </html>

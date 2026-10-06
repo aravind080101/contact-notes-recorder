@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>Share your contact details | Moolya</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/css/intlTelInput.css">
+<style>*{box-sizing:border-box}body{margin:0;padding:24px 16px;font-family:system-ui,sans-serif;background:#eef6f6;color:#153b43}main{max-width:480px;margin:24px auto;background:white;border-radius:24px;padding:28px;box-shadow:0 12px 40px #153b4310}h1{font-size:28px;line-height:1.2;margin:8px 0 12px}p{line-height:1.6;color:#506770}label{display:block;margin:20px 0 8px;font-weight:600;font-size:14px}input{width:100%;min-height:48px;border:1px solid #b9cdd0;border-radius:12px;padding:12px;font:inherit}button{width:100%;min-height:48px;margin-top:24px;border:0;border-radius:12px;color:white;background:#146575;font:inherit;font-weight:600}button:disabled{opacity:.6}.iti{width:100%}#status{min-height:24px;font-size:14px}.brand{font-weight:700;letter-spacing:3px;color:#146575}@media(prefers-color-scheme:dark){body{background:#102e37;color:#edf7f8}main{background:#193c47}p{color:#b6ccd1}input{background:#102e37;color:#edf7f8}.brand{color:#74d3d8}}
+</style></head><body><main><div class="brand">MOOLYA</div><h1>Let’s stay connected</h1><p>Share your details with the person who showed you this code.</p><form id="guestForm"><label for="person">Your name *</label><input id="person" autocomplete="name" maxlength="120" required><label for="company">Company *</label><input id="company" autocomplete="organization" maxlength="120" required><label for="phone">Phone number (optional)</label><input id="phone" type="tel" autocomplete="tel" maxlength="30"><button id="submit" type="submit">Share my details</button></form><p id="status" role="status" aria-live="polite"></p></main>
+<script src="./config.js"></script><script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/intlTelInput.min.js"></script><script>
+const token=new URLSearchParams(location.hash.slice(1)).get('guest');
+history.replaceState(null,'',location.pathname+location.search);
+const get=id=>document.getElementById(id);let busy=false;
+const picker=window.intlTelInput ? window.intlTelInput(get('phone'),{initialCountry:'in',separateDialCode:true,loadUtils:()=>import('https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/utils.js')}) : null;
+if(!/^[a-f0-9]{64}$/.test(token||'')){get('submit').disabled=true;get('status').textContent='Ask your contact for a new QR code.';}
+get('guestForm').onsubmit=async event=>{
+ event.preventDefault();if(busy)return;busy=true;get('submit').disabled=true;get('status').textContent='Sharing your details…';
+ try{
+  let phone='';
+  if(get('phone').value.trim()){
+   if(!picker)throw Error('Phone validation is unavailable. Reload this page.');
+   await picker.promise;
+   if(!window.intlTelInput.utils||!picker.isValidNumberPrecise())throw Error('Enter a valid phone number for the selected country.');
+   phone=picker.getNumber();
+  }
+  const response=await fetch(window.CONTACT_CONFIG.apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({action:'guestSubmit',args:[{token,person:get('person').value,company:get('company').value,phone}]})});
+  const result=await response.json();if(!response.ok||!result.ok)throw Error(result.error||'Could not save. Please try again.');
+  get('guestForm').hidden=true;get('status').textContent='Thank you! Your contact details have been saved.';
+ }catch(error){get('status').textContent=error.message;get('submit').disabled=false;}finally{busy=false;}
+};
+</script></body></html>
