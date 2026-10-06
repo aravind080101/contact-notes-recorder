@@ -1,4 +1,4 @@
-const CACHE = "moolya-contact-shell-individual-v4";
+const CACHE = "moolya-contact-shell-individual-v5";
 
 const SHELL = [
   "./",
