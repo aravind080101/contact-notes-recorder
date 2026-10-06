@@ -834,6 +834,7 @@ OTHER DEALINGS IN THE SOFTWARE.
     let audioBlob, previewUrl;
     let loading = false;
     let scanning = false;
+    let accountEpoch = 0;
     let searchTimer;
     let recorderWindow = null;
     let recordingToken = null;
@@ -1074,6 +1075,7 @@ OTHER DEALINGS IN THE SOFTWARE.
       if (name === "saveRecord") {
         // Recheck immediately before sending the record to the server.
         args[0].phone = await internationalPhone();
+        if (saveEpoch !== accountEpoch) return;
       }
       return window.contactApi(name,...args);
     }
@@ -1113,6 +1115,7 @@ OTHER DEALINGS IN THE SOFTWARE.
     }
 
     $("cardPhoto").onchange = async () => {
+      const scanEpoch = accountEpoch;
       const file = $("cardPhoto").files[0];
       if (!file) return;
 
@@ -1135,7 +1138,10 @@ OTHER DEALINGS IN THE SOFTWARE.
       $("cardPhoto").disabled = true;
 
       try {
-        const result = await call("scanPhoto", await photoPayload(file));
+        const payload = await photoPayload(file);
+        if (scanEpoch !== accountEpoch) return;
+        const result = await call("scanPhoto", payload);
+        if (scanEpoch !== accountEpoch) return;
 
         $("person").value = result.person || "";
         $("company").value = result.company || "";
@@ -1147,9 +1153,11 @@ OTHER DEALINGS IN THE SOFTWARE.
           ? "Photo scanned. Check Person and Company before saving."
           : "No readable person or company found. Enter the details manually or try a clearer photo.";
       } catch (err) {
+        if (scanEpoch !== accountEpoch) return;
         scan.textContent = "Could not scan this photo: " +
           (err.message || "Try another image or enter the details manually.");
       } finally {
+        if (scanEpoch !== accountEpoch) return;
         scanning = false;
         $("cardPhoto").disabled = false;
         $("save").disabled = loading;
@@ -1187,17 +1195,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 
     $('start').onclick=async()=>{
       if(recordingBusy||loading||scanning)return;
+      const recordEpoch=accountEpoch;
       recordingBusy=true;discardRecording=false;$('start').disabled=true;resetAudio();
       try{
         if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw Error('Microphone recording is unavailable in this browser.');
-        micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+        const acquiredStream=await navigator.mediaDevices.getUserMedia({audio:true});
+        if(recordEpoch!==accountEpoch){acquiredStream.getTracks().forEach(t=>t.stop());return}
+        micStream=acquiredStream;
         if(type()!=='voice'){stopMic();recordingBusy=false;$('start').disabled=false;return}
         const mime=['audio/webm','audio/mp4','audio/ogg'].find(m=>MediaRecorder.isTypeSupported(m));
         if(!mime)throw Error('No supported audio format found.');
         audioChunks=[];mediaRecorder=new MediaRecorder(micStream,{mimeType:mime,audioBitsPerSecond: 64000});
-        mediaRecorder.ondataavailable=e=>{if(e.data.size)audioChunks.push(e.data)};
-        mediaRecorder.onerror=()=>{discardRecording=true;status('Recording interrupted. Please try again.',true);stopMic()};
+        mediaRecorder.ondataavailable=e=>{if(recordEpoch!==accountEpoch)return;if(e.data.size)audioChunks.push(e.data)};
+        mediaRecorder.onerror=()=>{if(recordEpoch!==accountEpoch)return;discardRecording=true;status('Recording interrupted. Please try again.',true);stopMic()};
         mediaRecorder.onstop=()=>{
+          if(recordEpoch!==accountEpoch)return;
           clearInterval(recordingTimer);stopMic();recordingBusy=false;$('start').disabled=false;$('stopRecording').disabled=true;$('save').disabled=loading||scanning;
           if(discardRecording)return;
           audioBlob=new Blob(audioChunks,{type:mime});
@@ -1207,7 +1219,7 @@ OTHER DEALINGS IN THE SOFTWARE.
         mediaRecorder.start(1000);recordingStart=Date.now();$('stopRecording').disabled=false;$('save').disabled=true;
         recordingTimer=setInterval(()=>{const n=Math.floor((Date.now()-recordingStart)/1000);$('timer').textContent=`Recording ${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;if(audioChunks.reduce((n,c)=>n+c.size,0)>8*1024*1024&&mediaRecorder.state==='recording')mediaRecorder.stop()},500);
         status('Recording…');
-      }catch(e){stopMic();recordingBusy=false;$('start').disabled=false;status(e.name==='NotAllowedError'?'Allow microphone access in your browser settings, then try again.':e.message,true)}
+      }catch(e){if(recordEpoch!==accountEpoch)return;stopMic();recordingBusy=false;$('start').disabled=false;status(e.name==='NotAllowedError'?'Allow microphone access in your browser settings, then try again.':e.message,true)}
     };
     $('stopRecording').onclick=()=>{if(mediaRecorder?.state==='recording'){mediaRecorder.stop();$('save').disabled=loading||scanning}};
     window.addEventListener('pagehide',closeRecorder);
@@ -1263,11 +1275,13 @@ OTHER DEALINGS IN THE SOFTWARE.
     $("form").onsubmit = async e => {
       e.preventDefault();
       if (loading || scanning || recordingBusy) return;
+      const saveEpoch = accountEpoch;
 
       let phone;
       try {
         phone = await internationalPhone();
       } catch (err) {
+        if (saveEpoch !== accountEpoch) return;
         return status(err.message || "Could not format the phone number.", true);
       }
 
@@ -1289,6 +1303,7 @@ OTHER DEALINGS IN THE SOFTWARE.
         return status("Write a note before saving.", true);
       }
 
+      if (loading || scanning || recordingBusy || saveEpoch !== accountEpoch) return;
       loading = true;
       $("next").disabled = true;
       $("save").disabled = true;
@@ -1310,11 +1325,13 @@ OTHER DEALINGS IN THE SOFTWARE.
           };
         }
         
+        if (saveEpoch !== accountEpoch) return;
         status("Saving record…");
         $("next").hidden = true;
         $("next").disabled = true;
 
         await call("saveRecord", data);
+        if (saveEpoch !== accountEpoch) return;
 
         closeRecorder();
         status("Saved in Records. Tap Add next person to continue.");
@@ -1325,11 +1342,13 @@ OTHER DEALINGS IN THE SOFTWARE.
         loadRecords().catch(console.error);
 
       } catch (err) {
+        if (saveEpoch !== accountEpoch) return;
         $("next").hidden = true;
         $("next").disabled = true;
         status(err.message || "Save failed. Please try again.", true);
 
       } finally {
+        if (saveEpoch !== accountEpoch) return;
         loading = false;
         $("save").disabled = !$("next").disabled;
       }
@@ -1436,7 +1455,7 @@ OTHER DEALINGS IN THE SOFTWARE.
         $("loadMore").hidden = nextRecordCursor == null;
         $("pageStatus").textContent = query
           ? (nextRecordCursor == null ? "All matching contacts shown." : "More matching contacts are available.")
-          : "Latest 10 contacts. Search to find older contacts.";
+          : "Your latest 10 contacts. Search to find older contacts.";
 
         if (!records.length && !append) {
           const searching = $("search").value.trim();
@@ -1577,6 +1596,17 @@ OTHER DEALINGS IN THE SOFTWARE.
     if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
     window.addEventListener('contact-auth-ready', loadRecords);
     window.addEventListener('contact-auth-cleared', () => {
+      ++accountEpoch;
+      loading=false; scanning=false; recordingBusy=false;
+      $('start').disabled=false; $('stopRecording').disabled=true;
+      clearTimeout(searchTimer);
+      $('search').value='';
+      $('cardPhoto').disabled=false;
+      $('scanStatus').textContent='';
+      $('scanText').textContent='';
+      $('scanDetails').classList.add('hidden');
+      $('recordCount').textContent='0 shown';
+      $('records').querySelectorAll('audio').forEach(player=>{player.pause();if(player.dataset.objectUrl)URL.revokeObjectURL(player.dataset.objectUrl)});
       closeRecorder();
       ++recordRequest;
       nextRecordCursor=null;
@@ -1595,6 +1625,6 @@ OTHER DEALINGS IN THE SOFTWARE.
     });
 
   </script>
-<script src="./auth.js?v=header-v7"></script>
+<script src="./auth.js?v=individual-v1"></script>
 </body>
 </html>
