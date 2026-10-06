@@ -2254,5 +2254,170 @@
   </script>
 
   <script src="./auth.js?v=individual-v4"></script>
+
+  <script>
+(() => {
+  let installPrompt = null;
+  let installedThisSession = false;
+
+  const standalone = window.matchMedia(
+    "(display-mode: standalone)"
+  );
+
+  const isIOS =
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" &&
+      navigator.maxTouchPoints > 1);
+
+  const button = document.createElement("button");
+  button.id = "installAppButton";
+  button.type = "button";
+  button.className = "theme-toggle";
+  button.textContent = "Install app";
+
+  const actions = document.querySelector(".header-actions");
+  const themeButton = document.getElementById("themeToggle");
+
+  if (actions) {
+    const logout = document.getElementById("logoutButton");
+    actions.insertBefore(
+      button,
+      logout?.parentElement === actions ? logout : null
+    );
+  } else if (themeButton) {
+    themeButton.after(button);
+  } else {
+    document.querySelector(".topbar-inner")?.append(button);
+  }
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .header-actions {
+      flex-wrap: wrap;
+    }
+
+    #installAppButton {
+      margin: 0;
+      min-height: 44px;
+      font-size: 13px;
+      padding: 9px 13px;
+      white-space: nowrap;
+    }
+
+    .install-dialog {
+      width: calc(100% - 32px);
+      max-width: 420px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      color: var(--ink);
+    }
+
+    .install-dialog::backdrop {
+      background: #0009;
+    }
+
+    .install-dialog h2 {
+      margin-bottom: 12px;
+      font-size: 23px;
+    }
+
+    .install-dialog p {
+      white-space: pre-line;
+      line-height: 1.8;
+    }
+
+    .install-dialog button {
+      width: 100%;
+      margin-top: 20px;
+    }
+  `;
+  document.head.append(style);
+
+  const dialog = document.createElement("dialog");
+  dialog.className = "install-dialog";
+  dialog.setAttribute("aria-labelledby", "installDialogTitle");
+
+  const heading = document.createElement("h2");
+  heading.id = "installDialogTitle";
+  heading.textContent = "Install Contact Notes";
+
+  const instructions = document.createElement("p");
+
+  const close = document.createElement("button");
+  close.type = "button";
+  close.textContent = "Got it";
+  close.onclick = () => dialog.close();
+
+  dialog.append(heading, instructions, close);
+  document.body.append(dialog);
+
+  function updateButton() {
+    button.hidden =
+      standalone.matches ||
+      navigator.standalone === true ||
+      installedThisSession;
+  }
+
+  function showInstructions() {
+    if (isIOS) {
+      instructions.textContent =
+        "1. Open this website in Safari.\n" +
+        "2. Tap Share (the square with an upward arrow).\n" +
+        "3. Choose Add to Home Screen.\n" +
+        "4. Enable Open as Web App if shown, then tap Add.";
+    } else {
+      instructions.textContent =
+        "Open this website in Chrome on your Android phone.\n\n" +
+        "Tap the ⋮ menu, then choose Add to Home screen " +
+        "or Install app, if available.\n\n" +
+        "If installation is unavailable, reload the page " +
+        "while connected to the internet and try again.";
+    }
+
+    if (!dialog.open) dialog.showModal();
+  }
+
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    installPrompt = event;
+    updateButton();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    installPrompt = null;
+    installedThisSession = true;
+    updateButton();
+    if (dialog.open) dialog.close();
+  });
+
+  standalone.addEventListener("change", updateButton);
+
+  button.onclick = async () => {
+    if (!installPrompt) {
+      showInstructions();
+      return;
+    }
+
+    const prompt = installPrompt;
+    installPrompt = null;
+    button.disabled = true;
+
+    try {
+      await prompt.prompt();
+      await prompt.userChoice;
+    } catch {
+      showInstructions();
+    } finally {
+      button.disabled = false;
+      updateButton();
+    }
+  };
+
+  updateButton();
+})();
+</script>
+  
 </body>
 </html>
