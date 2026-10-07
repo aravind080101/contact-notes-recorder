@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -839,6 +840,7 @@
       }
     }
   </style>
+
 </head>
 
 <body>
@@ -850,22 +852,23 @@
           src="./icons/icon-192.png"
           alt="Moolya">
 
-        <div class="brand-copy">
-          <span class="brand-title">Contact Notes</span>
-          <span class="brand-subtitle">
-            Connections worth remembering
-          </span>
-        </div>
-      </div>
-
-      <button
-        id="themeToggle"
-        class="theme-toggle"
-        type="button"
-        aria-pressed="false">
-        Dark mode
-      </button>
+    <div class="brand-copy">
+      <span class="brand-title">Contact Notes</span>
+      <span class="brand-subtitle">
+        Connections worth remembering
+      </span>
     </div>
+  </div>
+
+  <button
+    id="themeToggle"
+    class="theme-toggle"
+    type="button"
+    aria-pressed="false">
+    Dark mode
+  </button>
+</div>
+
   </header>
 
   <main class="shell" hidden>
@@ -873,216 +876,217 @@
       <span id="connection" role="status"></span>
     </div>
 
-    <div class="view-controls">
-      <button
-        id="viewToggle"
-        class="swipe-handle"
-        type="button"
-        aria-controls="contactFace recordsFace"
-        aria-expanded="false"
-        aria-label="Swipe left or tap to view records">
-        <span class="swipe-grip" aria-hidden="true">
-          ‹ &nbsp; ▬ &nbsp; ›
-        </span>
-        <span id="swipeHint">Swipe left to view records</span>
-      </button>
-    </div>
+<div class="view-controls">
+  <button
+    id="viewToggle"
+    class="swipe-handle"
+    type="button"
+    aria-controls="contactFace recordsFace"
+    aria-expanded="false"
+    aria-label="Swipe left or tap to view records">
+    <span class="swipe-grip" aria-hidden="true">
+      ‹ &nbsp; ▬ &nbsp; ›
+    </span>
+    <span id="swipeHint">Swipe left to view records</span>
+  </button>
+</div>
 
-    <div id="flipCard">
-      <section id="contactFace" class="panel">
-        <div class="form-intro">
-          <div class="eyebrow">Make every connection count</div>
+<div id="flipCard">
+  <section id="contactFace" class="panel">
+    <div class="form-intro">
+      <div class="eyebrow">Make every connection count</div>
 
-          <div class="contact-heading">
-            <h1>Add a contact</h1>
+      <div class="contact-heading">
+        <h1>Add a contact</h1>
 
-            <div class="qr-option">
-              <button
-                id="guestQR"
-                type="button"
-                class="qr-trigger"
-                aria-label="Share QR code">
-                ▦ <span>QR code</span>
-              </button>
+        <div class="qr-option">
+          <button
+            id="guestQR"
+            type="button"
+            class="qr-trigger"
+            aria-label="Share QR code">
+            ▦ <span>QR code</span>
+          </button>
 
-              <p class="qr-caption">
-                Prefer them to enter their details?
-              </p>
-            </div>
-          </div>
-
-          <p class="contact-description">
-            Capture their details and add an optional written or voice note.
+          <p class="qr-caption">
+            Prefer them to enter their details?
           </p>
         </div>
+      </div>
 
-        <form id="form">
-          <label for="cardPhoto">
-            Take or choose a business card photo (optional)
-          </label>
+      <p class="contact-description">
+        Capture their details and add an optional written or voice note.
+      </p>
+    </div>
 
+    <form id="form">
+      <label for="cardPhoto">
+        Take or choose a business card photo (optional)
+      </label>
+
+      <input
+        id="cardPhoto"
+        type="file"
+        accept="image/*,.jpg,.jpeg,.png,.webp">
+
+      <div
+        id="scanStatus"
+        class="hint"
+        role="status"
+        aria-live="polite">
+        Choose a photo to suggest Person and Company.
+        The photo is sent to Google for analysis and is not saved.
+        Review both fields before saving.
+      </div>
+
+      <details id="scanDetails" class="hidden">
+        <summary>Why these details were suggested</summary>
+        <div id="scanText" class="note"></div>
+      </details>
+
+      <label for="person">Person *</label>
+      <input
+        id="person"
+        required
+        maxlength="120"
+        autocomplete="name"
+        placeholder="Full name">
+
+      <label for="company">Company *</label>
+      <input
+        id="company"
+        required
+        maxlength="120"
+        autocomplete="organization"
+        placeholder="Company name">
+
+      <label for="phone">Phone number (optional)</label>
+      <input
+        id="phone"
+        type="tel"
+        maxlength="30"
+        autocomplete="tel"
+        inputmode="tel"
+        aria-label="Phone number">
+
+      <div class="hint">
+        Select a country flag, then enter the phone number.
+      </div>
+
+      <label>Note type (optional)</label>
+      <div class="choice">
+        <label>
           <input
-            id="cardPhoto"
-            type="file"
-            accept="image/*,.jpg,.jpeg,.png,.webp">
+            type="radio"
+            name="noteType"
+            value="text"
+            checked>
+          Written
+        </label>
 
-          <div
-            id="scanStatus"
-            class="hint"
-            role="status"
-            aria-live="polite">
-            Choose a photo to suggest Person and Company.
-            The photo is sent to Google for analysis and is not saved.
-            Review both fields before saving.
-          </div>
+        <label>
+          <input type="radio" name="noteType" value="voice">
+          Voice
+        </label>
+      </div>
 
-          <details id="scanDetails" class="hidden">
-            <summary>Why these details were suggested</summary>
-            <div id="scanText" class="note"></div>
-          </details>
-
-          <label for="person">Person *</label>
-          <input
-            id="person"
-            required
-            maxlength="120"
-            autocomplete="name"
-            placeholder="Full name">
-
-          <label for="company">Company *</label>
-          <input
-            id="company"
-            required
-            maxlength="120"
-            autocomplete="organization"
-            placeholder="Company name">
-
-          <label for="phone">Phone number (optional)</label>
-          <input
-            id="phone"
-            type="tel"
-            maxlength="30"
-            autocomplete="tel"
-            inputmode="tel"
-            aria-label="Phone number">
-
-          <div class="hint">
-            Select a country flag, then enter the phone number.
-          </div>
-
-          <label>Note type (optional)</label>
-          <div class="choice">
-            <label>
-              <input
-                type="radio"
-                name="noteType"
-                value="text"
-                checked>
-              Written
-            </label>
-
-            <label>
-              <input type="radio" name="noteType" value="voice">
-              Voice
-            </label>
-          </div>
-
-          <div id="textBox">
-            <label for="note">Written note (optional)</label>
-            <textarea
-              id="note"
-              maxlength="5000"
-              placeholder="What would you like to remember?"
-              aria-describedby="noteFilterHint"></textarea>
-
-            <div
-              id="noteFilterHint"
-              class="hint"
-              role="status"
-              aria-live="polite"></div>
-          </div>
-
-          <div id="voiceBox" class="hidden">
-            <div class="controls">
-              <button id="start" type="button">
-                ● Start recording
-              </button>
-              <button id="stopRecording" type="button" disabled>
-                ■ Stop
-              </button>
-              <button id="clear" type="button" disabled>
-                Re-record
-              </button>
-            </div>
-
-            <div id="timer" class="hint">
-              Record your note here. Maximum 8 MB.
-            </div>
-
-            <audio id="preview" controls class="hidden"></audio>
-          </div>
-
-          <button class="primary" id="save" type="submit">
-            Save record
-          </button>
-
-          <button id="next" type="button" hidden disabled>
-            Add next person
-          </button>
-
-          <div
-            id="status"
-            class="status"
-            role="status"
-            aria-live="polite"></div>
-        </form>
-      </section>
-
-      <section
-        id="recordsFace"
-        class="panel hidden"
-        inert
-        aria-hidden="true">
-        <div class="records-heading">
-          <div>
-            <div class="eyebrow">Your network</div>
-            <h2>Contact records</h2>
-            <p class="section-description">
-              Find a connection and revisit your notes.
-            </p>
-          </div>
-
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end"><span id="recordCount" class="count-badge">—</span><button id="refreshRecords" type="button" style="min-height:40px;padding:8px 12px;font-size:12px" aria-label="Refresh contacts">↻ Refresh</button></div>
-        </div>
-
-        <div class="search-wrap">
-          <span aria-hidden="true" class="search-icon">⌕</span>
-          <input
-            id="search"
-            type="search"
-            placeholder="Search person, company, or phone"
-            aria-label="Search records">
-        </div>
-
-        <div id="records">
-          <div class="records-empty">Loading records…</div>
-        </div>
-
-        <button
-          id="loadMore"
-          type="button"
-          hidden
-          style="width:100%;margin-top:16px">
-          Load more
-        </button>
+      <div id="textBox">
+        <label for="note">Written note (optional)</label>
+        <textarea
+          id="note"
+          maxlength="5000"
+          placeholder="What would you like to remember?"
+          aria-describedby="noteFilterHint"></textarea>
 
         <div
-          id="pageStatus"
+          id="noteFilterHint"
           class="hint"
           role="status"
           aria-live="polite"></div>
-      </section>
+      </div>
+
+      <div id="voiceBox" class="hidden">
+        <div class="controls">
+          <button id="start" type="button">
+            ● Start recording
+          </button>
+          <button id="stopRecording" type="button" disabled>
+            ■ Stop
+          </button>
+          <button id="clear" type="button" disabled>
+            Re-record
+          </button>
+        </div>
+
+        <div id="timer" class="hint">
+          Record your note here. Maximum 8 MB.
+        </div>
+
+        <audio id="preview" controls class="hidden"></audio>
+      </div>
+
+      <button class="primary" id="save" type="submit">
+        Save record
+      </button>
+
+      <button id="next" type="button" hidden disabled>
+        Add next person
+      </button>
+
+      <div
+        id="status"
+        class="status"
+        role="status"
+        aria-live="polite"></div>
+    </form>
+  </section>
+
+  <section
+    id="recordsFace"
+    class="panel hidden"
+    inert
+    aria-hidden="true">
+    <div class="records-heading">
+      <div>
+        <div class="eyebrow">Your network</div>
+        <h2>Contact records</h2>
+        <p class="section-description">
+          Find a connection and revisit your notes.
+        </p>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end"><span id="recordCount" class="count-badge">—</span><button id="refreshRecords" type="button" style="min-height:40px;padding:8px 12px;font-size:12px" aria-label="Refresh contacts">↻ Refresh</button></div>
     </div>
+
+    <div class="search-wrap">
+      <span aria-hidden="true" class="search-icon">⌕</span>
+      <input
+        id="search"
+        type="search"
+        placeholder="Search person, company, or phone"
+        aria-label="Search records">
+    </div>
+
+    <div id="records">
+      <div class="records-empty">Loading records…</div>
+    </div>
+
+    <button
+      id="loadMore"
+      type="button"
+      hidden
+      style="width:100%;margin-top:16px">
+      Load more
+    </button>
+
+    <div
+      id="pageStatus"
+      class="hint"
+      role="status"
+      aria-live="polite"></div>
+  </section>
+</div>
+
   </main>
 
   <dialog id="guestDialog" class="guest-dialog">
@@ -1092,22 +1096,24 @@
       No login needed.
     </p>
 
-    <canvas
-      id="guestCanvas"
-      hidden
-      aria-label="Visitor form QR code"></canvas>
+<canvas
+  id="guestCanvas"
+  hidden
+  aria-label="Visitor form QR code"></canvas>
 
-    <p id="guestQRStatus" role="status"></p>
+<p id="guestQRStatus" role="status"></p>
 
-    <div class="controls">
-      <button id="copyGuestLink" type="button" disabled>
-        Copy link
-      </button>
-      <button id="closeGuestQR" type="button">Close</button>
-    </div>
+<div class="controls">
+  <button id="copyGuestLink" type="button" disabled>
+    Copy link
+  </button>
+  <button id="closeGuestQR" type="button">Close</button>
+</div>
+
   </dialog>
 
   <script src="./qr.js"></script>
+
   <script src="./guest-qr.js"></script>
 
   <script
@@ -1773,6 +1779,173 @@
         updateSaveButton();
       }
     });
+
+  function openContactEditor(record, editButton) {
+  const dialog = document.createElement("dialog");
+  dialog.className = "guest-dialog";
+
+  const form = document.createElement("form");
+  const heading = document.createElement("h2");
+  heading.textContent = "Edit contact";
+  form.append(heading);
+
+  function field(labelText, value, limit, multiline = false) {
+    const label = document.createElement("label");
+    label.textContent = labelText;
+
+    const input = document.createElement(
+      multiline ? "textarea" : "input"
+    );
+
+    input.value = value || "";
+    input.maxLength = limit;
+
+    if (!multiline) input.type = "text";
+
+    label.append(input);
+    form.append(label);
+
+    return input;
+  }
+
+  const person = field("Person", record.person, 120);
+  person.required = true;
+
+  const company = field("Company", record.company, 120);
+  company.required = true;
+
+  const phone = field(
+    "Phone number with country code (optional)",
+    record.phone,
+    30
+  );
+
+  phone.type = "tel";
+  phone.placeholder = "+919876543210";
+
+  const note = record.type === "Voice"
+    ? null
+    : field(
+        "Written note (optional)",
+        record.note,
+        5000,
+        true
+      );
+
+  if (!note) {
+    const hint = document.createElement("p");
+    hint.textContent =
+      "Your existing voice recording will stay attached.";
+    form.append(hint);
+  }
+
+  const feedback = document.createElement("p");
+  feedback.setAttribute("role", "status");
+  feedback.setAttribute("aria-live", "polite");
+
+  const controls = document.createElement("div");
+  controls.className = "controls";
+
+  const save = document.createElement("button");
+  save.type = "submit";
+  save.textContent = "Save changes";
+  save.className = "primary";
+
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.textContent = "Cancel";
+  cancel.onclick = () => dialog.close();
+
+  controls.append(save, cancel);
+  form.append(feedback, controls);
+  dialog.append(form);
+  document.body.append(dialog);
+
+  const epoch = accountEpoch;
+  let saving = false;
+
+  const closeOnSignOut = () => dialog.close();
+
+  window.addEventListener(
+    "contact-auth-cleared",
+    closeOnSignOut
+  );
+
+  dialog.addEventListener("cancel", event => {
+    if (saving) event.preventDefault();
+  });
+
+  dialog.addEventListener("close", () => {
+    window.removeEventListener(
+      "contact-auth-cleared",
+      closeOnSignOut
+    );
+
+    dialog.remove();
+
+    if (editButton.isConnected) {
+      editButton.focus();
+    }
+  }, {once: true});
+
+  form.onsubmit = async event => {
+    event.preventDefault();
+
+    if (saving || epoch !== accountEpoch) return;
+
+    saving = true;
+    save.disabled = true;
+    cancel.disabled = true;
+
+    const inputs = [person, company, phone, note]
+      .filter(Boolean);
+
+    inputs.forEach(input => {
+      input.disabled = true;
+    });
+
+    feedback.textContent = "Saving changes…";
+
+    try {
+      await call("updateRecord", {
+        id: record.id,
+        person: person.value,
+        company: company.value,
+        phone: phone.value.trim(),
+        writtenNote: note ? note.value : "",
+        original: {
+          person: record.person,
+          company: record.company,
+          phone: record.phone || "",
+          note: record.note || "",
+          type: record.type
+        }
+      });
+
+      if (epoch !== accountEpoch) return;
+
+      dialog.close();
+      status("Contact updated.");
+      await loadRecords();
+    } catch (error) {
+      if (epoch !== accountEpoch) return;
+
+      feedback.textContent =
+        error.message || "Could not update contact.";
+    } finally {
+      saving = false;
+      save.disabled = false;
+      cancel.disabled = false;
+
+      inputs.forEach(input => {
+        input.disabled = false;
+      });
+    }
+  };
+
+  dialog.showModal();
+  person.focus();
+}
 
     // Records
     function releaseRecordAudio() {
@@ -2451,6 +2624,6 @@
   updateButton();
 })();
 </script>
-  
+
 </body>
 </html>
