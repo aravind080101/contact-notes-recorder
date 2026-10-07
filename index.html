@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,13 +6,10 @@
   <meta name="theme-color" content="#215566">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Contact Notes</title>
-  <base target="_top">
 
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-
-  <link
-    rel="stylesheet"
+  <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/css/intlTelInput.css">
 
   <script src="./config.js"></script>
@@ -54,14 +50,8 @@
       --rim: #294b58;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    [hidden],
-    .hidden {
-      display: none !important;
-    }
+    * { box-sizing: border-box; }
+    [hidden], .hidden { display: none !important; }
 
     body {
       margin: 0;
@@ -72,16 +62,8 @@
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       background:
-        radial-gradient(
-          ellipse at 10% 15%,
-          var(--glow),
-          transparent 46%
-        ),
-        radial-gradient(
-          ellipse at 95% 65%,
-          var(--glow),
-          transparent 45%
-        ),
+        radial-gradient(ellipse at 10% 15%, var(--glow), transparent 46%),
+        radial-gradient(ellipse at 95% 65%, var(--glow), transparent 45%),
         var(--bg);
     }
 
@@ -116,7 +98,7 @@
       width: 58px;
       height: 58px;
       object-fit: contain;
-      background: #ffffff;
+      background: white;
       border-radius: 12px;
       flex-shrink: 0;
     }
@@ -170,11 +152,8 @@
 
     #contactFace {
       background: linear-gradient(
-        135deg,
-        var(--soft),
-        var(--panel) 32%,
-        var(--panel) 85%,
-        var(--soft)
+        135deg, var(--soft), var(--panel) 32%,
+        var(--panel) 85%, var(--soft)
       );
     }
 
@@ -200,9 +179,7 @@
       line-height: 1.6;
     }
 
-    .form-intro {
-      margin-bottom: 28px;
-    }
+    .form-intro { margin-bottom: 28px; }
 
     .eyebrow {
       color: var(--teal);
@@ -218,13 +195,9 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      flex-wrap: nowrap;
     }
 
-    .contact-heading h1 {
-      margin: 0;
-      min-width: 0;
-    }
+    .contact-heading h1 { margin: 0; min-width: 0; }
 
     .qr-option {
       flex-shrink: 0;
@@ -236,7 +209,6 @@
     .qr-trigger {
       min-height: 44px;
       margin: 0;
-      border: 1px solid var(--line);
       background: var(--soft);
       color: var(--ink);
       font-size: 14px;
@@ -244,16 +216,13 @@
       border-radius: 14px;
     }
 
-    .form-intro .qr-caption {
-      margin: 7px 0 0;
+    .qr-caption {
+      margin-top: 7px;
       font-size: 11px;
       line-height: 1.4;
-      color: var(--muted);
     }
 
-    .contact-description {
-      margin-top: 12px;
-    }
+    .contact-description { margin-top: 12px; }
 
     label {
       display: block;
@@ -263,8 +232,7 @@
       margin: 18px 0 7px;
     }
 
-    input,
-    textarea {
+    input, textarea {
       width: 100%;
       min-width: 0;
       min-height: 46px;
@@ -277,35 +245,12 @@
       padding: 12px 14px;
     }
 
-    input::placeholder,
-    textarea::placeholder {
+    input::placeholder, textarea::placeholder {
       color: var(--muted);
       opacity: .8;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 135px;
-    }
-
-    input[type="file"] {
-      padding: 18px;
-      border: 1px dashed var(--teal);
-      background: var(--soft);
-      font-size: 14px;
-      max-width: 100%;
-    }
-
-    input[type="file"]::file-selector-button {
-      background: var(--teal);
-      color: var(--panel);
-      border: 0;
-      padding: 10px 14px;
-      border-radius: 6px;
-      font: inherit;
-      margin-right: 12px;
-      cursor: pointer;
-    }
+    textarea { resize: vertical; min-height: 135px; }
 
     .choice {
       display: flex;
@@ -361,10 +306,7 @@
       min-height: 54px;
     }
 
-    button:disabled {
-      opacity: .48;
-      cursor: not-allowed;
-    }
+    button:disabled { opacity: .48; cursor: not-allowed; }
 
     #next {
       width: 100%;
@@ -381,14 +323,8 @@
       margin-top: 12px;
     }
 
-    .controls button {
-      flex: 1;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 14px;
-    }
+    .controls button { flex: 1; }
+    audio { width: 100%; margin-top: 14px; }
 
     .hint {
       font-size: 12px;
@@ -403,13 +339,8 @@
       font-size: 14px;
     }
 
-    .error {
-      color: var(--error);
-    }
-
-    .success {
-      color: var(--success);
-    }
+    .error { color: var(--error); }
+    .success { color: var(--success); }
 
     details {
       margin-top: 12px;
@@ -417,28 +348,17 @@
       font-size: 13px;
     }
 
-    summary {
-      cursor: pointer;
-    }
+    summary { cursor: pointer; }
+    details .note { margin-top: 8px; }
+    .note { white-space: pre-wrap; overflow-wrap: anywhere; }
 
-    details .note {
-      margin-top: 8px;
-    }
-
-    .note {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    input:focus,
-    textarea:focus,
-    button:focus-visible {
+    input:focus, textarea:focus, button:focus-visible {
       outline: 2px solid var(--teal);
       outline-offset: 3px;
     }
 
     .install-row {
-      color: #ffffff;
+      color: white;
       font-size: 12px;
       margin-bottom: 8px;
     }
@@ -470,47 +390,26 @@
       font-size: 20px;
       letter-spacing: 4px;
       line-height: 1.1;
-      color: #ffffff;
+      color: white;
     }
 
-    #flipCard {
-      perspective: 1400px;
-      touch-action: pan-y;
-    }
-
+    #flipCard { perspective: 1400px; touch-action: pan-y; }
     #flipCard .panel {
       transform-origin: center;
       backface-visibility: hidden;
     }
 
-    .flip-out {
-      animation: flipOut .18s ease-in forwards;
-    }
-
-    .flip-in {
-      animation: flipIn .22s ease-out forwards;
-    }
+    .flip-out { animation: flipOut .18s ease-in forwards; }
+    .flip-in { animation: flipIn .22s ease-out forwards; }
 
     @keyframes flipOut {
-      from {
-        transform: rotateY(0);
-        opacity: 1;
-      }
-      to {
-        transform: rotateY(-90deg);
-        opacity: .3;
-      }
+      from { transform: rotateY(0); opacity: 1; }
+      to { transform: rotateY(-90deg); opacity: .3; }
     }
 
     @keyframes flipIn {
-      from {
-        transform: rotateY(90deg);
-        opacity: .3;
-      }
-      to {
-        transform: rotateY(0);
-        opacity: 1;
-      }
+      from { transform: rotateY(90deg); opacity: .3; }
+      to { transform: rotateY(0); opacity: 1; }
     }
 
     .records-heading {
@@ -521,13 +420,15 @@
       margin-bottom: 22px;
     }
 
-    .records-heading h2 {
-      margin: 0 0 5px;
-    }
+    .records-heading h2 { margin: 0 0 5px; }
+    .section-description { font-size: 13px; }
 
-    .section-description {
-      font-size: 13px;
-      color: var(--muted);
+    .record-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .count-badge {
@@ -541,14 +442,14 @@
       border: 1px solid var(--line);
     }
 
-    .search-wrap {
-      position: relative;
-      margin-bottom: 20px;
+    #refreshRecords {
+      min-height: 40px;
+      padding: 8px 12px;
+      font-size: 12px;
     }
 
-    .search-wrap input {
-      padding-left: 40px;
-    }
+    .search-wrap { position: relative; margin-bottom: 20px; }
+    .search-wrap input { padding-left: 40px; }
 
     .search-icon {
       position: absolute;
@@ -568,11 +469,7 @@
       box-shadow: 0 3px 12px #001c2c08;
     }
 
-    .record-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .record-head { display: flex; align-items: center; gap: 12px; }
 
     .record-avatar {
       width: 42px;
@@ -588,10 +485,7 @@
       font-weight: 750;
     }
 
-    .record-identity {
-      flex: 1;
-      min-width: 0;
-    }
+    .record-identity { flex: 1; min-width: 0; }
 
     .record-name {
       font-size: 16px;
@@ -633,12 +527,14 @@
       line-height: 1.75;
     }
 
-    .voice-play {
+    .voice-play, .edit-contact {
       font-size: 12px;
       min-height: 38px;
       padding: 8px 12px;
       color: var(--teal);
     }
+
+    .edit-contact { margin-top: 12px; }
 
     .audio-feedback {
       font-size: 12px;
@@ -661,13 +557,13 @@
       margin-bottom: 6px;
     }
 
-    .records-empty p {
-      font-size: 12px;
-    }
+    .records-empty p { font-size: 12px; }
 
     .guest-dialog {
       width: calc(100% - 32px);
-      max-width: 420px;
+      max-width: 460px;
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;
       border: 1px solid var(--line);
       border-radius: 24px;
       background: var(--panel);
@@ -675,36 +571,28 @@
       padding: 24px;
     }
 
-    .guest-dialog::backdrop {
-      background: #0009;
-    }
+    .guest-dialog::backdrop { background: #0009; }
 
     .guest-dialog canvas {
       display: block;
       width: min(100%, 280px);
       height: auto;
       margin: 18px auto;
-      background: #ffffff;
+      background: white;
     }
 
-    .guest-dialog .controls {
-      justify-content: center;
-    }
+    .guest-dialog .controls { justify-content: center; }
+    .guest-dialog .controls .primary { margin-top: 0; }
 
     .iti {
       width: 100%;
-      --iti-path-flags-1x:
-        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags.webp");
-      --iti-path-flags-2x:
-        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags@2x.webp");
-      --iti-path-globe-1x:
-        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe.webp");
-      --iti-path-globe-2x:
-        url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe@2x.webp");
+      --iti-path-flags-1x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags.webp");
+      --iti-path-flags-2x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/flags@2x.webp");
+      --iti-path-globe-1x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe.webp");
+      --iti-path-globe-2x: url("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/img/globe@2x.webp");
     }
 
-    .iti__dropdown-content,
-    .iti__country-list {
+    .iti__dropdown-content, .iti__country-list {
       background: var(--panel);
       color: var(--ink);
     }
@@ -721,154 +609,69 @@
       color: var(--ink);
     }
 
-    .iti__selected-dial-code {
-      color: var(--ink);
-    }
-
-    .iti__country.iti__highlight {
-      background: var(--soft);
-    }
+    .iti__selected-dial-code { color: var(--ink); }
+    .iti__country.iti__highlight { background: var(--soft); }
 
     @media (prefers-reduced-motion: reduce) {
-      .flip-out,
-      .flip-in {
-        animation: none;
-      }
+      .flip-out, .flip-in { animation: none; }
     }
 
     @media (max-width: 600px) {
-      .topbar {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-
+      .topbar { padding-left: 12px; padding-right: 12px; }
       .topbar-inner {
         padding: 14px;
         min-height: 80px;
         border-radius: 20px;
       }
-
-      .brand {
-        gap: 10px;
-      }
-
-      .brand-mark {
-        width: 46px;
-        height: 46px;
-      }
-
-      .brand-title {
-        font-size: 19px;
-      }
-
-      .brand-subtitle {
-        font-size: 11px;
-      }
-
-      .shell {
-        margin-top: 10px;
-        padding: 0 12px 24px;
-      }
-
-      .panel {
-        padding: 24px 18px;
-      }
-
-      h2 {
-        font-size: 23px;
-      }
-
-      .form-intro {
-        margin-bottom: 20px;
-      }
-
-      input,
-      textarea {
-        font-size: 16px;
-      }
-
-      input[type="file"] {
-        padding: 12px;
-        font-size: 12px;
-      }
-
-      .contact-record {
-        padding: 16px;
-      }
-
-      .record-head {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .note-badge {
-        margin-left: 52px;
-      }
+      .brand { gap: 10px; }
+      .brand-mark { width: 46px; height: 46px; }
+      .brand-title { font-size: 19px; }
+      .brand-subtitle { font-size: 11px; }
+      .shell { margin-top: 10px; padding: 0 12px 24px; }
+      .panel { padding: 24px 18px; }
+      h2 { font-size: 23px; }
+      .form-intro { margin-bottom: 20px; }
+      input, textarea { font-size: 16px; }
+      .contact-record { padding: 16px; }
+      .record-head { flex-wrap: wrap; gap: 10px; }
+      .note-badge { margin-left: 52px; }
+      .records-heading { align-items: flex-start; gap: 10px; }
     }
 
     @media (max-width: 480px) {
-      .contact-heading {
-        gap: 10px;
-      }
-
-      .contact-heading h1 {
-        font-size: clamp(24px, 6vw, 30px);
-      }
-
-      .qr-option {
-        width: 130px;
-      }
-
-      .qr-option .qr-trigger {
-        padding: 9px 11px;
-        font-size: 12px;
-      }
+      .contact-heading { gap: 10px; }
+      .contact-heading h1 { font-size: clamp(24px, 6vw, 30px); }
+      .qr-option { width: 130px; }
+      .qr-trigger { padding: 9px 11px; font-size: 12px; }
     }
 
     @media (max-width: 360px) {
-      .brand-subtitle {
-        display: none;
-      }
-
-      .brand-title {
-        font-size: 17px;
-      }
-
-      .brand-mark {
-        width: 40px;
-        height: 40px;
-      }
+      .brand-subtitle { display: none; }
+      .brand-title { font-size: 17px; }
+      .brand-mark { width: 40px; height: 40px; }
     }
   </style>
-
 </head>
 
 <body>
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
-        <img
-          class="brand-mark"
-          src="./icons/icon-192.png"
-          alt="Moolya">
+        <img class="brand-mark"
+          src="./icons/icon-192.png" alt="Moolya">
+        <div class="brand-copy">
+          <span class="brand-title">Contact Notes</span>
+          <span class="brand-subtitle">
+            Connections worth remembering
+          </span>
+        </div>
+      </div>
 
-    <div class="brand-copy">
-      <span class="brand-title">Contact Notes</span>
-      <span class="brand-subtitle">
-        Connections worth remembering
-      </span>
+      <button id="themeToggle" class="theme-toggle"
+        type="button" aria-pressed="false">
+        Dark mode
+      </button>
     </div>
-  </div>
-
-  <button
-    id="themeToggle"
-    class="theme-toggle"
-    type="button"
-    aria-pressed="false">
-    Dark mode
-  </button>
-</div>
-
   </header>
 
   <main class="shell" hidden>
@@ -876,217 +679,163 @@
       <span id="connection" role="status"></span>
     </div>
 
-<div class="view-controls">
-  <button
-    id="viewToggle"
-    class="swipe-handle"
-    type="button"
-    aria-controls="contactFace recordsFace"
-    aria-expanded="false"
-    aria-label="Swipe left or tap to view records">
-    <span class="swipe-grip" aria-hidden="true">
-      ‹ &nbsp; ▬ &nbsp; ›
-    </span>
-    <span id="swipeHint">Swipe left to view records</span>
-  </button>
-</div>
+    <div class="view-controls">
+      <button id="viewToggle" class="swipe-handle"
+        type="button"
+        aria-controls="contactFace recordsFace"
+        aria-expanded="false"
+        aria-label="Swipe left or tap to view records">
+        <span class="swipe-grip" aria-hidden="true">‹ &nbsp; ▬ &nbsp; ›</span>
+        <span id="swipeHint">Swipe left to view records</span>
+      </button>
+    </div>
 
-<div id="flipCard">
-  <section id="contactFace" class="panel">
-    <div class="form-intro">
-      <div class="eyebrow">Make every connection count</div>
+    <div id="flipCard">
+      <section id="contactFace" class="panel">
+        <div class="form-intro">
+          <div class="eyebrow">Make every connection count</div>
 
-      <div class="contact-heading">
-        <h1>Add a contact</h1>
+          <div class="contact-heading">
+            <h1>Add a contact</h1>
+            <div class="qr-option">
+              <button id="guestQR" type="button"
+                class="qr-trigger" aria-label="Share QR code">
+                ▦ <span>QR code</span>
+              </button>
+              <p class="qr-caption">
+                Prefer them to enter their details?
+              </p>
+            </div>
+          </div>
 
-        <div class="qr-option">
-          <button
-            id="guestQR"
-            type="button"
-            class="qr-trigger"
-            aria-label="Share QR code">
-            ▦ <span>QR code</span>
-          </button>
-
-          <p class="qr-caption">
-            Prefer them to enter their details?
+          <p class="contact-description">
+            Capture their details and add an optional written or voice note.
           </p>
         </div>
-      </div>
 
-      <p class="contact-description">
-        Capture their details and add an optional written or voice note.
-      </p>
-    </div>
+        <form id="form">
+          <label>Business card photo (optional)</label>
 
-    <form id="form">
-      <label for="cardPhoto">
-        Take or choose a business card photo (optional)
-      </label>
+          <div class="controls">
+            <button id="takePhoto" type="button">Take photo</button>
+            <button id="choosePhoto" type="button">Choose file</button>
+          </div>
 
-      <input
-        id="cardPhoto"
-        type="file"
-        accept="image/*,.jpg,.jpeg,.png,.webp">
+          <input id="cameraPhoto" type="file"
+            accept="image/*" capture="environment" hidden>
+          <input id="cardPhoto" type="file"
+            accept="image/*,.jpg,.jpeg,.png,.webp,.heic,.heif" hidden>
 
-      <div
-        id="scanStatus"
-        class="hint"
-        role="status"
-        aria-live="polite">
-        Choose a photo to suggest Person and Company.
-        The photo is sent to Google for analysis and is not saved.
-        Review both fields before saving.
-      </div>
+          <div id="scanStatus" class="hint"
+            role="status" aria-live="polite">
+            Choose a photo to suggest Person and Company.
+            The photo is sent to Google for analysis and is not saved.
+            Review both fields before saving.
+          </div>
 
-      <details id="scanDetails" class="hidden">
-        <summary>Why these details were suggested</summary>
-        <div id="scanText" class="note"></div>
-      </details>
+          <details id="scanDetails" class="hidden">
+            <summary>Why these details were suggested</summary>
+            <div id="scanText" class="note"></div>
+          </details>
 
-      <label for="person">Person *</label>
-      <input
-        id="person"
-        required
-        maxlength="120"
-        autocomplete="name"
-        placeholder="Full name">
+          <label for="person">Person *</label>
+          <input id="person" required maxlength="120"
+            autocomplete="name" placeholder="Full name">
 
-      <label for="company">Company *</label>
-      <input
-        id="company"
-        required
-        maxlength="120"
-        autocomplete="organization"
-        placeholder="Company name">
+          <label for="company">Company *</label>
+          <input id="company" required maxlength="120"
+            autocomplete="organization" placeholder="Company name">
 
-      <label for="phone">Phone number (optional)</label>
-      <input
-        id="phone"
-        type="tel"
-        maxlength="30"
-        autocomplete="tel"
-        inputmode="tel"
-        aria-label="Phone number">
+          <label for="phone">Phone number (optional)</label>
+          <input id="phone" type="tel" maxlength="30"
+            autocomplete="tel" inputmode="tel"
+            aria-label="Phone number">
 
-      <div class="hint">
-        Select a country flag, then enter the phone number.
-      </div>
+          <div class="hint">
+            Select a country flag, then enter the phone number.
+          </div>
 
-      <label>Note type (optional)</label>
-      <div class="choice">
-        <label>
-          <input
-            type="radio"
-            name="noteType"
-            value="text"
-            checked>
-          Written
-        </label>
+          <label>Note type (optional)</label>
+          <div class="choice">
+            <label>
+              <input type="radio" name="noteType" value="text" checked>
+              Written
+            </label>
+            <label>
+              <input type="radio" name="noteType" value="voice">
+              Voice
+            </label>
+          </div>
 
-        <label>
-          <input type="radio" name="noteType" value="voice">
-          Voice
-        </label>
-      </div>
+          <div id="textBox">
+            <label for="note">Written note (optional)</label>
+            <textarea id="note" maxlength="5000"
+              placeholder="What would you like to remember?"
+              aria-describedby="noteFilterHint"></textarea>
+            <div id="noteFilterHint" class="hint"
+              role="status" aria-live="polite"></div>
+          </div>
 
-      <div id="textBox">
-        <label for="note">Written note (optional)</label>
-        <textarea
-          id="note"
-          maxlength="5000"
-          placeholder="What would you like to remember?"
-          aria-describedby="noteFilterHint"></textarea>
+          <div id="voiceBox" class="hidden">
+            <div class="controls">
+              <button id="start" type="button">● Start recording</button>
+              <button id="stopRecording" type="button" disabled>■ Stop</button>
+              <button id="clear" type="button" disabled>Re-record</button>
+            </div>
+            <div id="timer" class="hint">
+              Record your note here. Maximum 8 MB.
+            </div>
+            <audio id="preview" controls class="hidden"></audio>
+          </div>
 
-        <div
-          id="noteFilterHint"
-          class="hint"
-          role="status"
-          aria-live="polite"></div>
-      </div>
-
-      <div id="voiceBox" class="hidden">
-        <div class="controls">
-          <button id="start" type="button">
-            ● Start recording
+          <button class="primary" id="save" type="submit">
+            Save record
           </button>
-          <button id="stopRecording" type="button" disabled>
-            ■ Stop
+          <button id="next" type="button" hidden disabled>
+            Add next person
           </button>
-          <button id="clear" type="button" disabled>
-            Re-record
-          </button>
+          <div id="status" class="status"
+            role="status" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <section id="recordsFace" class="panel hidden"
+        inert aria-hidden="true">
+        <div class="records-heading">
+          <div>
+            <div class="eyebrow">Your network</div>
+            <h2>Contact records</h2>
+            <p class="section-description">
+              Find a connection and revisit your notes.
+            </p>
+          </div>
+          <div class="record-actions">
+            <span id="recordCount" class="count-badge">—</span>
+            <button id="refreshRecords" type="button"
+              aria-label="Refresh contacts">↻ Refresh</button>
+          </div>
         </div>
 
-        <div id="timer" class="hint">
-          Record your note here. Maximum 8 MB.
+        <div class="search-wrap">
+          <span aria-hidden="true" class="search-icon">⌕</span>
+          <input id="search" type="search"
+            placeholder="Search person, company, or phone"
+            aria-label="Search records">
         </div>
 
-        <audio id="preview" controls class="hidden"></audio>
-      </div>
+        <div id="records">
+          <div class="records-empty">Loading records…</div>
+        </div>
 
-      <button class="primary" id="save" type="submit">
-        Save record
-      </button>
+        <button id="loadMore" type="button" hidden
+          style="width:100%;margin-top:16px">
+          Load more
+        </button>
 
-      <button id="next" type="button" hidden disabled>
-        Add next person
-      </button>
-
-      <div
-        id="status"
-        class="status"
-        role="status"
-        aria-live="polite"></div>
-    </form>
-  </section>
-
-  <section
-    id="recordsFace"
-    class="panel hidden"
-    inert
-    aria-hidden="true">
-    <div class="records-heading">
-      <div>
-        <div class="eyebrow">Your network</div>
-        <h2>Contact records</h2>
-        <p class="section-description">
-          Find a connection and revisit your notes.
-        </p>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end"><span id="recordCount" class="count-badge">—</span><button id="refreshRecords" type="button" style="min-height:40px;padding:8px 12px;font-size:12px" aria-label="Refresh contacts">↻ Refresh</button></div>
+        <div id="pageStatus" class="hint"
+          role="status" aria-live="polite"></div>
+      </section>
     </div>
-
-    <div class="search-wrap">
-      <span aria-hidden="true" class="search-icon">⌕</span>
-      <input
-        id="search"
-        type="search"
-        placeholder="Search person, company, or phone"
-        aria-label="Search records">
-    </div>
-
-    <div id="records">
-      <div class="records-empty">Loading records…</div>
-    </div>
-
-    <button
-      id="loadMore"
-      type="button"
-      hidden
-      style="width:100%;margin-top:16px">
-      Load more
-    </button>
-
-    <div
-      id="pageStatus"
-      class="hint"
-      role="status"
-      aria-live="polite"></div>
-  </section>
-</div>
-
   </main>
 
   <dialog id="guestDialog" class="guest-dialog">
@@ -1095,29 +844,18 @@
       Scan this code to enter your name, company and phone number.
       No login needed.
     </p>
-
-<canvas
-  id="guestCanvas"
-  hidden
-  aria-label="Visitor form QR code"></canvas>
-
-<p id="guestQRStatus" role="status"></p>
-
-<div class="controls">
-  <button id="copyGuestLink" type="button" disabled>
-    Copy link
-  </button>
-  <button id="closeGuestQR" type="button">Close</button>
-</div>
-
+    <canvas id="guestCanvas" hidden
+      aria-label="Visitor form QR code"></canvas>
+    <p id="guestQRStatus" role="status"></p>
+    <div class="controls">
+      <button id="copyGuestLink" type="button" disabled>Copy link</button>
+      <button id="closeGuestQR" type="button">Close</button>
+    </div>
   </dialog>
 
   <script src="./qr.js"></script>
-
   <script src="./guest-qr.js"></script>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/intlTelInput.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/intlTelInput.min.js"></script>
 
   <script>
     const $ = id => document.getElementById(id);
@@ -1143,12 +881,12 @@
     let recordRequest = 0;
     let nextRecordCursor = null;
     let currentRecordQuery = "";
-    let shownRecordCount = 0;
     let recordPageBusy = false;
+    let recordsLoaded = false;
+    let pendingRecordReload = false;
 
     // Theme
     let currentTheme;
-
     try {
       currentTheme = localStorage.getItem("contactNotesTheme");
     } catch {}
@@ -1162,10 +900,8 @@
       document.documentElement.dataset.theme = theme;
       $("themeToggle").textContent =
         theme === "dark" ? "Light mode" : "Dark mode";
-
       $("themeToggle").setAttribute(
-        "aria-pressed",
-        String(theme === "dark")
+        "aria-pressed", String(theme === "dark")
       );
     }
 
@@ -1174,7 +910,6 @@
     $("themeToggle").onclick = () => {
       currentTheme = currentTheme === "dark" ? "light" : "dark";
       applyTheme(currentTheme);
-
       try {
         localStorage.setItem("contactNotesTheme", currentTheme);
       } catch {}
@@ -1198,62 +933,57 @@
     }
 
     // Country-specific phone validation
-    const phonePicker = window.intlTelInput
-      ? window.intlTelInput($("phone"), {
-          initialCountry: "in",
-          separateDialCode: true,
-          countrySearch: true,
-          strictMode: true,
-          validationNumberTypes: ["MOBILE", "FIXED_LINE"],
-          loadUtils: () => import(
-            "https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/utils.js"
-          )
-        })
-      : null;
+    function createPhonePicker(input, initialCountry = "in") {
+      if (!window.intlTelInput) return null;
+      return window.intlTelInput(input, {
+        initialCountry,
+        separateDialCode: true,
+        countrySearch: true,
+        strictMode: true,
+        validationNumberTypes: ["MOBILE", "FIXED_LINE"],
+        loadUtils: () => import(
+          "https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.1/build/js/utils.js"
+        )
+      });
+    }
 
-    async function internationalPhone() {
-      const raw = $("phone").value.trim();
+    const phonePicker = createPhonePicker($("phone"));
+
+    async function validatedPhone(input, picker) {
+      const raw = input.value.trim();
       if (!raw) return "";
 
-      if (!phonePicker) {
-        throw Error(
-          "Phone validation could not load. Reload the page."
-        );
+      if (!picker) {
+        throw Error("Phone validation could not load. Reload the page.");
       }
 
       try {
-        await phonePicker.promise;
+        await picker.promise;
       } catch {
-        throw Error(
-          "Phone validation could not load. Check your connection."
-        );
+        throw Error("Phone validation could not load. Check your connection.");
       }
 
       if (!window.intlTelInput.utils) {
         throw Error("Phone validation could not load. Reload the page.");
       }
 
-      const country = phonePicker.getSelectedCountryData();
-      const number = phonePicker.getNumber();
+      const country = picker.getSelectedCountryData();
+      const number = picker.getNumber();
 
       if (!country.iso2) {
         throw Error("Select a country for the phone number.");
       }
 
-      if (
-        country.iso2 === "in" &&
-        !/^\+91[0-9]{10}$/.test(number || "")
-      ) {
+      if (country.iso2 === "in" &&
+          !/^\+91[0-9]{10}$/.test(number || "")) {
         throw Error(
           "Indian phone numbers must contain exactly 10 digits, excluding +91."
         );
       }
 
-      if (
-        !/^[+0-9()\s.-]+$/.test(raw) ||
-        !phonePicker.isValidNumberPrecise() ||
-        !/^\+[1-9][0-9]{1,14}$/.test(number || "")
-      ) {
+      if (!/^[+0-9()\s.-]+$/.test(raw) ||
+          picker.isValidNumberPrecise() !== true ||
+          !/^\+[1-9][0-9]{1,14}$/.test(number || "")) {
         throw Error(
           "Enter a valid phone number for " +
           (country.name || country.iso2.toUpperCase()) + "."
@@ -1263,37 +993,29 @@
       return number;
     }
 
+    function internationalPhone() {
+      return validatedPhone($("phone"), phonePicker);
+    }
+
     async function call(name, ...args) {
-      const requestEpoch = accountEpoch;
-
-      if (name === "saveRecord") {
-        if (!pendingSaveData) args[0].phone = await internationalPhone();
-
-        if (requestEpoch !== accountEpoch) {
-          throw Error("Session changed. Please sign in again.");
-        }
+      if (typeof window.contactApi !== "function") {
+        throw Error("The app connection has not loaded. Reload the page.");
       }
-
       return window.contactApi(name, ...args);
     }
 
     function asBase64(blob) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-
-        reader.onload = () => resolve(
-          String(reader.result).split(",")[1]
-        );
-
-        reader.onerror = () => reject(
-          Error("Could not read the recording.")
-        );
-
+        reader.onload = () =>
+          resolve(String(reader.result).split(",")[1]);
+        reader.onerror = () =>
+          reject(Error("Could not read the recording."));
         reader.readAsDataURL(blob);
       });
     }
 
-    // Obscenity: validate without deleting or changing typed text.
+    // Validate notes without changing typed text.
     let noteMatcher = null;
 
     const profanityReady = import(
@@ -1306,52 +1028,52 @@
       return true;
     }).catch(() => false);
 
-    function filterWrittenNote() {
+    function containsBadWord(text) {
       if (!noteMatcher) return false;
-
-      const text = $("note").value;
-      const bad = noteMatcher.getAllMatches(text, true).some(match =>
-        !/[\p{L}\p{N}]/u.test(
-          text[match.startIndex - 1] || ""
-        ) &&
-        !/[\p{L}\p{N}]/u.test(
-          text[match.endIndex + 1] || ""
-        )
+      return noteMatcher.getAllMatches(text, true).some(match =>
+        !/[\p{L}\p{N}]/u.test(text[match.startIndex - 1] || "") &&
+        !/[\p{L}\p{N}]/u.test(text[match.endIndex + 1] || "")
       );
+    }
 
+    function filterWrittenNote() {
+      const bad = containsBadWord($("note").value);
       $("noteFilterHint").textContent = bad
-        ? "Please edit the inappropriate language before saving."
-        : "";
-
+        ? "Please edit the inappropriate language before saving." : "";
       return bad;
     }
 
     $("note").addEventListener("blur", filterWrittenNote);
-
     $("note").addEventListener("input", () => {
       $("noteFilterHint").textContent = "";
     });
 
+    async function validateNote(text) {
+      if (!text.trim()) return;
+      if (!await profanityReady) {
+        throw Error(
+          "The word checker could not load. Check your connection and try again."
+        );
+      }
+      if (containsBadWord(text)) {
+        throw Error("Please edit the inappropriate language before saving.");
+      }
+    }
+
     // Photo scanning
     async function photoPayload(file) {
       const bitmap = await createImageBitmap(file);
-
       try {
         const scale = Math.min(
-          1,
-          1800 / Math.max(bitmap.width, bitmap.height)
+          1, 1800 / Math.max(bitmap.width, bitmap.height)
         );
-
         const canvas = document.createElement("canvas");
         canvas.width = Math.max(1, Math.round(bitmap.width * scale));
         canvas.height = Math.max(1, Math.round(bitmap.height * scale));
-
         canvas.getContext("2d").drawImage(
           bitmap, 0, 0, canvas.width, canvas.height
         );
-
         const data = canvas.toDataURL("image/jpeg", .85);
-
         return {
           mimeType: "image/jpeg",
           base64: data.slice(data.indexOf(",") + 1)
@@ -1361,20 +1083,38 @@
       }
     }
 
-    $("cardPhoto").onchange = async () => {
-      if (loading || recordingBusy) return;
+    function photoControlsDisabled(value) {
+      for (const id of [
+        "cardPhoto", "cameraPhoto", "takePhoto", "choosePhoto"
+      ]) {
+        $(id).disabled = value;
+      }
+    }
 
+    $("takePhoto").onclick = () => {
+      if (!loading && !scanning && !recordingBusy && !saved) {
+        $("cameraPhoto").value = "";
+        $("cameraPhoto").click();
+      }
+    };
+
+    $("choosePhoto").onclick = () => {
+      if (!loading && !scanning && !recordingBusy && !saved) {
+        $("cardPhoto").value = "";
+        $("cardPhoto").click();
+      }
+    };
+
+    async function scanSelectedPhoto(input) {
+      if (loading || scanning || recordingBusy || saved) return;
       const epoch = accountEpoch;
-      const file = $("cardPhoto").files[0];
-
+      const file = input.files[0];
       if (!file) return;
 
       $("scanDetails").classList.add("hidden");
 
-      if (
-        !file.type.startsWith("image/") &&
-        !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)
-      ) {
+      if (!file.type.startsWith("image/") &&
+          !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)) {
         $("scanStatus").textContent = "Choose an image.";
         return;
       }
@@ -1386,15 +1126,13 @@
       }
 
       scanning = true;
-      saved = false;
       updateSaveButton();
-      $("cardPhoto").disabled = true;
+      photoControlsDisabled(true);
       $("scanStatus").textContent = "Reading the photo…";
 
       try {
         const payload = await photoPayload(file);
         if (epoch !== accountEpoch) return;
-
         const result = await call("scanPhoto", payload);
         if (epoch !== accountEpoch) return;
 
@@ -1402,26 +1140,26 @@
         $("company").value = result.company || "";
         $("scanText").textContent =
           result.evidence || "Review the suggestions against the photo.";
-
         $("scanDetails").classList.remove("hidden");
-
-        $("scanStatus").textContent =
-          result.person || result.company
-            ? "Photo scanned. Check Person and Company before saving."
-            : "No readable details found. Enter them manually or try a clearer photo.";
+        $("scanStatus").textContent = result.person || result.company
+          ? "Photo scanned. Check Person and Company before saving."
+          : "No readable details found. Enter them manually or try a clearer photo.";
       } catch (error) {
-        if (epoch !== accountEpoch) return;
-
-        $("scanStatus").textContent =
-          "Could not scan this photo: " + error.message;
+        if (epoch === accountEpoch) {
+          $("scanStatus").textContent =
+            "Could not scan this photo: " + error.message;
+        }
       } finally {
         if (epoch === accountEpoch) {
           scanning = false;
-          $("cardPhoto").disabled = false;
+          photoControlsDisabled(false);
           updateSaveButton();
         }
       }
-    };
+    }
+
+    $("cardPhoto").onchange = () => scanSelectedPhoto($("cardPhoto"));
+    $("cameraPhoto").onchange = () => scanSelectedPhoto($("cameraPhoto"));
 
     // Voice recording
     function stopMic() {
@@ -1434,65 +1172,43 @@
     function closeRecorder() {
       discardRecording = true;
       clearInterval(recordingTimer);
-
-      if (mediaRecorder?.state === "recording") {
-        mediaRecorder.stop();
-      }
-
+      if (mediaRecorder?.state === "recording") mediaRecorder.stop();
       stopMic();
     }
 
     function resetAudio() {
       audioBlob = null;
-
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       previewUrl = null;
-
       $("preview").pause();
       $("preview").removeAttribute("src");
       $("preview").classList.add("hidden");
       $("clear").disabled = true;
-      $("timer").textContent =
-        "Record your note here. Maximum 8 MB.";
+      $("timer").textContent = "Record your note here. Maximum 8 MB.";
     }
 
-    document.querySelectorAll(
-      'input[name="noteType"]'
-    ).forEach(radio => {
+    document.querySelectorAll('input[name="noteType"]').forEach(radio => {
       radio.addEventListener("change", () => {
         closeRecorder();
         resetAudio();
-
-        $("textBox").classList.toggle(
-          "hidden", noteType() !== "text"
-        );
-
-        $("voiceBox").classList.toggle(
-          "hidden", noteType() !== "voice"
-        );
+        $("textBox").classList.toggle("hidden", noteType() !== "text");
+        $("voiceBox").classList.toggle("hidden", noteType() !== "voice");
       });
     });
 
     $("start").onclick = async () => {
-      if (recordingBusy || loading || scanning) return;
-
+      if (recordingBusy || loading || scanning || saved) return;
       const epoch = accountEpoch;
       recordingBusy = true;
       discardRecording = false;
-      saved = false;
-
       $("start").disabled = true;
       resetAudio();
       updateSaveButton();
 
       try {
-        if (
-          !navigator.mediaDevices?.getUserMedia ||
-          !window.MediaRecorder
-        ) {
-          throw Error(
-            "Microphone recording is unavailable in this browser."
-          );
+        if (!navigator.mediaDevices?.getUserMedia ||
+            !window.MediaRecorder) {
+          throw Error("Microphone recording is unavailable in this browser.");
         }
 
         const acquired = await navigator.mediaDevices.getUserMedia({
@@ -1501,30 +1217,21 @@
 
         if (epoch !== accountEpoch || noteType() !== "voice") {
           acquired.getTracks().forEach(track => track.stop());
-
           if (epoch === accountEpoch) {
             recordingBusy = false;
             $("start").disabled = false;
             updateSaveButton();
           }
-
           return;
         }
 
         micStream = acquired;
+        const mime = ["audio/webm", "audio/mp4", "audio/ogg"]
+          .find(value => MediaRecorder.isTypeSupported(value));
 
-        const mime = [
-          "audio/webm",
-          "audio/mp4",
-          "audio/ogg"
-        ].find(value => MediaRecorder.isTypeSupported(value));
-
-        if (!mime) {
-          throw Error("No supported audio format found.");
-        }
+        if (!mime) throw Error("No supported audio format found.");
 
         audioChunks = [];
-
         mediaRecorder = new MediaRecorder(micStream, {
           mimeType: mime,
           audioBitsPerSecond: 64000
@@ -1538,7 +1245,6 @@
 
         mediaRecorder.onerror = () => {
           if (epoch !== accountEpoch) return;
-
           discardRecording = true;
           clearInterval(recordingTimer);
           stopMic();
@@ -1551,10 +1257,8 @@
 
         mediaRecorder.onstop = () => {
           if (epoch !== accountEpoch) return;
-
           clearInterval(recordingTimer);
           stopMic();
-
           recordingBusy = false;
           $("start").disabled = false;
           $("stopRecording").disabled = true;
@@ -1563,15 +1267,10 @@
           if (discardRecording) return;
 
           audioBlob = new Blob(audioChunks, {type: mime});
-
-          if (
-            !audioBlob.size ||
-            audioBlob.size > MAX_AUDIO_BYTES
-          ) {
+          if (!audioBlob.size || audioBlob.size > MAX_AUDIO_BYTES) {
             resetAudio();
             status(
-              "Recording is empty or exceeds 8 MB. Try a shorter note.",
-              true
+              "Recording is empty or exceeds 8 MB. Try a shorter note.", true
             );
             return;
           }
@@ -1585,39 +1284,31 @@
         };
 
         mediaRecorder.start(1000);
-
         const started = Date.now();
         $("stopRecording").disabled = false;
         status("Recording…");
 
         recordingTimer = setInterval(() => {
           const seconds = Math.floor((Date.now() - started) / 1000);
-
           $("timer").textContent =
-            "Recording " +
-            Math.floor(seconds / 60) + ":" +
+            "Recording " + Math.floor(seconds / 60) + ":" +
             String(seconds % 60).padStart(2, "0");
 
           const size = audioChunks.reduce(
             (total, chunk) => total + chunk.size, 0
           );
-
-          if (
-            size > MAX_AUDIO_BYTES &&
-            mediaRecorder.state === "recording"
-          ) {
+          if (size > MAX_AUDIO_BYTES &&
+              mediaRecorder.state === "recording") {
             mediaRecorder.stop();
           }
         }, 500);
       } catch (error) {
         if (epoch !== accountEpoch) return;
-
         stopMic();
         recordingBusy = false;
         $("start").disabled = false;
         $("stopRecording").disabled = true;
         updateSaveButton();
-
         status(
           error.name === "NotAllowedError"
             ? "Allow microphone access in your browser settings, then try again."
@@ -1642,10 +1333,9 @@
 
     window.addEventListener("pagehide", closeRecorder);
 
-    // Save
+    // Save records using the same request ID when retrying.
     $("form").onsubmit = async event => {
       event.preventDefault();
-
       if (loading || scanning || recordingBusy || saved) return;
 
       const epoch = accountEpoch;
@@ -1656,73 +1346,53 @@
       status("Checking details…");
 
       try {
-        const phone = await internationalPhone();
-        if (epoch !== accountEpoch) return;
+        let data = pendingSaveData;
 
-        const selectedType = noteType();
-        const written = selectedType === "text"
-          ? $("note").value.trim() : "";
-
-        if (written) {
-          const ready = await profanityReady;
+        if (!data) {
+          const phone = await internationalPhone();
           if (epoch !== accountEpoch) return;
 
-          if (!ready) {
-            throw Error(
-              "The word checker could not load. Check your connection and try again."
-            );
+          const selectedType = noteType();
+          const written = selectedType === "text"
+            ? $("note").value.trim() : "";
+
+          await validateNote(written);
+          if (epoch !== accountEpoch) return;
+
+          if (selectedType === "voice" && !audioBlob) {
+            throw Error("Stop and preview your recording before saving.");
           }
 
-          if (filterWrittenNote()) {
-            $("note").focus();
-            throw Error(
-              "Please edit the inappropriate language before saving."
-            );
-          }
-        }
-
-        if (selectedType === "voice" && !audioBlob) {
-          throw Error(
-            "Stop and preview your recording before saving."
-          );
-        }
-
-        let data = {
-          requestId: saveRequestId,
-          person: $("person").value,
-          company: $("company").value,
-          phone,
-          noteType: selectedType === "voice"
-            ? "voice" : written ? "text" : "none",
-          writtenNote: written
-        };
-
-        if (selectedType === "voice") {
-          data.audio = {
-            mimeType: audioBlob.type,
-            base64: await asBase64(audioBlob)
+          data = {
+            requestId: saveRequestId,
+            person: $("person").value,
+            company: $("company").value,
+            phone,
+            noteType: selectedType === "voice"
+              ? "voice" : written ? "text" : "none",
+            writtenNote: written
           };
+
+          if (selectedType === "voice") {
+            data.audio = {
+              mimeType: audioBlob.type,
+              base64: await asBase64(audioBlob)
+            };
+          }
+
+          if (epoch !== accountEpoch) return;
+          pendingSaveData = data;
         }
 
-        if (epoch !== accountEpoch) return;
-
-        // Retry the original payload and ID if a response was lost.
-        if (pendingSaveData) data = pendingSaveData;
-        else pendingSaveData = data;
         status("Saving record…");
         await call("saveRecord", data);
-
         if (epoch !== accountEpoch) return;
 
         saved = true;
         closeRecorder();
         $("next").hidden = false;
         $("next").disabled = false;
-
-        status(
-          "Saved in Records. Tap Add next person to continue."
-        );
-
+        status("Saved in Records. Tap Add next person to continue.");
         loadRecords();
       } catch (error) {
         if (epoch === accountEpoch) {
@@ -1740,7 +1410,6 @@
       closeRecorder();
       $("form").reset();
       resetAudio();
-
       saved = false;
       saveRequestId = crypto.randomUUID();
       pendingSaveData = null;
@@ -1753,21 +1422,17 @@
       $("noteFilterHint").textContent = "";
       $("scanDetails").classList.add("hidden");
       $("scanText").textContent = "";
-
       $("scanStatus").textContent =
         "Choose a photo to suggest Person and Company. Review the details before saving.";
-
       $("textBox").classList.remove("hidden");
       $("voiceBox").classList.add("hidden");
       $("next").hidden = true;
       $("next").disabled = true;
-
       updateSaveButton();
     }
 
     $("next").onclick = () => {
       if (loading || scanning || recordingBusy) return;
-
       resetContact();
       status("Ready for the next person.");
       $("person").focus();
@@ -1780,281 +1445,223 @@
       }
     });
 
-  function openContactEditor(record, editButton) {
-  const dialog = document.createElement("dialog");
-  dialog.className = "guest-dialog";
+    // Contact editor
+    function openContactEditor(record, editButton) {
+      const dialog = document.createElement("dialog");
+      dialog.className = "guest-dialog";
+      dialog.setAttribute("aria-label", "Edit contact");
 
-  const form = document.createElement("form");
-  const heading = document.createElement("h2");
-  heading.textContent = "Edit contact";
-  form.append(heading);
+      const form = document.createElement("form");
+      const heading = document.createElement("h2");
+      heading.textContent = "Edit contact";
+      form.append(heading);
 
-  function field(labelText, value, limit, multiline = false) {
-    const label = document.createElement("label");
-    label.textContent = labelText;
+      function field(title, value, limit, multiline = false) {
+        const label = document.createElement("label");
+        label.textContent = title;
+        const input = document.createElement(
+          multiline ? "textarea" : "input"
+        );
+        if (!multiline) input.type = "text";
+        input.value = value || "";
+        input.maxLength = limit;
+        label.append(input);
+        form.append(label);
+        return input;
+      }
 
-    const input = document.createElement(
-      multiline ? "textarea" : "input"
-    );
+      const person = field("Person *", record.person, 120);
+      const company = field("Company *", record.company, 120);
+      person.required = company.required = true;
 
-    input.value = value || "";
-    input.maxLength = limit;
+      const phone = field("Phone number (optional)", "", 30);
+      phone.type = "tel";
+      phone.autocomplete = "tel";
 
-    if (!multiline) input.type = "text";
+      const note = record.type === "Voice" ? null :
+        field("Written note (optional)", record.note, 5000, true);
 
-    label.append(input);
-    form.append(label);
+      if (!note) {
+        const hint = document.createElement("p");
+        hint.textContent = "Your existing voice recording will stay attached.";
+        form.append(hint);
+      }
 
-    return input;
-  }
+      const feedback = document.createElement("p");
+      feedback.className = "hint";
+      feedback.setAttribute("role", "status");
+      feedback.setAttribute("aria-live", "polite");
 
-  const person = field("Person", record.person, 120);
-  person.required = true;
+      const controls = document.createElement("div");
+      controls.className = "controls";
 
-  const company = field("Company", record.company, 120);
-  company.required = true;
+      const save = document.createElement("button");
+      save.type = "submit";
+      save.className = "primary";
+      save.textContent = "Save changes";
 
-  const phone = field(
-    "Phone number with country code (optional)",
-    record.phone,
-    30
-  );
+      const cancel = document.createElement("button");
+      cancel.type = "button";
+      cancel.textContent = "Cancel";
+      cancel.onclick = () => dialog.close();
 
-  phone.type = "tel";
-  phone.placeholder = "+919876543210";
+      controls.append(save, cancel);
+      form.append(feedback, controls);
+      dialog.append(form);
+      document.body.append(dialog);
 
-  const note = record.type === "Voice"
-    ? null
-    : field(
-        "Written note (optional)",
-        record.note,
-        5000,
-        true
-      );
+      const editorPhonePicker = createPhonePicker(phone);
+      if (editorPhonePicker) {
+        editorPhonePicker.setNumber(record.phone || "");
+      } else {
+        phone.value = record.phone || "";
+      }
 
-  if (!note) {
-    const hint = document.createElement("p");
-    hint.textContent =
-      "Your existing voice recording will stay attached.";
-    form.append(hint);
-  }
+      const epoch = accountEpoch;
+      let saving = false;
+      const closeOnSignOut = () => dialog.close();
+      window.addEventListener("contact-auth-cleared", closeOnSignOut);
 
-  const feedback = document.createElement("p");
-  feedback.setAttribute("role", "status");
-  feedback.setAttribute("aria-live", "polite");
+      dialog.addEventListener("cancel", event => {
+        if (saving) event.preventDefault();
+      });
 
-  const controls = document.createElement("div");
-  controls.className = "controls";
+      dialog.addEventListener("close", () => {
+        window.removeEventListener("contact-auth-cleared", closeOnSignOut);
+        editorPhonePicker?.destroy();
+        dialog.remove();
+        if (editButton.isConnected) editButton.focus();
+      }, {once: true});
 
-  const save = document.createElement("button");
-  save.type = "submit";
-  save.textContent = "Save changes";
-  save.className = "primary";
+      form.onsubmit = async event => {
+        event.preventDefault();
+        if (saving || epoch !== accountEpoch) return;
 
-  const cancel = document.createElement("button");
-  cancel.type = "button";
-  cancel.textContent = "Cancel";
-  cancel.onclick = () => dialog.close();
+        saving = true;
+        save.disabled = true;
+        cancel.disabled = true;
+        feedback.textContent = "Checking details…";
 
-  controls.append(save, cancel);
-  form.append(feedback, controls);
-  dialog.append(form);
-  document.body.append(dialog);
+        try {
+          const number = await validatedPhone(phone, editorPhonePicker);
+          await validateNote(note ? note.value : "");
+          if (epoch !== accountEpoch) return;
 
-  const epoch = accountEpoch;
-  let saving = false;
+          const data = {
+            id: record.id,
+            person: person.value,
+            company: company.value,
+            phone: number,
+            writtenNote: note ? note.value : "",
+            original: {
+              person: record.person,
+              company: record.company,
+              phone: record.phone || "",
+              note: record.note || "",
+              type: record.type
+            }
+          };
 
-  const closeOnSignOut = () => dialog.close();
+          form.querySelectorAll("input,textarea").forEach(input => {
+            input.disabled = true;
+          });
 
-  window.addEventListener(
-    "contact-auth-cleared",
-    closeOnSignOut
-  );
+          feedback.textContent = "Saving changes…";
+          await call("updateRecord", data);
+          if (epoch !== accountEpoch) return;
 
-  dialog.addEventListener("cancel", event => {
-    if (saving) event.preventDefault();
-  });
-
-  dialog.addEventListener("close", () => {
-    window.removeEventListener(
-      "contact-auth-cleared",
-      closeOnSignOut
-    );
-
-    dialog.remove();
-
-    if (editButton.isConnected) {
-      editButton.focus();
-    }
-  }, {once: true});
-
-  form.onsubmit = async event => {
-    event.preventDefault();
-
-    if (saving || epoch !== accountEpoch) return;
-
-    saving = true;
-    save.disabled = true;
-    cancel.disabled = true;
-
-    const inputs = [person, company, phone, note]
-      .filter(Boolean);
-
-    inputs.forEach(input => {
-      input.disabled = true;
-    });
-
-    feedback.textContent = "Saving changes…";
-
-    try {
-      await call("updateRecord", {
-        id: record.id,
-        person: person.value,
-        company: company.value,
-        phone: phone.value.trim(),
-        writtenNote: note ? note.value : "",
-        original: {
-          person: record.person,
-          company: record.company,
-          phone: record.phone || "",
-          note: record.note || "",
-          type: record.type
+          dialog.close();
+          status("Contact updated.");
+          await loadRecords();
+        } catch (error) {
+          if (epoch === accountEpoch) {
+            feedback.textContent =
+              error.message || "Could not update contact. Try again.";
+          }
+        } finally {
+          saving = false;
+          save.disabled = false;
+          cancel.disabled = false;
+          form.querySelectorAll("input,textarea").forEach(input => {
+            input.disabled = false;
+          });
         }
-      });
+      };
 
-      if (epoch !== accountEpoch) return;
-
-      dialog.close();
-      status("Contact updated.");
-      await loadRecords();
-    } catch (error) {
-      if (epoch !== accountEpoch) return;
-
-      feedback.textContent =
-        error.message || "Could not update contact.";
-    } finally {
-      saving = false;
-      save.disabled = false;
-      cancel.disabled = false;
-
-      inputs.forEach(input => {
-        input.disabled = false;
-      });
+      dialog.showModal();
+      person.focus();
     }
-  };
-
-  dialog.showModal();
-  person.focus();
-}
 
     // Records
     function releaseRecordAudio() {
       $("records").querySelectorAll("audio").forEach(player => {
         player.pause();
-
         if (player.dataset.objectUrl) {
           URL.revokeObjectURL(player.dataset.objectUrl);
         }
       });
     }
 
-    function emptyRecords(title, message) {
-      releaseRecordAudio();
-      $("records").replaceChildren();
-
-      const box = document.createElement("div");
-      box.className = "records-empty";
-
-      const heading = document.createElement("strong");
-      heading.textContent = title;
-
-      const detail = document.createElement("p");
-      detail.textContent = message;
-
-      box.append(heading, detail);
-      $("records").append(box);
-    }
-
     function element(tag, className, text) {
       const node = document.createElement(tag);
       node.className = className;
-
       if (text !== undefined) node.textContent = text;
-
       return node;
+    }
+
+    function emptyRecords(title, message) {
+      releaseRecordAudio();
+      $("records").replaceChildren();
+      const box = element("div", "records-empty");
+      box.append(
+        element("strong", "", title),
+        element("p", "", message)
+      );
+      $("records").append(box);
     }
 
     function renderRecord(record) {
       const card = element("article", "contact-record");
       const head = element("div", "record-head");
-
       const initials = String(record.person || "?")
-        .trim()
-        .split(/\s+/)
-        .slice(0, 2)
-        .map(word => word[0])
-        .join("")
-        .toUpperCase();
+        .trim().split(/\s+/).slice(0, 2)
+        .map(word => word[0]).join("").toUpperCase();
 
       const avatar = element("div", "record-avatar", initials);
       avatar.setAttribute("aria-hidden", "true");
 
       const identity = element("div", "record-identity");
-
       identity.append(
         element("h3", "record-name", record.person),
         element("p", "record-company", record.company)
       );
 
-      const badge = element(
-        "span",
-        "note-badge",
-        record.type === "Text"
-          ? "Written note"
-          : record.type === "Voice"
-            ? "Voice note"
-            : "Contact details"
-      );
+      const badge = element("span", "note-badge",
+        record.type === "Text" ? "Written note" :
+        record.type === "Voice" ? "Voice note" : "Contact details");
 
       head.append(avatar, identity, badge);
 
       const meta = element("div", "record-meta");
-
       if (record.phone) {
-        meta.append(
-          element("span", "record-phone", record.phone)
-        );
+        meta.append(element("span", "record-phone", record.phone));
       }
 
       const date = new Date(record.date);
-
-      meta.append(
-        element(
-          "time",
-          "record-date",
-          Number.isNaN(date.getTime())
-            ? ""
-            : date.toLocaleDateString(undefined, {
-                day: "numeric",
-                month: "short",
-                year: "numeric"
-              })
-        )
-      );
+      meta.append(element("time", "record-date",
+        Number.isNaN(date.getTime()) ? "" :
+        date.toLocaleDateString(undefined, {
+          day: "numeric", month: "short", year: "numeric"
+        })
+      ));
 
       card.append(head, meta);
 
       if (record.type === "Text") {
-        card.append(
-          element("div", "note record-note", record.note)
-        );
+        card.append(element("div", "note record-note", record.note));
       } else if (record.hasAudio) {
-        const button = element(
-          "button", "voice-play", "▶ Play voice note"
-        );
-
+        const button = element("button", "voice-play", "▶ Play voice note");
         button.type = "button";
-
         const feedback = element("div", "audio-feedback");
         feedback.setAttribute("role", "status");
 
@@ -2065,15 +1672,17 @@
           feedback.textContent = "";
 
           try {
-            const existingPlayer = card.querySelector("audio");
-            if (existingPlayer?.dataset.objectUrl) {
-              existingPlayer.currentTime = 0;
-              try { await existingPlayer.play(); }
-              catch { feedback.textContent = "Tap Play on the audio player to listen."; }
+            const existing = card.querySelector("audio");
+            if (existing?.dataset.objectUrl) {
+              existing.currentTime = 0;
+              try { await existing.play(); }
+              catch {
+                feedback.textContent = "Tap Play on the audio player to listen.";
+              }
               return;
             }
-            const audio = await call("getAudio", record.id);
 
+            const audio = await call("getAudio", record.id);
             if (epoch !== accountEpoch || !card.isConnected) return;
 
             const binary = atob(audio.base64);
@@ -2081,26 +1690,19 @@
               binary, character => character.charCodeAt(0)
             );
 
-            let player = card.querySelector("audio");
-
-            if (!player) {
-              player = document.createElement("audio");
-              player.controls = true;
-              card.append(player);
-            }
-
-            if (player.dataset.objectUrl) {
-              URL.revokeObjectURL(player.dataset.objectUrl);
-            }
-
+            const player = document.createElement("audio");
+            player.controls = true;
             const url = URL.createObjectURL(
               new Blob([bytes], {type: audio.mimeType})
             );
-
             player.dataset.objectUrl = url;
             player.src = url;
+            card.append(player);
+
             try { await player.play(); }
-            catch { feedback.textContent = "Tap Play on the audio player to listen."; }
+            catch {
+              feedback.textContent = "Tap Play on the audio player to listen.";
+            }
           } catch (error) {
             if (epoch === accountEpoch) {
               feedback.textContent =
@@ -2114,89 +1716,114 @@
 
         card.append(button, feedback);
       }
-      const editButton = document.createElement("button");
-      editButton.type = "button";
-      editButton.textContent = "Edit contact";
-      editButton.style.marginTop = "12px";
-      editButton.onclick = () => {
-  try {
-    if (typeof openContactEditor !== "function") {
-      throw new Error(
-        "The contact editor function is missing. Add openContactEditor() inside the main script."
-      );
-    }
 
-    openContactEditor(record, editButton);
-  } catch (error) {
-    alert("Could not open editor: " + error.message);
-  }
-};
+      const editButton = element("button", "edit-contact", "Edit contact");
+      editButton.type = "button";
+      editButton.onclick = () => {
+        try {
+          openContactEditor(record, editButton);
+        } catch (error) {
+          alert("Could not open editor: " + error.message);
+        }
+      };
 
       card.append(editButton);
       $("records").append(card);
     }
 
-    let recordsLoaded = false;
-    let pendingRecordReload = false;
-    let activeRecordQuery = "";
-
     async function loadRecords(append = false) {
       append = append === true;
       if (document.querySelector("main.shell").hidden) return;
       const query = $("search").value.trim();
+
       if (recordPageBusy) {
-        // Coalesce refreshes and searches; never overlap list requests.
         if (!append) pendingRecordReload = true;
         return;
       }
-      if (append && (nextRecordCursor == null || query !== currentRecordQuery)) return;
+
+      if (append &&
+          (nextRecordCursor == null || query !== currentRecordQuery)) {
+        return;
+      }
+
       const epoch = accountEpoch;
       const request = ++recordRequest;
-      const hadRecords = $("records").querySelectorAll(".contact-record").length > 0;
+      const hadRecords =
+        $("records").querySelectorAll(".contact-record").length > 0;
+
       recordPageBusy = true;
-      activeRecordQuery = query;
       $("loadMore").disabled = true;
       $("loadMore").textContent = "Loading…";
       $("refreshRecords").disabled = true;
-      $("pageStatus").textContent = append ? "Loading more contacts…" : "Updating contacts…";
+      $("pageStatus").textContent =
+        append ? "Loading more contacts…" : "Updating contacts…";
+
       if (!append && !recordsLoaded && !hadRecords) {
         emptyRecords("Loading contacts", "Getting your latest records…");
       }
+
       try {
-        const result = await call("listRecords", query,
-          append ? {cursor: nextRecordCursor} : {});
-        if (epoch !== accountEpoch || request !== recordRequest || query !== $("search").value.trim()) return;
-        if (!result || !Array.isArray(result.records)) throw Error("Could not read contacts.");
+        const result = await call(
+          "listRecords", query,
+          append ? {cursor: nextRecordCursor} : {}
+        );
+
+        if (epoch !== accountEpoch || request !== recordRequest ||
+            query !== $("search").value.trim()) return;
+
+        if (!result || !Array.isArray(result.records)) {
+          throw Error("Could not read contacts.");
+        }
+
         if (!append) {
           releaseRecordAudio();
           $("records").replaceChildren();
-          shownRecordCount = 0;
           currentRecordQuery = query;
         }
+
         recordsLoaded = true;
         nextRecordCursor = query ? result.nextCursor : null;
-        shownRecordCount += result.records.length;
-        $("recordCount").textContent = "Total contacts: " + result.totalContacts;
+
+        $("recordCount").textContent =
+          Number.isFinite(Number(result.totalContacts)) &&
+          result.totalContacts != null
+            ? "Total contacts: " + Number(result.totalContacts)
+            : "Total contacts: —";
+
         $("loadMore").hidden = nextRecordCursor == null;
         $("pageStatus").textContent = query
-          ? nextRecordCursor == null ? "All matching contacts shown." : "More matching contacts are available."
+          ? nextRecordCursor == null
+            ? "All matching contacts shown."
+            : "More matching contacts are available."
           : window.contactUser?.role === "admin"
-            ? "Latest 10 contacts from all users. Search to find older contacts."
-            : "Your latest 10 contacts. Search to find older contacts.";
+            ? "Latest 20 contacts from all users. Search to find older contacts."
+            : "Your latest 20 contacts. Search to find older contacts.";
+
         if (!result.records.length && !append) {
-          emptyRecords(query ? "No matching contacts" : "Your connections start here",
-            query ? "Try a different name, company, or phone number." : "Save your first contact to see their details here.");
-        } else result.records.forEach(renderRecord);
+          emptyRecords(
+            query ? "No matching contacts" : "Your connections start here",
+            query
+              ? "Try a different name, company, or phone number."
+              : "Save your first contact to see their details here."
+          );
+        } else {
+          result.records.forEach(renderRecord);
+        }
       } catch (error) {
-        if (epoch !== accountEpoch || request !== recordRequest || query !== $("search").value.trim()) return;
+        if (epoch !== accountEpoch || request !== recordRequest ||
+            query !== $("search").value.trim()) return;
+
         if (hadRecords || recordsLoaded) {
           $("pageStatus").textContent = query !== currentRecordQuery
             ? "Search could not complete. Previous results remain visible. Tap Refresh to retry."
             : "Could not update right now. Your loaded contacts remain visible. Tap Refresh to retry.";
         } else {
           $("recordCount").textContent = "—";
-          emptyRecords("Contacts are taking longer to load", "Tap Refresh to try again.");
-          $("pageStatus").textContent = "Your saved records have not been changed.";
+          emptyRecords(
+            "Contacts are taking longer to load", "Tap Refresh to try again."
+          );
+          $("pageStatus").textContent =
+            "Your saved records have not been changed.";
         }
       } finally {
         if (epoch === accountEpoch) {
@@ -2204,6 +1831,7 @@
           $("loadMore").disabled = false;
           $("loadMore").textContent = "Load more";
           $("refreshRecords").disabled = false;
+
           if (pendingRecordReload) {
             pendingRecordReload = false;
             clearTimeout(searchTimer);
@@ -2214,48 +1842,35 @@
     }
 
     $("refreshRecords").onclick = () => loadRecords();
-
     $("loadMore").onclick = () => loadRecords(true);
 
     $("search").oninput = () => {
       clearTimeout(searchTimer);
       ++recordRequest;
-
       nextRecordCursor = null;
       $("loadMore").hidden = true;
-
       searchTimer = setTimeout(() => loadRecords(), 300);
     };
 
-    // Swipe between contact form and records
+    // Swipe between the form and records
     let showingRecords = false;
     let flipping = false;
     let drag = null;
     let suppressSwipeClick = false;
-
-    const reducedMotion = matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    );
+    const reducedMotion =
+      matchMedia("(prefers-reduced-motion: reduce)");
 
     async function switchCard(toRecords) {
       if (flipping || toRecords === showingRecords) return;
-
       flipping = true;
 
-      const oldFace = $(
-        showingRecords ? "recordsFace" : "contactFace"
-      );
-
-      const newFace = $(
-        toRecords ? "recordsFace" : "contactFace"
-      );
-
+      const oldFace = $(showingRecords ? "recordsFace" : "contactFace");
+      const newFace = $(toRecords ? "recordsFace" : "contactFace");
       oldFace.querySelectorAll("audio").forEach(audio => audio.pause());
 
       const animate = (face, className, milliseconds) =>
         new Promise(resolve => {
           face.classList.add(className);
-
           setTimeout(() => {
             face.classList.remove(className);
             resolve();
@@ -2263,7 +1878,6 @@
         });
 
       await animate(oldFace, "flip-out", 180);
-
       oldFace.classList.add("hidden");
       oldFace.inert = true;
       oldFace.setAttribute("aria-hidden", "true");
@@ -2271,27 +1885,18 @@
       newFace.classList.remove("hidden");
       newFace.inert = false;
       newFace.removeAttribute("aria-hidden");
-
       showingRecords = toRecords;
 
-      $("viewToggle").setAttribute(
-        "aria-expanded", String(toRecords)
-      );
-
-      $("viewToggle").setAttribute(
-        "aria-label",
-        toRecords
-          ? "Swipe right or tap to add a contact"
-          : "Swipe left or tap to view records"
-      );
-
+      $("viewToggle").setAttribute("aria-expanded", String(toRecords));
+      $("viewToggle").setAttribute("aria-label", toRecords
+        ? "Swipe right or tap to add a contact"
+        : "Swipe left or tap to view records");
       $("swipeHint").textContent = toRecords
         ? "Swipe right to add a contact"
         : "Swipe left to view records";
 
       await animate(newFace, "flip-in", 220);
       flipping = false;
-
       if (toRecords && !recordsLoaded && !recordPageBusy) loadRecords();
     }
 
@@ -2301,7 +1906,6 @@
 
     function clearDrag() {
       if (!drag) return;
-
       drag.face.style.transform = "";
       drag.face.style.opacity = "";
       drag = null;
@@ -2311,13 +1915,8 @@
       const interactive = event.target.closest(
         "input,textarea,button,a,audio,select,summary,.iti"
       );
-
-      if (
-        flipping ||
-        !event.isPrimary ||
-        event.button !== 0 ||
-        (event.currentTarget !== $("viewToggle") && interactive)
-      ) return;
+      if (flipping || !event.isPrimary || event.button !== 0 ||
+          (event.currentTarget !== $("viewToggle") && interactive)) return;
 
       drag = {
         id: event.pointerId,
@@ -2332,7 +1931,6 @@
 
     function moveSwipe(event) {
       if (!drag || event.pointerId !== drag.id) return;
-
       const dx = event.clientX - drag.x;
       const dy = event.clientY - drag.y;
 
@@ -2341,57 +1939,41 @@
           clearDrag();
           return;
         }
-
-        if (
-          Math.abs(dx) < 10 ||
-          Math.abs(dx) < Math.abs(dy) * 1.3
-        ) return;
-
+        if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
         drag.active = true;
         drag.surface.setPointerCapture(event.pointerId);
       }
 
       const direction = showingRecords ? 1 : -1;
       drag.dx = dx;
-
       const progress = Math.min(
         Math.max(dx * direction, 0) /
-        Math.min($("flipCard").clientWidth, 420),
-        1
+        Math.min($("flipCard").clientWidth, 420), 1
       );
 
       drag.face.style.transform =
-        `translateX(${dx * .12}px) ` +
-        `rotateY(${direction * progress * 75}deg)`;
-
+        `translateX(${dx * .12}px) rotateY(${direction * progress * 75}deg)`;
       drag.face.style.opacity = String(1 - progress * .25);
     }
 
     function endSwipe(event) {
       if (!drag || event.pointerId !== drag.id) return;
-
       const direction = showingRecords ? 1 : -1;
-
       const shouldFlip = drag.active &&
         drag.dx * direction >
         Math.min(80, $("flipCard").clientWidth * .18);
-
       const surface = drag.surface;
       const wasDragged = drag.active;
-
       clearDrag();
 
       if (wasDragged) {
         suppressSwipeClick = true;
-        setTimeout(() => {
-          suppressSwipeClick = false;
-        }, 350);
+        setTimeout(() => { suppressSwipeClick = false; }, 350);
       }
 
       if (surface.hasPointerCapture(event.pointerId)) {
         surface.releasePointerCapture(event.pointerId);
       }
-
       if (shouldFlip) switchCard(!showingRecords);
     }
 
@@ -2406,15 +1988,13 @@
     // Connectivity and authentication
     function updateConnection() {
       $("connection").textContent = navigator.onLine
-        ? ""
-        : "Offline — reconnect to save and scan";
+        ? "" : "Offline — reconnect to save and scan";
     }
 
     window.addEventListener("online", () => {
       updateConnection();
       loadRecords();
     });
-
     window.addEventListener("offline", updateConnection);
     updateConnection();
 
@@ -2422,14 +2002,11 @@
       navigator.serviceWorker.register("./sw.js").catch(() => {});
     }
 
-    window.addEventListener("contact-auth-ready", () => {
-      loadRecords();
-    });
+    window.addEventListener("contact-auth-ready", () => loadRecords());
 
     window.addEventListener("contact-auth-cleared", () => {
       ++accountEpoch;
       ++recordRequest;
-
       clearTimeout(searchTimer);
       clearDrag();
       closeRecorder();
@@ -2441,13 +2018,13 @@
       recordPageBusy = false;
       recordsLoaded = false;
       pendingRecordReload = false;
-      $("refreshRecords").disabled = false;
       nextRecordCursor = null;
-      shownRecordCount = 0;
+      currentRecordQuery = "";
 
+      $("refreshRecords").disabled = false;
       $("start").disabled = false;
       $("stopRecording").disabled = true;
-      $("cardPhoto").disabled = false;
+      photoControlsDisabled(false);
       $("search").value = "";
       $("records").replaceChildren();
       $("recordCount").textContent = "Total contacts: 0";
@@ -2462,168 +2039,142 @@
   <script src="./auth.js?v=individual-v4"></script>
 
   <script>
-(() => {
-  let installPrompt = null;
-  let installedThisSession = false;
+    // Install app button
+    (() => {
+      let installPrompt = null;
+      let installedThisSession = false;
+      const standalone = matchMedia("(display-mode: standalone)");
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-  const standalone = window.matchMedia(
-    "(display-mode: standalone)"
-  );
+      const button = document.createElement("button");
+      button.id = "installAppButton";
+      button.type = "button";
+      button.className = "theme-toggle";
+      button.textContent = "Install app";
 
-  const isIOS =
-    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" &&
-      navigator.maxTouchPoints > 1);
+      const actions = document.querySelector(".header-actions");
+      const themeButton = document.getElementById("themeToggle");
 
-  const button = document.createElement("button");
-  button.id = "installAppButton";
-  button.type = "button";
-  button.className = "theme-toggle";
-  button.textContent = "Install app";
+      if (actions) {
+        const logout = document.getElementById("logoutButton");
+        actions.insertBefore(
+          button, logout?.parentElement === actions ? logout : null
+        );
+      } else if (themeButton) {
+        themeButton.after(button);
+      } else {
+        document.querySelector(".topbar-inner")?.append(button);
+      }
 
-  const actions = document.querySelector(".header-actions");
-  const themeButton = document.getElementById("themeToggle");
+      const style = document.createElement("style");
+      style.textContent = `
+        .header-actions { flex-wrap: wrap; }
+        #installAppButton {
+          margin: 0;
+          min-height: 44px;
+          font-size: 13px;
+          padding: 9px 13px;
+          white-space: nowrap;
+        }
+        .install-dialog {
+          width: calc(100% - 32px);
+          max-width: 420px;
+          padding: 24px;
+          border: 1px solid var(--line);
+          border-radius: 24px;
+          background: var(--panel);
+          color: var(--ink);
+        }
+        .install-dialog::backdrop { background: #0009; }
+        .install-dialog h2 {
+          margin-bottom: 12px;
+          font-size: 23px;
+        }
+        .install-dialog p {
+          white-space: pre-line;
+          line-height: 1.8;
+        }
+        .install-dialog button {
+          width: 100%;
+          margin-top: 20px;
+        }
+      `;
+      document.head.append(style);
 
-  if (actions) {
-    const logout = document.getElementById("logoutButton");
-    actions.insertBefore(
-      button,
-      logout?.parentElement === actions ? logout : null
-    );
-  } else if (themeButton) {
-    themeButton.after(button);
-  } else {
-    document.querySelector(".topbar-inner")?.append(button);
-  }
+      const dialog = document.createElement("dialog");
+      dialog.className = "install-dialog";
+      dialog.setAttribute("aria-labelledby", "installDialogTitle");
 
-  const style = document.createElement("style");
-  style.textContent = `
-    .header-actions {
-      flex-wrap: wrap;
-    }
+      const heading = document.createElement("h2");
+      heading.id = "installDialogTitle";
+      heading.textContent = "Install Contact Notes";
 
-    #installAppButton {
-      margin: 0;
-      min-height: 44px;
-      font-size: 13px;
-      padding: 9px 13px;
-      white-space: nowrap;
-    }
+      const instructions = document.createElement("p");
+      const close = document.createElement("button");
+      close.type = "button";
+      close.textContent = "Got it";
+      close.onclick = () => dialog.close();
 
-    .install-dialog {
-      width: calc(100% - 32px);
-      max-width: 420px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--panel);
-      color: var(--ink);
-    }
+      dialog.append(heading, instructions, close);
+      document.body.append(dialog);
 
-    .install-dialog::backdrop {
-      background: #0009;
-    }
+      function updateButton() {
+        button.hidden = standalone.matches ||
+          navigator.standalone === true || installedThisSession;
+      }
 
-    .install-dialog h2 {
-      margin-bottom: 12px;
-      font-size: 23px;
-    }
+      function showInstructions() {
+        instructions.textContent = isIOS
+          ? "1. Open this website in Safari.\n" +
+            "2. Tap Share (the square with an upward arrow).\n" +
+            "3. Choose Add to Home Screen.\n" +
+            "4. Enable Open as Web App if shown, then tap Add."
+          : "Open this website in Chrome on your Android phone.\n\n" +
+            "Tap the ⋮ menu, then choose Add to Home screen " +
+            "or Install app, if available.\n\n" +
+            "If installation is unavailable, reload the page " +
+            "while connected to the internet and try again.";
+        if (!dialog.open) dialog.showModal();
+      }
 
-    .install-dialog p {
-      white-space: pre-line;
-      line-height: 1.8;
-    }
+      window.addEventListener("beforeinstallprompt", event => {
+        event.preventDefault();
+        installPrompt = event;
+        updateButton();
+      });
 
-    .install-dialog button {
-      width: 100%;
-      margin-top: 20px;
-    }
-  `;
-  document.head.append(style);
+      window.addEventListener("appinstalled", () => {
+        installPrompt = null;
+        installedThisSession = true;
+        updateButton();
+        if (dialog.open) dialog.close();
+      });
 
-  const dialog = document.createElement("dialog");
-  dialog.className = "install-dialog";
-  dialog.setAttribute("aria-labelledby", "installDialogTitle");
+      standalone.addEventListener("change", updateButton);
 
-  const heading = document.createElement("h2");
-  heading.id = "installDialogTitle";
-  heading.textContent = "Install Contact Notes";
+      button.onclick = async () => {
+        if (!installPrompt) {
+          showInstructions();
+          return;
+        }
 
-  const instructions = document.createElement("p");
+        const prompt = installPrompt;
+        installPrompt = null;
+        button.disabled = true;
+        try {
+          await prompt.prompt();
+          await prompt.userChoice;
+        } catch {
+          showInstructions();
+        } finally {
+          button.disabled = false;
+          updateButton();
+        }
+      };
 
-  const close = document.createElement("button");
-  close.type = "button";
-  close.textContent = "Got it";
-  close.onclick = () => dialog.close();
-
-  dialog.append(heading, instructions, close);
-  document.body.append(dialog);
-
-  function updateButton() {
-    button.hidden =
-      standalone.matches ||
-      navigator.standalone === true ||
-      installedThisSession;
-  }
-
-  function showInstructions() {
-    if (isIOS) {
-      instructions.textContent =
-        "1. Open this website in Safari.\n" +
-        "2. Tap Share (the square with an upward arrow).\n" +
-        "3. Choose Add to Home Screen.\n" +
-        "4. Enable Open as Web App if shown, then tap Add.";
-    } else {
-      instructions.textContent =
-        "Open this website in Chrome on your Android phone.\n\n" +
-        "Tap the ⋮ menu, then choose Add to Home screen " +
-        "or Install app, if available.\n\n" +
-        "If installation is unavailable, reload the page " +
-        "while connected to the internet and try again.";
-    }
-
-    if (!dialog.open) dialog.showModal();
-  }
-
-  window.addEventListener("beforeinstallprompt", event => {
-    event.preventDefault();
-    installPrompt = event;
-    updateButton();
-  });
-
-  window.addEventListener("appinstalled", () => {
-    installPrompt = null;
-    installedThisSession = true;
-    updateButton();
-    if (dialog.open) dialog.close();
-  });
-
-  standalone.addEventListener("change", updateButton);
-
-  button.onclick = async () => {
-    if (!installPrompt) {
-      showInstructions();
-      return;
-    }
-
-    const prompt = installPrompt;
-    installPrompt = null;
-    button.disabled = true;
-
-    try {
-      await prompt.prompt();
-      await prompt.userChoice;
-    } catch {
-      showInstructions();
-    } finally {
-      button.disabled = false;
       updateButton();
-    }
-  };
-
-  updateButton();
-})();
-</script>
-
+    })();
+  </script>
 </body>
 </html>
