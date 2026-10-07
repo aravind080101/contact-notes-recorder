@@ -1985,7 +1985,7 @@
         recordsLoaded = true;
         nextRecordCursor = query ? result.nextCursor : null;
         shownRecordCount += result.records.length;
-        $("recordCount").textContent = shownRecordCount + " shown";
+        $("recordCount").textContent = "Total contacts: " + result.totalContacts;
         $("loadMore").hidden = nextRecordCursor == null;
         $("pageStatus").textContent = query
           ? nextRecordCursor == null ? "All matching contacts shown." : "More matching contacts are available."
@@ -2259,7 +2259,7 @@
       $("cardPhoto").disabled = false;
       $("search").value = "";
       $("records").replaceChildren();
-      $("recordCount").textContent = "0 shown";
+      $("recordCount").textContent = "Total contacts: 0";
       $("loadMore").hidden = true;
       $("pageStatus").textContent = "";
 
