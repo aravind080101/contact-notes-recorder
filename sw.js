@@ -1,4 +1,4 @@
-const CACHE = "moolya-contact-shell-individual-v9";
+const CACHE = "moolya-contact-shell-cloudflare-v1";
 
 const SHELL = [
   "./",
@@ -46,7 +46,7 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
 
-  // Only cache same-origin GET requests. API requests are not cached.
+  // API requests and requests to other websites are not cached.
   if (
     event.request.method !== "GET" ||
     url.origin !== self.location.origin
@@ -59,21 +59,26 @@ self.addEventListener("fetch", event => {
       .then(response => {
         if (response.ok) {
           const copy = response.clone();
+
           event.waitUntil(
             caches.open(CACHE)
               .then(cache => cache.put(event.request, copy))
           );
         }
+
         return response;
       })
       .catch(async () => {
         const cache = await caches.open(CACHE);
         const cached = await cache.match(event.request);
+
         if (cached) return cached;
+
         if (event.request.mode === "navigate") {
           const page = await cache.match("./index.html");
           if (page) return page;
         }
+
         return Response.error();
       })
   );
