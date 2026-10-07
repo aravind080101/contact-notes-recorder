@@ -1941,7 +1941,13 @@
 
         card.append(button, feedback);
       }
+      const editButton = document.createElement("button");
+      editButton.type = "button";
+      editButton.textContent = "Edit contact";
+      editButton.style.marginTop = "12px";
+      editButton.onclick = () => openContactEditor(record, editButton);
 
+      card.append(editButton);
       $("records").append(card);
     }
 
