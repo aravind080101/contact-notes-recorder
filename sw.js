@@ -1,4 +1,4 @@
-const CACHE = "moolya-contact-shell-cloudflare-v1";
+const CACHE = "moolya-contact-shell-cloudflare-v2";
 
 const SHELL = [
   "./",
