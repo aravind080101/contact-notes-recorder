@@ -1945,7 +1945,19 @@
       editButton.type = "button";
       editButton.textContent = "Edit contact";
       editButton.style.marginTop = "12px";
-      editButton.onclick = () => openContactEditor(record, editButton);
+      editButton.onclick = () => {
+  try {
+    if (typeof openContactEditor !== "function") {
+      throw new Error(
+        "The contact editor function is missing. Add openContactEditor() inside the main script."
+      );
+    }
+
+    openContactEditor(record, editButton);
+  } catch (error) {
+    alert("Could not open editor: " + error.message);
+  }
+};
 
       card.append(editButton);
       $("records").append(card);
