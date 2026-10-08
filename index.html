@@ -859,7 +859,7 @@
         <div class="search-wrap">
           <span aria-hidden="true" class="search-icon">⌕</span>
           <input id="search" type="search"
-            placeholder="Search person, company, or phone"
+            placeholder="Search person, company, phone, or email"
             aria-label="Search records">
         </div>
 
@@ -1447,6 +1447,7 @@
             person: $("person").value,
             company: $("company").value,
             phone,
+            email: $("email").value.trim(),
             noteType: selectedType === "voice"
               ? "voice" : written ? "text" : "none",
             writtenNote: written
@@ -1564,6 +1565,10 @@
       const phone = field("Phone number (optional)", "", 30);
       phone.type = "tel";
 
+      const email = field("Email (optional)", record.email || "", 254);
+      email.type = "email";
+      email.autocomplete = "email";
+
       const note = record.type === "Voice" ? null :
         field("Written note (optional)", record.note, 5000, true);
 
@@ -1640,11 +1645,13 @@
             person: person.value,
             company: company.value,
             phone: number,
+            email: email.value.trim(),
             writtenNote: note ? note.value : "",
             original: {
               person: record.person,
               company: record.company,
               phone: record.phone || "",
+              email: record.email || "",
               note: record.note || "",
               type: record.type
             }
@@ -1737,6 +1744,9 @@
       const meta = element("div", "record-meta");
       if (record.phone) {
         meta.append(element("span", "record-phone", record.phone));
+      }
+      if (record.email) {
+        meta.append(element("span", "record-email", record.email));
       }
 
       const date = new Date(record.date);
