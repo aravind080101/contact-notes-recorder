@@ -306,6 +306,17 @@
     window.dispatchEvent(new Event("contact-auth-ready"));
   }
 
+  function signIn(user) {
+    clear();
+    token = user.token;
+    sessionStorage.setItem(key, token);
+    message("");
+    openApp(user);
+  }
+
+  // Face ID / fingerprint button on the sign-in form (passkey.js).
+  window.Passkey?.mount({form: get("loginForm"), onSignedIn: signIn}).catch(() => {});
+
   function busy(form, value) {
     form.querySelectorAll("button,input:not([readonly])").forEach(el => {
       el.disabled = value;
@@ -325,12 +336,10 @@
         password: get("loginPassword").value
       });
 
-      clear();
-      token = user.token;
-      sessionStorage.setItem(key, token);
+      signIn(user);
       get("loginPassword").value = "";
-      message("");
-      openApp(user);
+      // Offer Face ID / fingerprint for next time (shown once per device).
+      window.Passkey?.offer({token: user.token, username: user.username}).catch(() => {});
     } catch (error) {
       message(error.message);
     } finally {
