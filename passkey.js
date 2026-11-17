@@ -22,6 +22,9 @@
     del: k => { try { localStorage.removeItem(k); } catch {} }
   };
   const REMEMBER_KEY = 'passkey:user';
+  // Set when someone taps the Face ID button on a device that has no saved
+  // passkey yet: their next password sign-in turns Face ID on straight away.
+  let setupRequested = false;
   const DISMISS_KEY = 'passkey:dismissed:';
 
   async function call(action, input, token) {
@@ -86,12 +89,22 @@
 
   async function enable(token, username) {
     const o = await call('passkeyRegisterOptions', {}, token);
-    const credential = await navigator.credentials.create({publicKey: {
-      ...o,
-      challenge: unb64u(o.challenge),
-      user: {...o.user, id: unb64u(o.user.id)},
-      excludeCredentials: o.excludeCredentials.map(c => ({type: 'public-key', id: unb64u(c.id)}))
-    }});
+    let credential;
+    try {
+      credential = await navigator.credentials.create({publicKey: {
+        ...o,
+        challenge: unb64u(o.challenge),
+        user: {...o.user, id: unb64u(o.user.id)},
+        excludeCredentials: o.excludeCredentials.map(c => ({type: 'public-key', id: unb64u(c.id)}))
+      }});
+    } catch (error) {
+      // This device already has a passkey for this account: nothing to add.
+      if (error && error.name === 'InvalidStateError') {
+        if (username) store.set(REMEMBER_KEY, username);
+        return {alreadySetUp: true};
+      }
+      throw error;
+    }
     const r = credential.response;
     const data = await call('passkeyRegister', {
       id: credential.id,
@@ -120,7 +133,11 @@
       .pk-btn svg{width:22px;height:22px;flex:none}
       .pk-or{display:flex;align-items:center;gap:10px;margin:14px 0 0;opacity:.6;font-size:.85em}
       .pk-or:before,.pk-or:after{content:"";flex:1;border-top:1px solid currentColor;opacity:.4}
-      .pk-msg{margin:8px 0 0;font-size:.9em;color:#c0392b;min-height:0}.pk-msg:empty{display:none}
+      .pk-msg{margin:8px 0 0;font-size:.9em;color:#c0392b;min-height:0}.pk-msg:empty{display:none}.pk-msg.pk-hint{color:var(--muted,#555)}
+      .pk-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;
+        width:min(420px,calc(100vw - 32px));background:var(--panel,#fff);color:var(--ink,#111);
+        border:1px solid var(--line,#ddd);border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.25);
+        padding:14px 18px;font:inherit;font-size:.95em}
       .pk-card{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;
         width:min(420px,calc(100vw - 32px));background:var(--panel,#fff);color:var(--ink,#111);border:1px solid var(--line,#ddd);border-radius:18px;
         box-shadow:0 10px 40px rgba(0,0,0,.25);padding:18px;font:inherit}
@@ -161,6 +178,18 @@
     startAutofill();
 
     button.addEventListener('click', async () => {
+      msg.classList.remove('pk-hint');
+      if (!store.get(REMEMBER_KEY)) {
+        // Nothing saved on this device yet: sign in with the password once,
+        // then Face ID / fingerprint is saved automatically.
+        setupRequested = true;
+        msg.classList.add('pk-hint');
+        msg.textContent = 'First time on this device: sign in with your username and password below. ' +
+          'Face ID / fingerprint will be turned on right after, so next time you just tap this button.';
+        const user = form.querySelector('input[autocomplete~="username"], input[type="text"], input[type="email"]');
+        if (user) user.focus();
+        return;
+      }
       if (autofill) { autofill.abort(); autofill = null; }
       msg.textContent = '';
       button.disabled = true;
@@ -178,11 +207,36 @@
     });
   }
 
+  function toast(text) {
+    css();
+    const t = document.createElement('div');
+    t.className = 'pk-toast';
+    t.setAttribute('role', 'status');
+    t.textContent = text;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 5000);
+  }
+
   async function offer({token, username}) {
     if (!token || !(await supported())) return false;
+    const requested = setupRequested;
+    setupRequested = false;
     if (store.get(REMEMBER_KEY) === username) return false;          // already on for this device
-    const dismissed = Number(store.get(DISMISS_KEY + username) || 0);
-    if (Date.now() - dismissed < 30 * 24 * 60 * 60 * 1000) return false; // asked recently
+    if (requested) {
+      // They tapped the Face ID button first, so turn it on straight away.
+      try {
+        await enable(token, username);
+        toast('Face ID / fingerprint is on. Next time, just tap the button to sign in.');
+        return true;
+      } catch (error) {
+        // Some browsers need one more tap before showing the Face ID prompt:
+        // fall back to the card with a "Turn on" button.
+        if (!cancelled(error)) { toast(error.message); return false; }
+      }
+    } else {
+      const dismissed = Number(store.get(DISMISS_KEY + username) || 0);
+      if (Date.now() - dismissed < 30 * 24 * 60 * 60 * 1000) return false; // asked recently
+    }
     css();
     return new Promise(resolve => {
       const card = document.createElement('div');
