@@ -1,4 +1,4 @@
-const CACHE = "moolya-contact-shell-cloudflare-v13";
+const CACHE = "moolya-contact-shell-cloudflare-v14";
 
 const SHELL = [
   "./",
@@ -8,7 +8,9 @@ const SHELL = [
   "./guest-qr.js",
   "./guest.html",
   "./auth.js",
-  "./auth.js?v=individual-v4",
+  "./auth.js?v=individual-v5",
+  "./passkey.js",
+  "./passkey.js?v=1",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
