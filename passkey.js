@@ -163,19 +163,8 @@
       : 'Sign in with Face ID / fingerprint';
     form.insertBefore(wrap, form.firstChild);
 
-    // Let saved passkeys also appear in the username field's autofill.
-    let autofill = null;
-    const startAutofill = async () => {
-      const user = form.querySelector('input[name="username"], input[autocomplete~="username"], input[type="text"], input[type="email"]');
-      if (!user || !PublicKeyCredential.isConditionalMediationAvailable) return;
-      try { if (!(await PublicKeyCredential.isConditionalMediationAvailable())) return; } catch { return; }
-      user.setAttribute('autocomplete', 'username webauthn');
-      autofill = new AbortController();
-      signIn({conditional: true, signal: autofill.signal}).then(onSignedIn).catch(error => {
-        if (!cancelled(error)) msg.textContent = error.message;
-      });
-    };
-    startAutofill();
+    // No background Face ID request on page load: every server call counts
+    // toward the sign-in attempt limit, so we only call it when tapped.
 
     button.addEventListener('click', async () => {
       msg.classList.remove('pk-hint');
@@ -190,7 +179,6 @@
         if (user) user.focus();
         return;
       }
-      if (autofill) { autofill.abort(); autofill = null; }
       msg.textContent = '';
       button.disabled = true;
       try {
@@ -200,7 +188,6 @@
           ? 'Face ID / fingerprint was cancelled. Try again or use your password.'
           : error.message;
         if (!store.get(REMEMBER_KEY)) label.textContent = 'Sign in with Face ID / fingerprint';
-        startAutofill();
       } finally {
         button.disabled = false;
       }
